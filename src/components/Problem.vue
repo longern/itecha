@@ -73,3 +73,9 @@ export default {
   components: { codemirror },
 };
 </script>
+
+<style>
+.CodeMirror {
+  height: 60vh;
+}
+</style>
