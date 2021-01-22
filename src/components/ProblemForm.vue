@@ -1,9 +1,6 @@
 <template>
   <v-container>
-    <v-card
-      :loading="loading"
-      class="pa-4"
-    >
+    <v-card :loading="loading" class="pa-4">
       <h2 class="mb-4">编辑：{{ original_title }}</h2>
       <v-form>
         <v-text-field
@@ -16,11 +13,7 @@
           v-model="problem.content"
           required
         ></v-textarea>
-        <v-btn
-          color="primary"
-          @click="save"
-          :disabled="loading"
-        >保存</v-btn>
+        <v-btn color="primary" @click="save" :disabled="loading">保存</v-btn>
       </v-form>
     </v-card>
   </v-container>

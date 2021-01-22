@@ -1,17 +1,14 @@
 <template>
   <v-container>
-    <v-breadcrumbs :items="breadcrumbsItems"></v-breadcrumbs>
-    <v-row
-      v-for="problem in problems"
-      :key="problem.id"
-    >
+    <v-row>
       <v-col>
         <v-card class="pa-4">
-          <router-link
-            :to="`/problems/${problem.id}`"
-            v-text="problem.title"
-          >
-          </router-link>
+          <v-data-table :headers="headers" :items="problems">
+            <template v-slot:item.title="{ item }">
+              <router-link :to="`/problems/${item.id}`" v-text="item.title">
+              </router-link>
+            </template>
+          </v-data-table>
         </v-card>
       </v-col>
     </v-row>
@@ -23,6 +20,13 @@ export default {
   name: "ProblemList",
 
   data: () => ({
+    headers: [
+      {
+        text: "题目名称",
+        value: "title",
+        sortable: false,
+      },
+    ],
     problems: [
       {
         id: 1,
@@ -38,3 +42,9 @@ export default {
   }),
 };
 </script>
+
+<style scoped>
+a {
+  text-decoration: none;
+}
+</style>

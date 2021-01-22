@@ -5,14 +5,8 @@
       <v-col>
         <v-card class="main-card mb-4">
           <v-row no-gutters>
-            <v-col
-              md="4"
-              class="pa-4"
-            >
-              <h1
-                v-text="title"
-                class="text-center mb-4"
-              ></h1>
+            <v-col md="4" class="pa-4">
+              <h1 v-text="title" class="text-center mb-2"></h1>
               <div>{{ content }}</div>
             </v-col>
             <v-col md="8">
