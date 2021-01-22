@@ -9,7 +9,10 @@
               md="4"
               class="pa-4"
             >
-              <h1 v-text="title"></h1>
+              <h1
+                v-text="title"
+                class="text-center mb-4"
+              ></h1>
               <div>{{ content }}</div>
             </v-col>
             <v-col md="8">
@@ -37,7 +40,7 @@ import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
 
 export default {
-  name: "Editor",
+  name: "Problem",
 
   data: () => ({
     title: "A+B problem",
