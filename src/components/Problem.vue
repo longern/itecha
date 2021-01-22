@@ -5,7 +5,10 @@
       <v-col>
         <v-card class="main-card mb-4">
           <v-row no-gutters>
-            <v-col md="4" class="pa-4">
+            <v-col
+              md="4"
+              class="pa-4"
+            >
               <h1 v-text="title"></h1>
               <div>{{ content }}</div>
             </v-col>
@@ -63,6 +66,7 @@ export default {
       const pythonExecutorUrl = process.env.VUE_APP_PYTHON3_EXECUTOR;
       const response = await fetch(pythonExecutorUrl, {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: this.code,
       });
       const output = await response.text();
