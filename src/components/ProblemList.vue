@@ -1,9 +1,16 @@
 <template>
   <v-container>
     <v-row>
+      <h1 class="ma-8">题目列表</h1>
+    </v-row>
+    <v-row>
       <v-col>
         <v-card class="pa-4">
-          <v-data-table :headers="headers" :items="problems">
+          <v-data-table
+            :headers="headers"
+            :items="problems"
+            hide-default-footer
+          >
             <template v-slot:item.title="{ item }">
               <router-link :to="`/problems/${item.id}`" v-text="item.title">
               </router-link>

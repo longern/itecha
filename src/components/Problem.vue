@@ -1,28 +1,47 @@
 <template>
   <v-container>
-    <v-breadcrumbs :items="breadcrumbsItems"></v-breadcrumbs>
     <v-row>
       <v-col>
-        <v-card class="main-card mb-4">
-          <v-row no-gutters>
-            <v-col md="4" class="pa-4">
+        <v-breadcrumbs :items="breadcrumbsItems"></v-breadcrumbs>
+      </v-col>
+      <v-spacer></v-spacer>
+      <v-col md="auto" class="pt-8">
+        <v-btn
+          class="mr-3"
+          color="secondary"
+          @click="isDebugPanelVisible ^= true"
+          v-text="isDebugPanelVisible ? '隐藏' : '调试'"
+        >
+        </v-btn>
+        <v-btn color="primary" @click="runPython3Code">提交</v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-row>
+          <v-col md="4">
+            <v-card class="pa-4 fill-height">
               <h1 v-text="title" class="text-center mb-2"></h1>
               <div>{{ content }}</div>
-            </v-col>
-            <v-col md="8">
+            </v-card>
+          </v-col>
+          <v-col>
+            <v-card class="fill-height">
               <codemirror
                 ref="cm"
                 v-model="code"
                 :options="cmOption"
               ></codemirror>
-            </v-col>
-          </v-row>
-        </v-card>
+            </v-card>
+          </v-col>
+          <v-col v-if="isDebugPanelVisible" md="3">
+            <v-card class="pa-4 fill-height">
+              <v-textarea v-model="debugInput" label="输入"></v-textarea>
+              <pre><code v-text="debugOutput" ></code></pre>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-col>
-    </v-row>
-    <v-row>
-      <v-spacer></v-spacer>
-      <v-btn @click="runPython3Code">运行 Python3 代码</v-btn>
     </v-row>
   </v-container>
 </template>
@@ -49,6 +68,8 @@ export default {
         "Shift-Tab": "indentLess",
       },
     },
+    debugInput: "",
+    debugOutput: "",
     breadcrumbsItems: [
       {
         text: "首页",
@@ -56,6 +77,7 @@ export default {
         href: "/",
       },
     ],
+    isDebugPanelVisible: false,
   }),
 
   methods: {
@@ -66,9 +88,10 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: this.code,
       });
-      const output = await response.text();
-      console.log(output);
+      this.debugOutput = await response.text();
     },
+
+    async submit() {},
   },
 
   components: { codemirror },
@@ -78,5 +101,9 @@ export default {
 <style>
 .CodeMirror {
   height: 60vh;
+}
+
+.CodeMirror-gutters {
+  background: none;
 }
 </style>
