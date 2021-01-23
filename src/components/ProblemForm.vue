@@ -34,7 +34,16 @@ export default {
   }),
 
   methods: {
-    save() {},
+    async save() {
+      await fetch(
+        `${process.env.VUE_APP_API_BASE_URL}problems/${this.problem.id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(this.problem),
+        }
+      );
+    },
   },
 
   async mounted() {
