@@ -86,7 +86,10 @@ export default {
       const response = await fetch(pythonExecutorUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: this.code,
+        body: JSON.stringify({
+          source: this.code,
+          input: this.debugInput,
+        }),
       });
       this.debugOutput = await response.text();
     },
