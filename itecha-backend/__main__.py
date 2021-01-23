@@ -1,3 +1,4 @@
+import json
 import sys
 import traceback
 from io import StringIO
@@ -18,20 +19,30 @@ def problems():
 
 
 @app.route("/python-executor", methods=["POST"])
-def python_executor():
-    code = request.data
+def python_executor() -> bytes:
+    request_obj: dict = json.loads(request.data)
+    source = request_obj.get("source")
+    code_input = request_obj.get("input", "")
 
-    buffer = StringIO()
-    sys.stdout = buffer
-    sys.stderr = buffer
+    if not code_input.endswith("\n"):
+        code_input += "\n"
+    input_buffer = StringIO()
+    input_buffer.write(code_input)
+    input_buffer.seek(0)
+    sys.stdin = input_buffer
+
+    output_buffer = StringIO()
+    sys.stdout = output_buffer
+    sys.stderr = output_buffer
 
     try:
-        exec(code, {})
+        exec(source, {})
     except Exception:
         traceback.print_exc()
-    output = buffer.getvalue().encode()
+    output = output_buffer.getvalue().encode()
 
-    # Restore the original stdout
+    # Restore the original stdin and stdout
+    sys.stdin = sys.__stdin__
     sys.stdout = sys.__stdout__
     sys.stdout = sys.__stderr__
 
