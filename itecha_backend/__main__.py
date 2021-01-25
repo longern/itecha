@@ -23,15 +23,42 @@ class Problem(db.Model):
     content = db.Column(db.Text, nullable=False)
 
 
-PROBLEMS = [
-    {"id": 1, "title": "A+B problem", "content": "输入两个数a和b，输出他们的和"},
-    {"id": 2, "title": "A*B problem", "content": "输入两个数a和b，输出他们的乘积"},
-]
+@app.route("/problems/<id>", methods=["GET"])
+def problem(id: str) -> str:
+    problem = Problem.query.filter_by(id=id).first()
+    return json.dumps(
+        {"id": problem.id, "title": problem.title, "content": problem.content}
+    )
+
+
+@app.route("/problems", methods=["POST"])
+def create_problems() -> str:
+    problem_dict: dict = json.loads(request.data)
+    problem = Problem(**problem_dict)
+    db.session.add(problem)
+    db.session.commit()
+    return ("", 204)
+
+
+@app.route("/problems/<id>", methods=["PUT"])
+def update_problems(id: str) -> str:
+    problem_dict: dict = json.loads(request.data)
+    problem = Problem.query.get(id)
+    for key, value in problem_dict.items():
+        if key != "id":
+            setattr(problem, key, value)
+    db.session.commit()
+    return {"id": problem.id, "title": problem.title, "content": problem.content}
 
 
 @app.route("/problems", methods=["GET"])
-def problems():
-    return PROBLEMS
+def list_problems() -> str:
+    return json.dumps(
+        [
+            {"id": problem.id, "title": problem.title, "content": problem.content}
+            for problem in Problem.query.all()
+        ]
+    )
 
 
 @app.route("/python-executor", methods=["POST"])

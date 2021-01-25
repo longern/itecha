@@ -1,7 +1,10 @@
 <template>
   <v-container>
     <v-card :loading="loading" class="pa-4">
-      <h2 class="mb-4">编辑：{{ original_title }}</h2>
+      <h2 class="mb-4">
+        <span v-if="$route.params.id">编辑：{{ original_title }}</span>
+        <span v-else>创建题目</span>
+      </h2>
       <v-form>
         <v-text-field
           v-model="problem.title"
@@ -26,27 +29,40 @@ export default {
   data: () => ({
     loading: true,
     original_title: "A+B problem",
-    problem: {
-      id: 1,
-      title: "A+B problem",
-      content: "输入两个数a和b，输出他们的和",
-    },
+    problem: {},
   }),
 
   methods: {
     async save() {
-      await fetch(
-        `${process.env.VUE_APP_API_BASE_URL}problems/${this.problem.id}`,
-        {
-          method: "PUT",
+      if (this.$route.params.id) {
+        await fetch(
+          `${process.env.VUE_APP_API_BASE_URL}problems/${this.problem.id}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(this.problem),
+          }
+        );
+      } else {
+        await fetch(`${process.env.VUE_APP_API_BASE_URL}problems`, {
+          method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(this.problem),
-        }
-      );
+        });
+      }
     },
   },
 
   async mounted() {
+    this.problem = await (
+      await fetch(
+        `${process.env.VUE_APP_API_BASE_URL}problems/${this.$route.params.id}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      )
+    ).json();
     this.loading = false;
   },
 };

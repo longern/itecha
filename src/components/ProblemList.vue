@@ -34,19 +34,14 @@ export default {
         sortable: false,
       },
     ],
-    problems: [
-      {
-        id: 1,
-        title: "A+B problem",
-        content: "输入两个数a和b，输出他们的和",
-      },
-      {
-        id: 2,
-        title: "A*B problem",
-        content: "输入两个数a和b，输出他们的乘积",
-      },
-    ],
+    problems: [],
   }),
+
+  async mounted() {
+    this.problems = await (
+      await fetch(`${process.env.VUE_APP_API_BASE_URL}problems`)
+    ).json();
+  },
 };
 </script>
 

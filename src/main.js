@@ -23,6 +23,10 @@ const router = new VueRouter({
       component: Login,
     },
     {
+      path: "/problems/create",
+      component: ProblemForm,
+    },
+    {
       path: "/problems/:id",
       component: Problem,
     },

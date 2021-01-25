@@ -21,8 +21,8 @@
         <v-row>
           <v-col md="4">
             <v-card class="pa-4 fill-height">
-              <h1 v-text="title" class="text-center mb-2"></h1>
-              <div>{{ content }}</div>
+              <h1 v-text="problem.title" class="text-center mb-2"></h1>
+              <div>{{ problem.content }}</div>
             </v-card>
           </v-col>
           <v-col>
@@ -56,8 +56,7 @@ export default {
   name: "Problem",
 
   data: () => ({
-    title: "A+B problem",
-    content: "输入两个数a和b，输出他们的和",
+    problem: {},
     code: "",
     cmOption: {
       indentUnit: 4,
@@ -95,6 +94,18 @@ export default {
     },
 
     async submit() {},
+  },
+
+  async mounted() {
+    this.problem = await (
+      await fetch(
+        `${process.env.VUE_APP_API_BASE_URL}problems/${this.$route.params.id}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      )
+    ).json();
   },
 
   components: { codemirror },
