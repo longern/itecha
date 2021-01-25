@@ -97,15 +97,17 @@ export default {
   },
 
   async mounted() {
-    this.problem = await (
-      await fetch(
-        `${process.env.VUE_APP_API_BASE_URL}problems/${this.$route.params.id}`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      )
-    ).json();
+    this.problem = (
+      await (
+        await fetch(
+          `${process.env.VUE_APP_API_BASE_URL}problems/${this.$route.params.id}`,
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          }
+        )
+      ).json()
+    ).data;
   },
 
   components: { codemirror },

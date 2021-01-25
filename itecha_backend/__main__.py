@@ -27,7 +27,7 @@ class Problem(db.Model):
 def problem(id: str) -> str:
     problem = Problem.query.filter_by(id=id).first()
     return json.dumps(
-        {"id": problem.id, "title": problem.title, "content": problem.content}
+        {"data": {"id": problem.id, "title": problem.title, "content": problem.content}}
     )
 
 
@@ -48,16 +48,20 @@ def update_problems(id: str) -> str:
         if key != "id":
             setattr(problem, key, value)
     db.session.commit()
-    return {"id": problem.id, "title": problem.title, "content": problem.content}
+    return {
+        "data": {"id": problem.id, "title": problem.title, "content": problem.content}
+    }
 
 
 @app.route("/problems", methods=["GET"])
 def list_problems() -> str:
     return json.dumps(
-        [
-            {"id": problem.id, "title": problem.title, "content": problem.content}
-            for problem in Problem.query.all()
-        ]
+        {
+            "data": [
+                {"id": problem.id, "title": problem.title, "content": problem.content}
+                for problem in Problem.query.all()
+            ]
+        }
     )
 
 
