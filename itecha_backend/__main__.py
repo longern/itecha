@@ -37,7 +37,7 @@ class Submission(db.Model):
 def problem(id: str) -> str:
     problem = Problem.query.filter_by(id=id).first()
     return json.dumps(
-        {"data": {"id": problem.id, "title": problem.title, "content": problem.content}}
+        {"id": problem.id, "title": problem.title, "content": problem.content}
     )
 
 
@@ -58,9 +58,9 @@ def update_problems(id: str) -> str:
         if key != "id":
             setattr(problem, key, value)
     db.session.commit()
-    return {
-        "data": {"id": problem.id, "title": problem.title, "content": problem.content}
-    }
+    return json.dumps(
+        {"id": problem.id, "title": problem.title, "content": problem.content}
+    )
 
 
 @app.route("/problems", methods=["GET"])

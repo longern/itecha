@@ -62,7 +62,7 @@ export default {
           headers: { "Content-Type": "application/json" },
         }
       );
-      this.problem = (await problem_response.json()).data;
+      this.problem = await problem_response.json();
     }
     this.loading = false;
   },

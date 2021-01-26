@@ -108,7 +108,7 @@ export default {
       `${process.env.VUE_APP_API_BASE_URL}problems/${this.$route.params.id}`,
       { headers: { "Content-Type": "application/json" } }
     );
-    this.problem = (await problem_response.json()).data;
+    this.problem = await problem_response.json();
     this.loading = false;
   },
 
@@ -119,9 +119,5 @@ export default {
 <style>
 .CodeMirror {
   height: 60vh;
-}
-
-.CodeMirror-gutters {
-  background: none;
 }
 </style>
