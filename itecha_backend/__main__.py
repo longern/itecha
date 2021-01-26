@@ -21,6 +21,16 @@ class Problem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), nullable=False)
     content = db.Column(db.Text, nullable=False)
+    submissions = db.relationship("Submission", back_populates="problem")
+
+
+class Submission(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    code = db.Column(db.Text)
+    creator_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    creator = db.relationship("User")
+    problem_id = db.Column(db.Integer, db.ForeignKey("problem.id"))
+    problem = db.relationship("Problem", back_populates="submissions")
 
 
 @app.route("/problems/<id>", methods=["GET"])

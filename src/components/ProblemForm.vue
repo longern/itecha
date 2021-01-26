@@ -54,17 +54,16 @@ export default {
   },
 
   async mounted() {
-    this.problem = (
-      await (
-        await fetch(
-          `${process.env.VUE_APP_API_BASE_URL}problems/${this.$route.params.id}`,
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          }
-        )
-      ).json()
-    ).data;
+    if (this.$route.params.id) {
+      const problem_response = await fetch(
+        `${process.env.VUE_APP_API_BASE_URL}problems/${this.$route.params.id}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      this.problem = (await problem_response.json()).data;
+    }
     this.loading = false;
   },
 };

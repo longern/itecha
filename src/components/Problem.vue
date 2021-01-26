@@ -8,21 +8,20 @@
       <v-col md="auto" class="pt-8">
         <v-btn
           class="mr-3"
-          color="secondary"
           @click="isDebugPanelVisible ^= true"
           v-text="isDebugPanelVisible ? '隐藏' : '调试'"
         >
         </v-btn>
-        <v-btn color="primary" @click="runPython3Code">提交</v-btn>
+        <v-btn color="primary" @click="submit">提交</v-btn>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
         <v-row>
           <v-col md="4">
-            <v-card class="pa-4 fill-height">
-              <h1 v-text="problem.title" class="text-center mb-2"></h1>
-              <div>{{ problem.content }}</div>
+            <v-card class="fill-height" :loading="loading">
+              <h1 v-text="problem.title" class="pt-4 text-center mb-2"></h1>
+              <div class="mx-4">{{ problem.content }}</div>
             </v-card>
           </v-col>
           <v-col>
@@ -37,7 +36,8 @@
           <v-col v-if="isDebugPanelVisible" md="3">
             <v-card class="pa-4 fill-height">
               <v-textarea v-model="debugInput" label="输入"></v-textarea>
-              <pre><code v-text="debugOutput" ></code></pre>
+              <v-btn color="secondary" @click="runPython3Code">运行</v-btn>
+              <pre class="mt-4"><code v-text="debugOutput" ></code></pre>
             </v-card>
           </v-col>
         </v-row>
@@ -77,6 +77,7 @@ export default {
       },
     ],
     isDebugPanelVisible: false,
+    loading: true,
   }),
 
   methods: {
@@ -93,21 +94,22 @@ export default {
       this.debugOutput = await response.text();
     },
 
-    async submit() {},
+    async submit() {
+      await fetch(`${process.env.VUE_APP_API_BASE_URL}submissions`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: this.code }),
+      });
+    },
   },
 
   async mounted() {
-    this.problem = (
-      await (
-        await fetch(
-          `${process.env.VUE_APP_API_BASE_URL}problems/${this.$route.params.id}`,
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          }
-        )
-      ).json()
-    ).data;
+    const problem_response = await fetch(
+      `${process.env.VUE_APP_API_BASE_URL}problems/${this.$route.params.id}`,
+      { headers: { "Content-Type": "application/json" } }
+    );
+    this.problem = (await problem_response.json()).data;
+    this.loading = false;
   },
 
   components: { codemirror },
