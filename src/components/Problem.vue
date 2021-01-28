@@ -20,8 +20,10 @@
         <v-row>
           <v-col md="4">
             <v-card class="fill-height" :loading="loading">
-              <h1 v-text="problem.title" class="pt-4 text-center mb-2"></h1>
-              <div class="mx-4">{{ problem.content }}</div>
+              <v-container>
+                <h1 v-text="problem.title" class="text-center mb-2"></h1>
+                <div>{{ problem.content }}</div>
+              </v-container>
             </v-card>
           </v-col>
           <v-col>
@@ -34,10 +36,12 @@
             </v-card>
           </v-col>
           <v-col v-if="isDebugPanelVisible" md="3">
-            <v-card class="pa-4 fill-height">
-              <v-textarea v-model="debugInput" label="输入"></v-textarea>
-              <v-btn color="secondary" @click="runPython3Code">运行</v-btn>
-              <pre class="mt-4"><code v-text="debugOutput" ></code></pre>
+            <v-card class="fill-height">
+              <v-container>
+                <v-textarea v-model="debugInput" label="输入"></v-textarea>
+                <v-btn color="secondary" @click="runPython3Code">运行</v-btn>
+                <pre class="mt-4"><code v-text="debugOutput" ></code></pre>
+              </v-container>
             </v-card>
           </v-col>
         </v-row>

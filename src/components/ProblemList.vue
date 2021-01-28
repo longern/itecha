@@ -5,22 +5,24 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-card class="px-4" :loading="loading">
-          <v-data-table
-            :headers="headers"
-            :items="problems"
-            hide-default-footer
-          >
-            <template v-slot:item.title="{ item }">
-              <router-link :to="`/problems/${item.id}`" v-text="item.title">
-              </router-link>
-            </template>
-            <template v-slot:item.actions="{ item }">
-              <router-link :to="`/problems/${item.id}/edit`">
-                <v-icon>mdi-pencil</v-icon>
-              </router-link>
-            </template>
-          </v-data-table>
+        <v-card :loading="loading">
+          <v-container>
+            <v-data-table
+              :headers="headers"
+              :items="problems"
+              hide-default-footer
+            >
+              <template v-slot:item.title="{ item }">
+                <router-link :to="`/problems/${item.id}`" v-text="item.title">
+                </router-link>
+              </template>
+              <template v-slot:item.actions="{ item }">
+                <router-link :to="`/problems/${item.id}/edit`">
+                  <v-icon>mdi-pencil</v-icon>
+                </router-link>
+              </template>
+            </v-data-table>
+          </v-container>
         </v-card>
       </v-col>
     </v-row>

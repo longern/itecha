@@ -21,6 +21,7 @@ class Problem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), nullable=False)
     content = db.Column(db.Text, nullable=False)
+    testcases = db.Column(db.Text)
     submissions = db.relationship("Submission", back_populates="problem")
 
 
@@ -29,6 +30,7 @@ class Submission(db.Model):
     code = db.Column(db.Text)
     creator_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     creator = db.relationship("User")
+    creator_ip = db.Column(db.String(20))
     problem_id = db.Column(db.Integer, db.ForeignKey("problem.id"))
     problem = db.relationship("Problem", back_populates="submissions")
 
@@ -36,14 +38,23 @@ class Submission(db.Model):
 @app.route("/problems/<id>", methods=["GET"])
 def problem(id: str) -> str:
     problem = Problem.query.filter_by(id=id).first()
+    if not problem:
+        return ("Not Found", 404)
     return json.dumps(
-        {"id": problem.id, "title": problem.title, "content": problem.content}
+        {
+            "id": problem.id,
+            "title": problem.title,
+            "content": problem.content,
+            "testcases": json.loads(problem.testcases),
+        }
     )
 
 
 @app.route("/problems", methods=["POST"])
 def create_problems() -> str:
     problem_dict: dict = json.loads(request.data)
+    if "testcases" in problem_dict:
+        problem_dict["testcases"] = json.dumps(problem_dict["testcases"])
     problem = Problem(**problem_dict)
     db.session.add(problem)
     db.session.commit()
@@ -53,6 +64,8 @@ def create_problems() -> str:
 @app.route("/problems/<id>", methods=["PUT"])
 def update_problems(id: str) -> str:
     problem_dict: dict = json.loads(request.data)
+    if "testcases" in problem_dict:
+        problem_dict["testcases"] = json.dumps(problem_dict["testcases"])
     problem = Problem.query.get(id)
     for key, value in problem_dict.items():
         if key != "id":
