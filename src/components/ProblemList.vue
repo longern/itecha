@@ -16,7 +16,7 @@
                 <router-link :to="`/problems/${item.id}`" v-text="item.title">
                 </router-link>
               </template>
-              <template v-slot:item.actions="{ item }">
+              <template v-slot:item.actions="{ item }" v-if="isSuperuser">
                 <router-link :to="`/problems/${item.id}/edit`" title="编辑">
                   <v-icon>mdi-pencil</v-icon>
                 </router-link>
@@ -38,6 +38,8 @@
 <script>
 export default {
   name: "ProblemList",
+
+  props: ["isSuperuser"],
 
   data: () => ({
     headers: [

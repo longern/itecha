@@ -12,7 +12,7 @@
 
     <v-main>
       <div>
-        <router-view></router-view>
+        <router-view :is-superuser="isSuperuser"></router-view>
       </div>
     </v-main>
   </v-app>
@@ -23,7 +23,8 @@ export default {
   name: "App",
 
   data: () => ({
-    //
+    isSuperuser:
+      ["127.0.0.1", "localhost"].indexOf(document.location.hostname) >= 0,
   }),
 };
 </script>
