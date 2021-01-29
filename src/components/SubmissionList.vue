@@ -23,7 +23,12 @@
                 </router-link>
               </template>
               <template v-slot:item.code="{ item }">
-                <v-icon :title="item.code">mdi-code-tags</v-icon>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon v-bind="attrs" v-on="on">mdi-code-tags</v-icon>
+                  </template>
+                  <span v-text="item.code"></span>
+                </v-tooltip>
               </template>
               <template v-slot:item.create_time="{ item }">
                 <span
