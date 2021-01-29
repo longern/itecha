@@ -1,7 +1,9 @@
 <template>
   <v-container>
-    <v-row>
+    <v-row class="align-center">
       <h1 class="ma-8">提交记录</h1>
+      <v-spacer></v-spacer>
+      <v-btn color="primary" @click="run">测评</v-btn>
     </v-row>
     <v-row>
       <v-col>
@@ -10,14 +12,18 @@
             <v-data-table
               :headers="headers"
               :items="submissions"
+              disable-sort
               hide-default-footer
             >
-              <template v-slot:item.title="{ item }">
+              <template v-slot:item.title>
                 <router-link
-                  :to="`/submissions/${item.id}`"
-                  v-text="item.title"
+                  :to="`/problems/${problem.id}`"
+                  v-text="problem.title"
                 >
                 </router-link>
+              </template>
+              <template v-slot:item.code="{ item }">
+                <v-icon :title="item.code">mdi-code-tags</v-icon>
               </template>
               <template v-slot:item.create_time="{ item }">
                 <span
@@ -34,23 +40,27 @@
 
 <script>
 export default {
-  name: "ProblemList",
+  name: "SubmissionList",
+
+  props: ["problem_id"],
 
   data: () => ({
     headers: [
       {
         text: "题目名称",
         value: "title",
-        sortable: false,
       },
       {
         text: "提交者",
         value: "creator",
-        sortable: false,
       },
       {
-        text: "提交IP",
-        value: "creator_ip",
+        text: "代码",
+        value: "code",
+      },
+      {
+        text: "分数",
+        value: "score",
       },
       {
         text: "提交时间",
@@ -58,15 +68,56 @@ export default {
       },
     ],
     loading: true,
+    problem: {},
     submissions: [],
   }),
 
+  methods: {
+    async run() {
+      const pythonExecutorUrl = process.env.VUE_APP_PYTHON3_EXECUTOR;
+
+      for (var i = 0; i < this.submissions.length; i++) {
+        const submission = this.submissions[i];
+        let submission_score = 0;
+
+        const testcase_score = 100 / this.problem.testcases.length;
+        for (var j = 0; j < this.problem.testcases.length; j++) {
+          const testcase = this.problem.testcases[j];
+          const response = await fetch(pythonExecutorUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              source: submission.code,
+              input: testcase.input_data,
+            }),
+          });
+          const output = await response.text();
+          if (output.trim() == testcase.output_data)
+            submission_score += testcase_score;
+        }
+
+        this.$set(submission, "score", submission_score);
+      }
+    },
+  },
+
   async mounted() {
-    this.submissions = (
+    const submissions = (
       await (
         await fetch(`${process.env.VUE_APP_API_BASE_URL}submissions`)
       ).json()
     ).data;
+
+    this.problem = await (
+      await fetch(
+        `${process.env.VUE_APP_API_BASE_URL}problems/${this.problem_id}`
+      )
+    ).json();
+
+    this.submissions = submissions.filter(
+      (submission) => submission.problem_id == this.problem_id
+    );
+
     this.loading = false;
   },
 };

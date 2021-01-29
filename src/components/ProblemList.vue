@@ -17,8 +17,14 @@
                 </router-link>
               </template>
               <template v-slot:item.actions="{ item }">
-                <router-link :to="`/problems/${item.id}/edit`">
+                <router-link :to="`/problems/${item.id}/edit`" title="编辑">
                   <v-icon>mdi-pencil</v-icon>
+                </router-link>
+                <router-link
+                  :to="`/submissions?problem_id=${item.id}`"
+                  title="提交记录"
+                >
+                  <v-icon>mdi-clock</v-icon>
                 </router-link>
               </template>
             </v-data-table>

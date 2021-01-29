@@ -38,6 +38,7 @@ const router = new VueRouter({
     {
       path: "/submissions",
       component: SubmissionList,
+      props: (route) => ({ problem_id: route.query.problem_id }),
     },
   ],
 });
