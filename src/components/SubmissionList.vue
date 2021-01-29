@@ -27,7 +27,7 @@
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon v-bind="attrs" v-on="on">mdi-code-tags</v-icon>
                   </template>
-                  <span v-text="item.code"></span>
+                  <pre v-text="item.code"></pre>
                 </v-tooltip>
               </template>
               <template v-slot:item.create_time="{ item }">
