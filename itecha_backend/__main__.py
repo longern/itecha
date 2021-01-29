@@ -5,6 +5,7 @@ import traceback
 from io import StringIO
 
 from flask import Flask, request
+from flask.helpers import send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -152,6 +153,12 @@ def python_executor() -> bytes:
     sys.stdout = sys.__stderr__
 
     return output
+
+
+@app.route("/", defaults={"path": "index.html"})
+@app.route("/<path:path>")
+def index(path):
+    return send_from_directory("static", path, as_attachment=False)
 
 
 @app.after_request
