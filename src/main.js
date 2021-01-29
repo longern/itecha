@@ -7,6 +7,7 @@ import Login from "./components/Login.vue";
 import Problem from "./components/Problem.vue";
 import ProblemList from "./components/ProblemList.vue";
 import ProblemForm from "./components/ProblemForm.vue";
+import SubmissionList from "./components/SubmissionList.vue";
 
 Vue.config.productionTip = false;
 
@@ -33,6 +34,10 @@ const router = new VueRouter({
     {
       path: "/problems/:id/edit",
       component: ProblemForm,
+    },
+    {
+      path: "/submissions",
+      component: SubmissionList,
     },
   ],
 });

@@ -102,7 +102,7 @@ export default {
       await fetch(`${process.env.VUE_APP_API_BASE_URL}submissions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: this.code }),
+        body: JSON.stringify({ problem_id: this.problem.id, code: this.code }),
       });
     },
   },

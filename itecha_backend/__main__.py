@@ -1,3 +1,4 @@
+import datetime
 import json
 import sys
 import traceback
@@ -33,6 +34,9 @@ class Submission(db.Model):
     creator_ip = db.Column(db.String(20))
     problem_id = db.Column(db.Integer, db.ForeignKey("problem.id"))
     problem = db.relationship("Problem", back_populates="submissions")
+    create_time = db.Column(
+        db.TIMESTAMP(), nullable=False, server_default=db.text("CURRENT_TIMESTAMP")
+    )
 
 
 @app.route("/problems/<id>", methods=["GET"])
@@ -83,6 +87,36 @@ def list_problems() -> str:
             "data": [
                 {"id": problem.id, "title": problem.title, "content": problem.content}
                 for problem in Problem.query.all()
+            ]
+        }
+    )
+
+
+@app.route("/submissions", methods=["POST"])
+def create_submission() -> str:
+    submission_dict = json.loads(request.data)
+    submission = Submission(creator_ip=request.remote_addr, **submission_dict)
+    print(submission_dict)
+    db.session.add(submission)
+    db.session.commit()
+    return ("", 204)
+
+
+@app.route("/submissions", methods=["GET"])
+def list_submissions() -> str:
+    return json.dumps(
+        {
+            "data": [
+                {
+                    "id": submission.id,
+                    "problem_id": submission.problem_id,
+                    "code": submission.code,
+                    "creator_ip": submission.creator_ip,
+                    "create_time": submission.create_time.replace(
+                        tzinfo=datetime.timezone.utc
+                    ).isoformat(),
+                }
+                for submission in Submission.query.all()
             ]
         }
     )

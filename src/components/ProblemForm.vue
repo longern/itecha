@@ -60,8 +60,8 @@ export default {
 
   data: () => ({
     loading: true,
-    original_title: "A+B problem",
-    problem: {},
+    original_title: "题目",
+    problem: { testcases: [] },
   }),
 
   methods: {
@@ -103,6 +103,7 @@ export default {
         }
       );
       this.problem = await problem_response.json();
+      this.original_title = this.problem.title;
     }
     this.loading = false;
   },
