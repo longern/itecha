@@ -13,11 +13,11 @@
             label="标题"
             required
           ></v-text-field>
-          <v-textarea
+          <mavon-editor
             label="描述"
             v-model="problem.content"
             required
-          ></v-textarea>
+          ></mavon-editor>
           <h3 class="mb-4">测评</h3>
           <v-btn icon @click="appendTestCase"><v-icon>mdi-plus</v-icon></v-btn>
           <v-row v-for="(testcase, index) in problem.testcases" :key="index">
@@ -55,6 +55,9 @@
 </template>
 
 <script>
+import { mavonEditor } from "mavon-editor";
+import "mavon-editor/dist/css/index.css";
+
 export default {
   name: "ProblemForm",
 
@@ -107,5 +110,7 @@ export default {
     }
     this.loading = false;
   },
+
+  components: { mavonEditor },
 };
 </script>

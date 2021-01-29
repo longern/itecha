@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app>
+    <v-app-bar app absolute>
       <v-app-bar-title>
         <router-link to="/" tag="span">iTechA</router-link>
       </v-app-bar-title>

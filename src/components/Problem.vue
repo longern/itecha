@@ -22,7 +22,7 @@
             <v-card class="fill-height" :loading="loading">
               <v-container>
                 <h1 v-text="problem.title" class="text-center mb-2"></h1>
-                <div>{{ problem.content }}</div>
+                <div v-html="renderedContent"></div>
               </v-container>
             </v-card>
           </v-col>
@@ -55,6 +55,9 @@ import { codemirror } from "vue-codemirror";
 import "codemirror/mode/python/python";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
+import MarkdownIt from "markdown-it";
+
+const md = new MarkdownIt();
 
 export default {
   name: "Problem",
@@ -83,6 +86,12 @@ export default {
     isDebugPanelVisible: false,
     loading: true,
   }),
+
+  computed: {
+    renderedContent() {
+      return md.render(this.problem.content);
+    },
+  },
 
   methods: {
     async runPython3Code() {
