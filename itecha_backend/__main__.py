@@ -24,6 +24,7 @@ class Problem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), nullable=False)
     content = db.Column(db.Text, nullable=False)
+    default_code = db.Column(db.Text)
     testcases = db.Column(db.Text)
     submissions = db.relationship("Submission", back_populates="problem")
 
@@ -51,6 +52,7 @@ def problem(id: str) -> str:
             "id": problem.id,
             "title": problem.title,
             "content": problem.content,
+            "default_code": problem.default_code,
             "testcases": json.loads(problem.testcases),
         }
     )
