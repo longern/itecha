@@ -89,7 +89,7 @@ export default {
 
   computed: {
     renderedContent() {
-      return md.render(this.problem.content);
+      return md.render(this.problem.content || "");
     },
   },
 
