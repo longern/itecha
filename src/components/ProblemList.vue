@@ -1,7 +1,11 @@
 <template>
   <v-container>
-    <v-row>
+    <v-row class="align-center">
       <h1 class="ma-8">题目列表</h1>
+      <v-spacer></v-spacer>
+      <v-btn v-if="isSuperuser" color="primary" to="/problems/create">
+        创建题目
+      </v-btn>
     </v-row>
     <v-row>
       <v-col>
