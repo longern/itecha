@@ -122,7 +122,7 @@ export default {
       { headers: { "Content-Type": "application/json" } }
     );
     this.problem = await problem_response.json();
-    this.code = this.problem.default_code;
+    this.code = this.problem.default_code || "";
     this.loading = false;
   },
 
