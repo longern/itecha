@@ -130,6 +130,8 @@ export default {
       );
       this.problem = await problem_response.json();
       this.original_title = this.problem.title;
+      if (!Array.isArray(this.problem.testcases))
+        this.$set(this.problem, "testcases", []);
     }
     this.loading = false;
   },

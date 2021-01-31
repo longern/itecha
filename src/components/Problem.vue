@@ -80,7 +80,7 @@ export default {
       {
         text: "首页",
         disabled: false,
-        href: "/",
+        to: "/",
       },
     ],
     isDebugPanelVisible: false,
