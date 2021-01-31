@@ -55,9 +55,9 @@ import { codemirror } from "vue-codemirror";
 import "codemirror/mode/python/python";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/idea.css";
-import MarkdownIt from "markdown-it";
+import { mavonEditor } from "mavon-editor";
 
-const md = new MarkdownIt();
+const md = mavonEditor.getMarkdownIt();
 
 export default {
   name: "Problem",
