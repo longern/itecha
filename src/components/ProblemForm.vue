@@ -116,6 +116,11 @@ export default {
           body: JSON.stringify(this.problem),
         });
       }
+
+      this.$dialog.notify.success("保存成功", {
+        position: "top-right",
+        timeout: 5000,
+      });
     },
   },
 

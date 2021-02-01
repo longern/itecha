@@ -113,6 +113,11 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ problem_id: this.problem.id, code: this.code }),
       });
+
+      this.$dialog.notify.success("提交成功", {
+        position: "top-right",
+        timeout: 5000,
+      });
     },
   },
 
