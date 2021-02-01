@@ -22,7 +22,7 @@
             <v-card class="fill-height" :loading="loading">
               <v-container>
                 <h1 v-text="problem.title" class="text-center mb-2"></h1>
-                <div v-html="renderedContent"></div>
+                <div v-html="renderedContent" class="markdown-body"></div>
               </v-container>
             </v-card>
           </v-col>
