@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="problem-form">
     <v-card :loading="loading">
       <v-container>
         <h2 class="mb-4">
@@ -144,3 +144,9 @@ export default {
   components: { mavonEditor, codemirror },
 };
 </script>
+
+<style>
+.problem-form .v-textarea {
+  font-family: Consolas, "Courier New", Courier, monospace;
+}
+</style>
