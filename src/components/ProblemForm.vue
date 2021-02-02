@@ -18,6 +18,7 @@
             v-model="problem.content"
             required
             class="mb-4"
+            :externals="false"
           ></mavon-editor>
           <v-expansion-panels>
             <v-expansion-panel>
