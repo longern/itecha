@@ -100,7 +100,7 @@ def login_required(func):
         expected_token = hashlib.sha256(
             f"{user_id}{timestamp}{salt}{app.config['SECRET_KEY']}".encode()
         ).hexdigest()
-        if token == expected_token or time.time() - timestamp >= 86400:
+        if token != expected_token or time.time() - timestamp >= 86400:
             raise Unauthorized()
 
         return func(*args, **kwargs)
