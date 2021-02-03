@@ -12,7 +12,10 @@
 
     <v-main>
       <div>
-        <router-view :is-superuser="isSuperuser"></router-view>
+        <router-view
+          :is-superuser="isSuperuser"
+          @login="updateToken"
+        ></router-view>
       </div>
     </v-main>
   </v-app>
@@ -26,6 +29,12 @@ export default {
     isSuperuser:
       ["127.0.0.1", "localhost"].indexOf(document.location.hostname) >= 0,
   }),
+
+  methods: {
+    updateToken(token) {
+      console.log(token);
+    },
+  },
 };
 </script>
 

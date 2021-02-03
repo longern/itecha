@@ -4,7 +4,7 @@
     <v-row>
       <v-col md="4" offset-md="4">
         <v-card class="login pa-8 mt-16">
-          <v-form ref="loginForm">
+          <v-form ref="loginForm" @submit.prevent="login">
             <v-text-field
               v-model="username"
               label="用户名"
@@ -12,10 +12,11 @@
             ></v-text-field>
             <v-text-field
               v-model="password"
+              type="password"
               label="密码"
               required
             ></v-text-field>
-            <v-btn color="primary" @click="login">登录</v-btn>
+            <v-btn type="submit" color="primary">登录</v-btn>
           </v-form>
         </v-card>
       </v-col>
@@ -47,11 +48,12 @@ export default {
       });
 
       if (response.status <= 299) {
+        this.$emit("login", (await response.json()).token);
         this.$router.push("/");
         return;
       }
 
-      const messageBody = JSON.parse(await response.text());
+      const messageBody = await response.json();
       this.message = messageBody.message[0].message;
     },
   },

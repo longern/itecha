@@ -1,14 +1,30 @@
 import datetime
+import hashlib
 import json
+import logging
+import os
+import re
 import sys
+import time
 import traceback
+from functools import wraps
 from io import StringIO
 
 from flask import Flask, request
 from flask.helpers import send_from_directory
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import check_password_hash, gen_salt, generate_password_hash
+from werkzeug.exceptions import (
+    HTTPException,
+    BadRequest,
+    Unauthorized,
+    UnprocessableEntity,
+)
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = os.getenv(
+    "SECRET_KEY", "f5xl2fa-=5-lt1n!ucyzv%kz(t=2p4u#tqr$7!vj*a*wmiufr#"
+)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////tmp/test.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
@@ -43,6 +59,69 @@ class Submission(db.Model):
     )
 
 
+@app.route("/login", methods=["POST"])
+def login():
+    body: dict = request.json
+    logging.info("Logging username: %s", body.get("username"))
+
+    if not body.get("username"):
+        raise UnprocessableEntity([{"field": "username", "message": "Empty username."}])
+
+    user = User.query.filter_by(username=body.get("username")).first()
+
+    if not user:  # User not found
+        raise UnprocessableEntity([{"field": "username", "message": "User not found."}])
+
+    if not check_password_hash(user.password, body.get("password")):
+        raise UnprocessableEntity(
+            [{"field": "password", "message": "Incorrect password."}]
+        )
+
+    timestamp = int(time.time())
+    salt = gen_salt(8)
+    token = hashlib.sha256(
+        f"{user.id}{timestamp}{salt}{app.config['SECRET_KEY']}".encode()
+    ).hexdigest()
+
+    return {"token": f"{user.id},{timestamp},{salt},{token}"}
+
+
+def login_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        match = re.match(
+            "Bearer ([^,]*),([^,]*),([^,]*),([^,]*)",
+            request.headers.get("Authorization", ""),
+        )
+        if not match:
+            raise Unauthorized()
+
+        user_id, timestamp, salt, token = match.groups()
+        expected_token = hashlib.sha256(
+            f"{user_id}{timestamp}{salt}{app.config['SECRET_KEY']}".encode()
+        ).hexdigest()
+        if token == expected_token or time.time() - timestamp >= 86400:
+            raise Unauthorized()
+
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+@app.route("/users", methods=["POST"])
+def create_user() -> str:
+    user_dict: dict = json.loads(request.data)
+    if "username" not in user_dict or "password" not in user_dict:
+        raise BadRequest()
+    user = User(
+        username=user_dict["username"],
+        password=generate_password_hash(user_dict["password"]),
+    )
+    db.session.add(user)
+    db.session.commit()
+    return ("", 204)
+
+
 @app.route("/problems/<id>", methods=["GET"])
 def problem(id: str) -> str:
     problem = Problem.query.filter_by(id=id).first()
@@ -61,6 +140,7 @@ def problem(id: str) -> str:
 
 
 @app.route("/problems", methods=["POST"])
+@login_required
 def create_problems() -> str:
     problem_dict: dict = json.loads(request.data)
     if "testcases" in problem_dict:
@@ -72,6 +152,7 @@ def create_problems() -> str:
 
 
 @app.route("/problems/<id>", methods=["PUT"])
+@login_required
 def update_problems(id: str) -> str:
     problem_dict: dict = json.loads(request.data)
     if "testcases" in problem_dict:
@@ -171,6 +252,14 @@ def after_request(response):
     response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
     response.headers.add("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE")
     return response
+
+
+@app.errorhandler(HTTPException)
+def handle_exception(exception: HTTPException):
+    return (
+        {"name": exception.__class__.__name__, "message": exception.description},
+        exception.code,
+    )
 
 
 if __name__ == "__main__":
