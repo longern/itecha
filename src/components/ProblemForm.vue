@@ -31,6 +31,16 @@
                 ></codemirror>
               </v-expansion-panel-content>
             </v-expansion-panel>
+            <v-expansion-panel>
+              <v-expansion-panel-header>隐藏代码</v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <codemirror
+                  ref="cm"
+                  v-model="problem.hidden_code"
+                  :options="cmOption"
+                ></codemirror>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
           </v-expansion-panels>
           <h3 class="my-4">测评</h3>
           <v-btn icon @click="appendTestCase"><v-icon>mdi-plus</v-icon></v-btn>

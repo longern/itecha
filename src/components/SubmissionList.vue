@@ -92,7 +92,7 @@ export default {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              source: submission.code,
+              source: `${submission.code}\n${this.problem.hidden_code || ""}`,
               input: testcase.input_data,
             }),
           });
