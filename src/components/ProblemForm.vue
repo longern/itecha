@@ -111,8 +111,9 @@ export default {
     },
 
     async save() {
+      let response;
       if (this.$route.params.id) {
-        await fetch(
+        response = await fetch(
           `${process.env.VUE_APP_API_BASE_URL}problems/${this.problem.id}`,
           {
             method: "PUT",
@@ -121,17 +122,24 @@ export default {
           }
         );
       } else {
-        await fetch(`${process.env.VUE_APP_API_BASE_URL}problems`, {
+        response = await fetch(`${process.env.VUE_APP_API_BASE_URL}problems`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(this.problem),
         });
       }
 
-      this.$dialog.notify.success("保存成功", {
-        position: "top-right",
-        timeout: 5000,
-      });
+      if (response.status <= 299) {
+        this.$dialog.notify.success("保存成功", {
+          position: "top-right",
+          timeout: 5000,
+        });
+      } else {
+        this.$dialog.notify.error((await response.json()).name, {
+          position: "top-right",
+          timeout: 5000,
+        });
+      }
     },
   },
 
