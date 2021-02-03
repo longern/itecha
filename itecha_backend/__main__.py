@@ -122,6 +122,19 @@ def create_user() -> str:
     return ("", 204)
 
 
+@app.route("/users/<id>", methods=["GET"])
+def user(id: str) -> str:
+    user = User.query.filter_by(id=id).first()
+    if not user:
+        return ("Not Found", 404)
+    return json.dumps(
+        {
+            "id": user.id,
+            "username": user.username,
+        }
+    )
+
+
 @app.route("/problems/<id>", methods=["GET"])
 def problem(id: str) -> str:
     problem = Problem.query.filter_by(id=id).first()
