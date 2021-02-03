@@ -79,6 +79,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import { mavonEditor } from "mavon-editor";
 import { codemirror } from "vue-codemirror";
 import "mavon-editor/dist/css/index.css";
@@ -113,20 +114,15 @@ export default {
     async save() {
       let response;
       if (this.$route.params.id) {
-        response = await fetch(
+        response = await axios.put(
           `${process.env.VUE_APP_API_BASE_URL}problems/${this.problem.id}`,
-          {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(this.problem),
-          }
+          this.problem
         );
       } else {
-        response = await fetch(`${process.env.VUE_APP_API_BASE_URL}problems`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(this.problem),
-        });
+        response = await axios.post(
+          `${process.env.VUE_APP_API_BASE_URL}problems`,
+          this.problem
+        );
       }
 
       if (response.status <= 299) {
@@ -135,7 +131,7 @@ export default {
           timeout: 5000,
         });
       } else {
-        this.$dialog.notify.error((await response.json()).name, {
+        this.$dialog.notify.error(response.data.name, {
           position: "top-right",
           timeout: 5000,
         });
@@ -145,14 +141,10 @@ export default {
 
   async mounted() {
     if (this.$route.params.id) {
-      const problem_response = await fetch(
-        `${process.env.VUE_APP_API_BASE_URL}problems/${this.$route.params.id}`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
+      const problem_response = await axios.get(
+        `${process.env.VUE_APP_API_BASE_URL}problems/${this.$route.params.id}`
       );
-      this.problem = await problem_response.json();
+      this.problem = problem_response.data;
       this.original_title = this.problem.title;
       if (!Array.isArray(this.problem.testcases))
         this.$set(this.problem, "testcases", []);

@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import { codemirror } from "vue-codemirror";
 import "codemirror/mode/python/python";
 import "codemirror/lib/codemirror.css";
@@ -96,22 +97,17 @@ export default {
   methods: {
     async runPython3Code() {
       const pythonExecutorUrl = process.env.VUE_APP_PYTHON3_EXECUTOR;
-      const response = await fetch(pythonExecutorUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          source: this.code,
-          input: this.debugInput,
-        }),
+      const response = await axios.post(pythonExecutorUrl, {
+        source: this.code,
+        input: this.debugInput,
       });
-      this.debugOutput = await response.text();
+      this.debugOutput = response.data;
     },
 
     async submit() {
-      await fetch(`${process.env.VUE_APP_API_BASE_URL}submissions`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ problem_id: this.problem.id, code: this.code }),
+      await axios.post(`${process.env.VUE_APP_API_BASE_URL}submissions`, {
+        problem_id: this.problem.id,
+        code: this.code,
       });
 
       this.$dialog.notify.success("提交成功", {
@@ -122,11 +118,10 @@ export default {
   },
 
   async mounted() {
-    const problem_response = await fetch(
-      `${process.env.VUE_APP_API_BASE_URL}problems/${this.$route.params.id}`,
-      { headers: { "Content-Type": "application/json" } }
+    const problem_response = await axios.get(
+      `${process.env.VUE_APP_API_BASE_URL}problems/${this.$route.params.id}`
     );
-    this.problem = await problem_response.json();
+    this.problem = problem_response.data;
     this.code = this.problem.default_code || "";
     this.loading = false;
   },
