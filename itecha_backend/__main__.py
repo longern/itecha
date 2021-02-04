@@ -10,7 +10,7 @@ import traceback
 from functools import wraps
 from io import StringIO
 
-from flask import Flask, request
+from flask import Flask, request, g
 from flask.helpers import send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, gen_salt, generate_password_hash
@@ -100,8 +100,10 @@ def login_required(func):
         expected_token = hashlib.sha256(
             f"{user_id}{timestamp}{salt}{app.config['SECRET_KEY']}".encode()
         ).hexdigest()
-        if token != expected_token or time.time() - timestamp >= 86400:
+        if token != expected_token or time.time() - int(timestamp) >= 86400:
             raise Unauthorized()
+
+        g.user_id = int(user_id)
 
         return func(*args, **kwargs)
 
@@ -193,10 +195,12 @@ def list_problems() -> str:
 
 
 @app.route("/submissions", methods=["POST"])
+@login_required
 def create_submission() -> str:
     submission_dict = json.loads(request.data)
-    submission = Submission(creator_ip=request.remote_addr, **submission_dict)
-    print(submission_dict)
+    submission = Submission(
+        creator_id=g.user_id, creator_ip=request.remote_addr, **submission_dict
+    )
     db.session.add(submission)
     db.session.commit()
     return ("", 204)
@@ -211,6 +215,10 @@ def list_submissions() -> str:
                     "id": submission.id,
                     "problem_id": submission.problem_id,
                     "code": submission.code,
+                    "creator": {
+                        "id": submission.creator.id,
+                        "username": submission.creator.username,
+                    } if submission.creator_id else None,
                     "creator_ip": submission.creator_ip,
                     "create_time": submission.create_time.replace(
                         tzinfo=datetime.timezone.utc

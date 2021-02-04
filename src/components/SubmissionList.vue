@@ -22,6 +22,14 @@
                 >
                 </router-link>
               </template>
+              <template v-slot:item.creator="{ item }">
+                <router-link
+                  v-if="item.creator"
+                  :to="`/users/${item.creator.id}`"
+                  v-text="item.creator.username"
+                >
+                </router-link>
+              </template>
               <template v-slot:item.code="{ item }">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
