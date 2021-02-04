@@ -64,4 +64,8 @@ export default {
   font-family: Consolas, "Courier New", Courier, monospace;
   cursor: pointer;
 }
+
+.v-application .markdown-body pre code {
+  background-color: transparent;
+}
 </style>
