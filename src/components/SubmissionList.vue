@@ -29,6 +29,12 @@
                   v-text="item.creator.username"
                 >
                 </router-link>
+                <span
+                  v-if="item.creator_ip"
+                  class="ml-1"
+                  v-text="`(${item.creator_ip})`"
+                >
+                </span>
               </template>
               <template v-slot:item.code="{ item }">
                 <v-tooltip bottom>
