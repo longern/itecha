@@ -1,6 +1,9 @@
-from .models import Problem, Submission
+import pickle
+
 from django.contrib.auth.models import User
 from rest_framework import serializers
+
+from .models import Problem, Submission
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -9,7 +12,20 @@ class UserSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class PickleField(serializers.Field):
+    def to_representation(self, value):
+        try:
+            return pickle.loads(value)
+        except EOFError:
+            return None
+
+    def to_internal_value(self, data):
+        return pickle.dumps(data)
+
+
 class ProblemSerializer(serializers.ModelSerializer):
+    testcases = PickleField()
+
     class Meta:
         model = Problem
         fields = "__all__"
