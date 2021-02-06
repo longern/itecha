@@ -15,7 +15,7 @@ class ProblemSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class BasicProblemSerializer(serializers.ModelSerializer):
+class BasicProblemSerializer(ProblemSerializer):
     class Meta:
         model = Problem
         fields = ["id", "title", "content", "default_code"]

@@ -33,7 +33,11 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class ProblemViewSet(viewsets.ModelViewSet):
     queryset = Problem.objects.all()
-    serializer_class = ProblemSerializer
+
+    def get_serializer_class(self):
+        if self.request.user.is_staff:
+            return ProblemSerializer
+        return BasicProblemSerializer
 
 
 class SubmissionViewSet(viewsets.ModelViewSet):

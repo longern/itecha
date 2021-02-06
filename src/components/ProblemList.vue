@@ -40,6 +40,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "ProblemList",
 
@@ -64,8 +66,8 @@ export default {
 
   async mounted() {
     this.problems = (
-      await (await fetch(`${process.env.VUE_APP_API_BASE_URL}problems`)).json()
-    ).results;
+      await axios.get(`${process.env.VUE_APP_API_BASE_URL}problems`)
+    ).data.results;
     this.loading = false;
   },
 };

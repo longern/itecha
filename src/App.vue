@@ -49,6 +49,7 @@ export default {
   },
 
   created() {
+    axios.defaults.withCredentials = true;
     if (localStorage.getItem("rest_admin_auth")) {
       const { token } = JSON.parse(localStorage.getItem("rest_admin_auth"));
       this.updateToken(token);
