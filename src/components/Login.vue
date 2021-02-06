@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "Login",
 
@@ -38,22 +40,21 @@ export default {
     async login() {
       if (!this.$refs.loginForm.validate()) return;
 
-      const response = await fetch(process.env.VUE_APP_API_BASE_URL + "login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const response = await axios.post(
+        process.env.VUE_APP_API_BASE_URL + "login",
+        {
           username: this.username,
           password: this.password,
-        }),
-      });
+        }
+      );
 
       if (response.status <= 299) {
-        this.$emit("login", (await response.json()).token);
+        this.$emit("login", response.data.token);
         this.$router.push("/");
         return;
       }
 
-      const messageBody = await response.json();
+      const messageBody = await response.data;
       this.message = messageBody.message[0].message;
     },
   },

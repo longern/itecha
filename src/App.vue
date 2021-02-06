@@ -38,6 +38,10 @@ export default {
         `${process.env.VUE_APP_API_BASE_URL}users/current`
       );
       this.user = user_response.data;
+
+      const csrf_token_match = document.cookie.match(/csrftoken=([^;]*)/);
+      if (csrf_token_match)
+        axios.defaults.headers["X-CSRFToken"] = csrf_token_match[1];
     },
   },
 
