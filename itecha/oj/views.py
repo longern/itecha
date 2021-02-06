@@ -26,6 +26,15 @@ class Login(APIView):
             raise ValueError()
 
 
+class CurrentUserView(APIView):
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return Response({}, 200)
+
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
+
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
