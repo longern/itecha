@@ -67,7 +67,7 @@ export default {
   async mounted() {
     this.problems = (
       await axios.get(`${process.env.VUE_APP_API_BASE_URL}problems`)
-    ).data.results;
+    ).data;
     this.loading = false;
   },
 };

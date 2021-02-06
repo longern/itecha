@@ -123,7 +123,7 @@ export default {
       await axios.get(`${process.env.VUE_APP_API_BASE_URL}submissions`, {
         params: { problem: this.problem_id },
       })
-    ).data.results;
+    ).data;
 
     this.loading = false;
   },
