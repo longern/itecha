@@ -38,6 +38,11 @@ class BasicProblemSerializer(ProblemSerializer):
 
 
 class SubmissionSerializer(serializers.ModelSerializer):
+    problem = ProblemSerializer(read_only=True)
+    problem_id = serializers.PrimaryKeyRelatedField(
+        queryset=Problem.objects.all(), source="problem", write_only=True
+    )
+
     class Meta:
         model = Submission
         fields = "__all__"

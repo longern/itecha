@@ -106,7 +106,7 @@ export default {
 
     async submit() {
       await axios.post(`${process.env.VUE_APP_API_BASE_URL}submissions`, {
-        problem: this.problem.id,
+        problem_id: this.problem.id,
         code: this.code,
       });
 
