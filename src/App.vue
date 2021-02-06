@@ -14,7 +14,7 @@
     <v-main>
       <div>
         <router-view
-          :is-superuser="isSuperuser"
+          :is-superuser="user.is_superuser"
           @login="updateToken"
         ></router-view>
       </div>
@@ -29,8 +29,6 @@ export default {
   name: "App",
 
   data: () => ({
-    isSuperuser:
-      ["127.0.0.1", "localhost"].indexOf(document.location.hostname) >= 0,
     user: {},
   }),
 

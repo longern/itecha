@@ -65,7 +65,7 @@ export default {
   async mounted() {
     this.problems = (
       await (await fetch(`${process.env.VUE_APP_API_BASE_URL}problems`)).json()
-    ).data;
+    ).results;
     this.loading = false;
   },
 };

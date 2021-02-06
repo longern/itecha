@@ -15,10 +15,10 @@
               disable-sort
               hide-default-footer
             >
-              <template v-slot:item.title>
+              <template v-slot:item.problem="{ item }">
                 <router-link
-                  :to="`/problems/${problem.id}`"
-                  v-text="problem.title"
+                  :to="`/problems/${item.problem.id}`"
+                  v-text="item.problem.title"
                 >
                 </router-link>
               </template>
@@ -58,6 +58,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "SubmissionList",
 
@@ -67,7 +69,7 @@ export default {
     headers: [
       {
         text: "题目名称",
-        value: "title",
+        value: "problem",
       },
       {
         text: "提交者",
@@ -87,7 +89,6 @@ export default {
       },
     ],
     loading: true,
-    problem: {},
     submissions: [],
   }),
 
@@ -99,18 +100,15 @@ export default {
         const submission = this.submissions[i];
         let submission_score = 0;
 
-        const testcase_score = 100 / this.problem.testcases.length;
-        for (var j = 0; j < this.problem.testcases.length; j++) {
-          const testcase = this.problem.testcases[j];
-          const response = await fetch(pythonExecutorUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              source: `${submission.code}\n${this.problem.hidden_code || ""}`,
-              input: testcase.input_data,
-            }),
+        const testcase_score = 100 / submission.problem.testcases.length;
+        for (var j = 0; j < submission.problem.testcases.length; j++) {
+          const testcase = submission.problem.testcases[j];
+          const hidden_code = submission.problem.hidden_code || "";
+          const response = await axios.post(pythonExecutorUrl, {
+            source: `${submission.code}\n${hidden_code}`,
+            input: testcase.input_data,
           });
-          const output = await response.text();
+          const output = response.data;
           if (output.trim() == testcase.output_data)
             submission_score += testcase_score;
         }
@@ -121,21 +119,11 @@ export default {
   },
 
   async mounted() {
-    const submissions = (
-      await (
-        await fetch(`${process.env.VUE_APP_API_BASE_URL}submissions`)
-      ).json()
-    ).data;
-
-    this.problem = await (
-      await fetch(
-        `${process.env.VUE_APP_API_BASE_URL}problems/${this.problem_id}`
-      )
-    ).json();
-
-    this.submissions = submissions.filter(
-      (submission) => submission.problem_id == this.problem_id
-    );
+    this.submissions = (
+      await axios.get(`${process.env.VUE_APP_API_BASE_URL}submissions`, {
+        params: { problem: this.problem_id },
+      })
+    ).data.results;
 
     this.loading = false;
   },
