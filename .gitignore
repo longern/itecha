@@ -27,3 +27,7 @@ pnpm-debug.log*
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Django
+local_settings.py
+db.sqlite3
