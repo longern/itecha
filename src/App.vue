@@ -15,7 +15,7 @@
       <div>
         <router-view
           :is-superuser="user.is_superuser"
-          @login="updateUser"
+          @login="updateToken"
         ></router-view>
       </div>
     </v-main>
@@ -33,9 +33,16 @@ export default {
   }),
 
   methods: {
-    async updateUser() {
+    updateToken(token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      localStorage.setItem("rest_admin_auth", JSON.stringify({ token }));
+
+      this.updateUser(token.replace(/,.*/, ""));
+    },
+
+    async updateUser(user_id) {
       const user_response = await axios.get(
-        `${process.env.VUE_APP_API_BASE_URL}users/current`
+        `${process.env.VUE_APP_API_BASE_URL}users/${user_id}`
       );
       this.user = user_response.data;
 
@@ -47,7 +54,10 @@ export default {
 
   created() {
     axios.defaults.withCredentials = true;
-    this.updateUser();
+    if (localStorage.getItem("rest_admin_auth")) {
+      const { token } = JSON.parse(localStorage.getItem("rest_admin_auth"));
+      this.updateToken(token);
+    }
   },
 };
 </script>
