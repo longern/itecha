@@ -32,8 +32,8 @@ class Cursor:
         self.conn: tablestore.OTSClient = conn
 
     def select(self, sql, params):
-        sql = re.sub(" ORDER BY [^ ]*( (ASC)|(DESC))?", "", sql)
-        sql = re.sub(" LIMIT \d*", "", sql)
+        sql = re.sub(" LIMIT \d*$", "", sql)
+        sql = re.sub(" ORDER BY [^ ]*( (ASC|DESC))?$", "", sql)
         select_match = re.match('SELECT (.*) FROM "([^ ]*)"(?: WHERE .*)?$', sql)
         if not select_match:
             raise ValueError(sql)
@@ -77,6 +77,8 @@ class Cursor:
         insert_match = re.match(
             'UPDATE "([^ ]*)" SET "(.*)" = %s WHERE ".*"\."id" = %s$', sql
         )
+        if not insert_match:
+            raise ValueError(sql)
 
         table_name = insert_match.groups()[0]
         primary_keys = [("_partition", 0), ("id", params[1])]
@@ -126,6 +128,7 @@ class DatabaseOperations(BaseDatabaseOperations):
 
 class DatabaseFeatures(BaseDatabaseFeatures):
     uses_savepoints = False
+    atomic_transactions = False
 
 
 class DatabaseWrapper(BaseDatabaseWrapper):
