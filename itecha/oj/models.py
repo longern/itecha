@@ -20,7 +20,7 @@ class Submission(models.Model):
     creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     creator_ip = models.CharField(max_length=31, null=True)
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
-    create_time = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.__class__.__name__}({self.id})"
