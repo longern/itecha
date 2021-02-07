@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 
 class Problem(models.Model):
-    title = models.CharField(max_length=255, unique=True, null=False)
+    title = models.CharField(max_length=255, null=False)
     content = models.TextField()
     default_code = models.TextField(null=True)
     testcases = models.BinaryField()

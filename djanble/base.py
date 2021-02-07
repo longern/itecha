@@ -55,6 +55,7 @@ class Cursor:
             row_dict = row_as_dict(row)
             result.append([row_dict.get(column, None) for column in columns])
 
+        self.rowcount = len(result)
         self.result = iter(result)
 
     def insert(self, sql: str, params):
@@ -67,8 +68,12 @@ class Cursor:
             tablestore.Row([("_partition", 0), ("id", tablestore.PK_AUTO_INCR)], []),
         )
 
+        self.rowcount = 1
+
     def update(self, sql: str, params):
         insert_match = re.match('UPDATE "([^ ]*)" SET \([^)]*\) VALUES \(.*\)$', sql)
+
+        self.rowcount = 1
 
     def execute(self, sql: str, params=None):
         self.result = []
@@ -88,6 +93,9 @@ class Cursor:
             except StopIteration:
                 break
         return ret
+
+    def fetchone(self):
+        return next(self.result)
 
     close = do_nothing
 
