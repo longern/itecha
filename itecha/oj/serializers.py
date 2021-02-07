@@ -38,6 +38,7 @@ class BasicProblemSerializer(ProblemSerializer):
 
 
 class SubmissionSerializer(serializers.ModelSerializer):
+    creator = UserSerializer(read_only=True)
     problem = ProblemSerializer(read_only=True)
     problem_id = serializers.PrimaryKeyRelatedField(
         queryset=Problem.objects.all(), source="problem", write_only=True
@@ -46,4 +47,3 @@ class SubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Submission
         fields = "__all__"
-        depth = 1

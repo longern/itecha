@@ -62,12 +62,16 @@ class Cursor:
         insert_match = re.match('INSERT INTO "([^ ]*)" \([^)]*\) VALUES \(.*\)$', sql)
         if not insert_match:
             raise ValueError(sql)
+
         table_name = insert_match.groups()[0]
+        primary_keys = [("_partition", 0), ("id", tablestore.PK_AUTO_INCR)]
         consumed, return_row = self.conn.put_row(
             table_name,
-            tablestore.Row([("_partition", 0), ("id", tablestore.PK_AUTO_INCR)], []),
+            tablestore.Row(primary_keys, []),
+            return_type=tablestore.ReturnType.RT_PK,
         )
 
+        self.lastrowid = row_as_dict(return_row)["id"]
         self.rowcount = 1
 
     def update(self, sql: str, params):
