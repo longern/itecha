@@ -32,9 +32,9 @@ class Cursor:
         self.conn: tablestore.OTSClient = conn
 
     def select(self, sql, params):
-        select_match = re.match(
-            'SELECT (.*) FROM "([^ ]*)"(?: WHERE .*)?(?: LIMIT (\d*))?$', sql
-        )
+        sql = re.sub(" ORDER BY [^ ]*( (ASC)|(DESC))?", "", sql)
+        sql = re.sub(" LIMIT \d*", "", sql)
+        select_match = re.match('SELECT (.*) FROM "([^ ]*)"(?: WHERE .*)?$', sql)
         if not select_match:
             raise ValueError(sql)
         table_name = select_match.groups()[1]
@@ -74,7 +74,16 @@ class Cursor:
         self.rowcount = 1
 
     def update(self, sql: str, params):
-        insert_match = re.match('UPDATE "([^ ]*)" SET \([^)]*\) VALUES \(.*\)$', sql)
+        insert_match = re.match(
+            'UPDATE "([^ ]*)" SET "(.*)" = %s WHERE ".*"\."id" = %s$', sql
+        )
+
+        table_name = insert_match.groups()[0]
+        primary_keys = [("_partition", 0), ("id", params[1])]
+        row = tablestore.Row(
+            primary_keys, {"PUT": [(insert_match.groups()[1], params[0])]}
+        )
+        self.conn.update_row(table_name, row, tablestore.Condition("EXPECT_EXIST"))
 
         self.rowcount = 1
 
@@ -115,11 +124,15 @@ class DatabaseOperations(BaseDatabaseOperations):
         return '"{}"'.format(name)
 
 
+class DatabaseFeatures(BaseDatabaseFeatures):
+    uses_savepoints = False
+
+
 class DatabaseWrapper(BaseDatabaseWrapper):
     introspection_class = DatabaseIntrospection
     client_class = BaseDatabaseClient
     creation_class = BaseDatabaseCreation
-    features_class = BaseDatabaseFeatures
+    features_class = DatabaseFeatures
     ops_class = DatabaseOperations
 
     Database = Database
