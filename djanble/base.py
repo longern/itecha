@@ -34,7 +34,9 @@ class Cursor:
     def select(self, sql, params):
         sql = re.sub(" LIMIT \d*$", "", sql)
         sql = re.sub(" ORDER BY [^ ]*( (ASC|DESC))?$", "", sql)
-        select_match = re.match('SELECT (.*) FROM "([^ ]*)"(?: WHERE .*)?$', sql)
+        select_match = re.match(
+            'SELECT (.*) FROM "([^ ]*)"(?: WHERE "(.*)"\."id" = %s)?$', sql
+        )
         if not select_match:
             raise ValueError(sql)
         table_name = select_match.groups()[1]
@@ -42,12 +44,18 @@ class Cursor:
             re.sub(".*\.", "", column)[1:-1]
             for column in select_match.groups()[0].split(", ")
         ]
-        consumed, next_primary_key, row_list, next_token = self.conn.get_range(
-            table_name,
-            "FORWARD",
-            [("_partition", 0), ("id", tablestore.INF_MIN)],
-            [("_partition", 0), ("id", tablestore.INF_MAX)],
-        )
+        if select_match.groups()[2]:
+            _, row, _ = self.conn.get_row(
+                table_name, [("_partition", 0), ("id", params[0])]
+            )
+            row_list = [row]
+        else:
+            consumed, next_primary_key, row_list, _ = self.conn.get_range(
+                table_name,
+                "FORWARD",
+                [("_partition", 0), ("id", tablestore.INF_MIN)],
+                [("_partition", 0), ("id", tablestore.INF_MAX)],
+            )
 
         result = []
         for row in row_list:
@@ -75,16 +83,28 @@ class Cursor:
 
     def update(self, sql: str, params):
         insert_match = re.match(
-            'UPDATE "([^ ]*)" SET "(.*)" = %s WHERE ".*"\."id" = %s$', sql
+            'UPDATE "([^ ]*)" SET ((?:"(?:[^"]*)" = (?:%s|NULL),? )+)WHERE ".*"\."id" = %s$',
+            sql,
         )
         if not insert_match:
             raise ValueError(sql)
 
+        params_iter = iter(params)
+
+        assignments = {}
+        for assignment_expr in insert_match.groups()[1].split(","):
+            lhs, rhs = assignment_expr.strip().split(" = ")
+            if rhs == "%s":
+                param = next(params_iter)
+                if isinstance(param, memoryview):
+                    param = bytearray(param)
+                assignments[lhs.strip('"')] = param
+            elif rhs.upper() == "NULL":
+                assignments[lhs.strip('"')] = None
+
         table_name = insert_match.groups()[0]
-        primary_keys = [("_partition", 0), ("id", params[1])]
-        row = tablestore.Row(
-            primary_keys, {"PUT": [(insert_match.groups()[1], params[0])]}
-        )
+        primary_keys = [("_partition", 0), ("id", params[-1])]
+        row = tablestore.Row(primary_keys, {"PUT": list(assignments.items())})
         self.conn.update_row(table_name, row, tablestore.Condition("EXPECT_EXIST"))
 
         self.rowcount = 1
