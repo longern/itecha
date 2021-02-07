@@ -77,6 +77,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "itecha.wsgi.application"
 
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+
 
 # CORS configuration
 CORS_ALLOW_ALL_ORIGINS = True

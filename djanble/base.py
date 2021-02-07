@@ -1,7 +1,6 @@
 import re
 from itertools import chain
 
-import moz_sql_parser
 import tablestore
 from django.db.backends.base.base import BaseDatabaseWrapper
 from django.db.backends.base.client import BaseDatabaseClient
