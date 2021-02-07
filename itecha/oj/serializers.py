@@ -9,7 +9,7 @@ from .models import Problem, Submission
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = "__all__"
+        exclude = ("password", "groups", "user_permissions")
 
 
 class PickleField(serializers.Field):
