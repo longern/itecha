@@ -53,6 +53,7 @@ class ProblemViewSet(viewsets.ModelViewSet):
 class SubmissionViewSet(viewsets.ModelViewSet):
     queryset = Submission.objects.all()
     serializer_class = SubmissionSerializer
+    filterset_fields = ["creator", "problem"]
 
     def perform_create(self, serializer):
         serializer.save(
