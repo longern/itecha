@@ -44,10 +44,8 @@
                   <pre v-text="item.code"></pre>
                 </v-tooltip>
               </template>
-              <template v-slot:item.create_time="{ item }">
-                <span
-                  v-text="new Date(item.create_time).toLocaleString()"
-                ></span>
+              <template v-slot:item.created="{ item }">
+                <span v-text="new Date(item.created).toLocaleString()"></span>
               </template>
             </v-data-table>
           </v-container>
@@ -85,7 +83,7 @@ export default {
       },
       {
         text: "提交时间",
-        value: "create_time",
+        value: "created",
       },
     ],
     loading: true,

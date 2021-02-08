@@ -20,6 +20,7 @@ env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False),
     ALLOWED_HOSTS=(list, []),
+    CORS_ALLOWED_ORIGINS=(list, []),
     DATABASE_URL=(str, "sqlite:///db.sqlite3"),
     DATABASE_ENGINE=(str, ""),
     TZ=(str, "Asia/Shanghai"),
@@ -77,9 +78,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "itecha.wsgi.application"
 
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+
 
 # CORS configuration
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = env("CORS_ALLOWED_ORIGINS")
+
+CORS_ALLOW_CREDENTIALS = True
 
 
 # Database
@@ -95,15 +100,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 
@@ -130,6 +129,7 @@ STATIC_URL = "/static/"
 # Django rest framework
 
 REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": ["itecha.oj.authentication.TokenAuthentication"],
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",

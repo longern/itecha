@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from rest_framework import permissions, viewsets
 from rest_framework.views import APIView, Response
+from .authentication import generate_token
 
 from .models import Problem, Submission
 from .serializers import (
@@ -20,8 +21,8 @@ class Login(APIView):
         password = request.data.get("password")
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
-            return Response({"token": str(user.id)})
+            # login(request, user)
+            return Response({"token": generate_token(user)})
         else:
             raise ValueError()
 
