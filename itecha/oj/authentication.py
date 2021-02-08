@@ -1,5 +1,4 @@
 import hashlib
-import re
 import time
 
 from django.conf import settings

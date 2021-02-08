@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "corsheaders",
     "rest_framework",
     "django_filters",
     "itecha.oj",
@@ -51,7 +50,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -83,9 +81,14 @@ SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 
 
 # CORS configuration
-CORS_ALLOWED_ORIGINS = env("CORS_ALLOWED_ORIGINS")
+if DEBUG:
+    INSTALLED_APPS.append("corsheaders")
 
-CORS_ALLOW_CREDENTIALS = True
+    MIDDLEWARE.insert(2, "corsheaders.middleware.CorsMiddleware")
+
+    CORS_ALLOWED_ORIGINS = env("CORS_ALLOWED_ORIGINS")
+
+    CORS_ALLOW_CREDENTIALS = True
 
 
 # Database
