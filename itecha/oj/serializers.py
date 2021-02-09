@@ -25,6 +25,9 @@ class PickleField(serializers.Field):
 
 class ProblemSerializer(serializers.ModelSerializer):
     testcases = PickleField()
+    default_code = serializers.CharField(
+        allow_blank=True, allow_null=True, trim_whitespace=False
+    )
 
     class Meta:
         model = Problem
