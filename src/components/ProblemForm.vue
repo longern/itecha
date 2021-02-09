@@ -90,7 +90,7 @@ export default {
   data: () => ({
     loading: true,
     original_title: "题目",
-    problem: { testcases: [] },
+    problem: { default_code: "", testcases: [], hidden_code: "" },
     cmOption: {
       indentUnit: 4,
       lineNumbers: true,
