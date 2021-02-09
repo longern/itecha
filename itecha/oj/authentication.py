@@ -3,7 +3,7 @@ import time
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from rest_framework import authentication, exceptions
+from rest_framework import authentication
 from werkzeug.security import gen_salt
 
 
@@ -40,6 +40,6 @@ class TokenAuthentication(authentication.BaseAuthentication):
         try:
             user = User.objects.get(id=user_id)
         except User.DoesNotExist:
-            raise exceptions.AuthenticationFailed("No such user")
+            return None
 
         return (user, token)

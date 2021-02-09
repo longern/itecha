@@ -24,7 +24,7 @@ class Login(APIView):
             # login(request, user)
             return Response({"token": generate_token(user)})
         else:
-            raise ValueError()
+            return Response(status=401)
 
 
 class CurrentUserView(APIView):
