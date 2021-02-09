@@ -2,7 +2,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 module.exports = {
-  "outputDir": "itecha_backend/static",
+  "outputDir": "itecha/static",
   "transpileDependencies": [
     "vuetify"
   ],
