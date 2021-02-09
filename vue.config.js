@@ -8,6 +8,10 @@ module.exports = {
   ],
 };
 
+process.env.VUE_APP_API_BASE_URL = process.env.VUE_APP_API_BASE_URL || "/";
+
+process.env.VUE_APP_PYTHON3_EXECUTOR = process.env.VUE_APP_PYTHON3_EXECUTOR || "/python-executor";
+
 process.env.VUE_APP_ENABLE_CDN = process.env.VUE_APP_ENABLE_CDN || "";
 
 if (!process.env.VUE_APP_ENABLE_CDN)
