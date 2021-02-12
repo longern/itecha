@@ -1,3 +1,4 @@
+import json
 import pickle
 
 from django.contrib.auth.models import User
@@ -10,6 +11,17 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         exclude = ("password", "groups", "user_permissions")
+
+
+class JSONField(serializers.Field):
+    def to_representation(self, value):
+        try:
+            return json.loads(value)
+        except EOFError:
+            return None
+
+    def to_internal_value(self, data):
+        return json.dumps(data)
 
 
 class PickleField(serializers.Field):
@@ -28,6 +40,7 @@ class ProblemSerializer(serializers.ModelSerializer):
     default_code = serializers.CharField(
         allow_blank=True, allow_null=True, trim_whitespace=False
     )
+    tags = JSONField()
 
     class Meta:
         model = Problem
@@ -37,7 +50,7 @@ class ProblemSerializer(serializers.ModelSerializer):
 class BasicProblemSerializer(ProblemSerializer):
     class Meta:
         model = Problem
-        fields = ["id", "title", "content", "default_code"]
+        fields = ["id", "title", "content", "default_code", "tags"]
 
 
 class SubmissionSerializer(serializers.ModelSerializer):

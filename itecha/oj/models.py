@@ -10,6 +10,7 @@ class Problem(models.Model):
     default_code = models.TextField(blank=True, null=True)
     testcases = models.BinaryField()
     hidden_code = models.TextField(blank=True, null=True)
+    tags = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.title

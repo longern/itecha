@@ -20,6 +20,15 @@
                 <router-link :to="`/problems/${item.id}`" v-text="item.title">
                 </router-link>
               </template>
+              <template v-slot:item.tags="{ item }">
+                <v-chip-group v-if="item.tags">
+                  <v-chip
+                    v-for="tag in item.tags"
+                    :key="tag"
+                    v-text="tag"
+                  ></v-chip>
+                </v-chip-group>
+              </template>
               <template v-slot:item.actions="{ item }" v-if="isSuperuser">
                 <router-link :to="`/problems/${item.id}/edit`" title="编辑">
                   <v-icon>mdi-pencil</v-icon>
@@ -52,6 +61,11 @@ export default {
       {
         text: "题目名称",
         value: "title",
+        sortable: false,
+      },
+      {
+        text: "标签",
+        value: "tags",
         sortable: false,
       },
       {
