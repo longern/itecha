@@ -18,7 +18,7 @@
     <v-row>
       <v-col>
         <v-row>
-          <v-col md="4">
+          <v-col cols="12" md="4">
             <v-card class="fill-height" :loading="loading">
               <v-container>
                 <h1 v-text="problem.title" class="text-center mb-2"></h1>
@@ -35,7 +35,7 @@
               ></codemirror>
             </v-card>
           </v-col>
-          <v-col v-if="isDebugPanelVisible" md="3">
+          <v-col v-if="isDebugPanelVisible" cols="12" md="3">
             <v-card class="fill-height">
               <v-container>
                 <v-textarea v-model="debugInput" label="输入"></v-textarea>
