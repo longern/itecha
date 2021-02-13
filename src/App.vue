@@ -37,12 +37,12 @@ export default {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       localStorage.setItem("rest_admin_auth", JSON.stringify({ token }));
 
-      this.updateUser(token.replace(/,.*/, ""));
+      this.updateUser();
     },
 
-    async updateUser(user_id) {
+    async updateUser() {
       const user_response = await axios.get(
-        `${process.env.VUE_APP_API_BASE_URL}users/${user_id}`
+        `${process.env.VUE_APP_API_BASE_URL}users/current`
       );
       this.user = user_response.data;
 

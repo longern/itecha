@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from rest_framework import permissions, viewsets
+from rest_framework.decorators import action
 from rest_framework.views import APIView, Response
 from .authentication import generate_token
 
@@ -27,18 +28,17 @@ class Login(APIView):
             return Response(status=401)
 
 
-class CurrentUserView(APIView):
-    def get(self, request):
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    @action(methods=["GET"], detail=False)
+    def current(self, request):
         if not request.user.is_authenticated:
             return Response({}, 200)
 
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
 
 
 class ProblemViewSet(viewsets.ModelViewSet):
