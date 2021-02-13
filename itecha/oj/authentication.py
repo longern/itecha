@@ -3,8 +3,8 @@ import time
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import get_hasher
 from rest_framework import authentication
-from werkzeug.security import gen_salt
 
 
 def check_token(token: str, life=604800):
@@ -20,7 +20,7 @@ def check_token(token: str, life=604800):
 
 def generate_token(user: User) -> str:
     timestamp = int(time.time())
-    salt = gen_salt(8)
+    salt = get_hasher().salt()
     token = hashlib.sha256(
         f"{user.id}{timestamp}{salt}{settings.SECRET_KEY}".encode()
     ).hexdigest()
