@@ -77,18 +77,25 @@ export default {
     },
     debugInput: "",
     debugOutput: "",
-    breadcrumbsItems: [
-      {
-        text: "首页",
-        disabled: false,
-        to: "/",
-      },
-    ],
     isDebugPanelVisible: false,
     loading: true,
   }),
 
   computed: {
+    breadcrumbsItems() {
+      return [
+        {
+          text: "首页",
+          disabled: false,
+          to: "/",
+        },
+        {
+          text: this.problem.title,
+          disabled: true,
+          to: "/",
+        },
+      ];
+    },
     renderedContent() {
       return md.render(this.problem.content || "");
     },
