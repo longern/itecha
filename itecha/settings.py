@@ -46,6 +46,12 @@ INSTALLED_APPS = [
     "itecha.oj",
 ]
 
+try:
+    __import__("import_export")
+    INSTALLED_APPS.append("import_export")
+except ImportError:
+    pass
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",

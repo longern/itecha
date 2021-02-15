@@ -1,12 +1,17 @@
 from django.contrib import admin
 from .models import Problem, Submission
 
+try:
+    from import_export.admin import ImportExportMixin
+except ImportError:
+    ImportExportMixin = type("ImportExportMixin", (), {})
+
 
 @admin.register(Problem)
-class ProblemAdmin(admin.ModelAdmin):
+class ProblemAdmin(ImportExportMixin, admin.ModelAdmin):
     pass
 
 
 @admin.register(Submission)
-class SubmissionAdmin(admin.ModelAdmin):
+class SubmissionAdmin(ImportExportMixin, admin.ModelAdmin):
     pass
