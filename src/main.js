@@ -6,6 +6,7 @@ import 'vuetify-dialog/dist/vuetify-dialog.css'
 
 import App from "./App.vue";
 import Login from "./components/Login.vue";
+import Playground from "./components/Playground.vue";
 import Problem from "./components/Problem.vue";
 import ProblemList from "./components/ProblemList.vue";
 import ProblemForm from "./components/ProblemForm.vue";
@@ -29,6 +30,10 @@ const router = new VueRouter({
     {
       path: "/login",
       component: Login,
+    },
+    {
+      path: "/playground",
+      component: Playground,
     },
     {
       path: "/problems/create",

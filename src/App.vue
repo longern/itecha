@@ -7,6 +7,8 @@
 
       <v-spacer></v-spacer>
 
+      <v-btn text to="/playground">在线运行</v-btn>
+
       <v-btn v-if="user.username" text v-text="user.username"></v-btn>
       <v-btn v-else text to="/login">登录</v-btn>
     </v-app-bar>
