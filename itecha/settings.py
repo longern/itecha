@@ -11,16 +11,19 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+
 import environ
+from django.utils.crypto import get_random_string
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env(
     # set casting, default value
+    SECRET_KEY=(str, ""),
     DEBUG=(bool, False),
-    ALLOWED_HOSTS=(list, []),
-    CORS_ALLOWED_ORIGINS=(list, []),
+    ALLOWED_HOSTS=(list, ["*"]),
+    CORS_ALLOWED_ORIGINS=(list, ["http://localhost:8080"]),
     DATABASE_URL=(str, "sqlite:///db.sqlite3"),
     DATABASE_ENGINE=(str, ""),
     TZ=(str, "Asia/Shanghai"),
@@ -28,6 +31,11 @@ env = environ.Env(
 environ.Env.read_env()
 
 SECRET_KEY = env("SECRET_KEY")
+
+if not SECRET_KEY:
+    SECRET_KEY = get_random_string(50)
+    with open(Path(__file__).resolve().parent / ".env", "w") as env_file:
+        env_file.write(f"SECRET_KEY={SECRET_KEY}\n")
 
 DEBUG = env("DEBUG")
 
