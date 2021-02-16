@@ -18,7 +18,7 @@
             v-model="problem.content"
             required
             class="mb-4"
-            :externals="false"
+            :externalLink="false"
           ></mavon-editor>
           <v-expansion-panels>
             <v-expansion-panel>
@@ -81,7 +81,6 @@
 
 <script>
 import axios from "axios";
-import { mavonEditor } from "mavon-editor";
 import { codemirror } from "vue-codemirror";
 import "mavon-editor/dist/css/index.css";
 
@@ -155,7 +154,7 @@ export default {
     this.loading = false;
   },
 
-  components: { mavonEditor, codemirror, EditableTags },
+  components: { codemirror, EditableTags },
 };
 </script>
 

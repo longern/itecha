@@ -3,6 +3,8 @@ import VueRouter from "vue-router";
 import vuetify from "./plugins/vuetify";
 import VuetifyDialog from 'vuetify-dialog'
 import 'vuetify-dialog/dist/vuetify-dialog.css'
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 
 import App from "./App.vue";
 import Login from "./components/Login.vue";
@@ -20,6 +22,7 @@ Vue.use(VuetifyDialog, {
     vuetify
   }
 });
+Vue.use(mavonEditor);
 
 const router = new VueRouter({
   routes: [
