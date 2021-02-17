@@ -5,9 +5,10 @@ from rest_framework.decorators import action
 from rest_framework.views import APIView, Response
 from .authentication import generate_token
 
-from .models import Problem, Submission
+from .models import Contest, Problem, Submission
 from .serializers import (
     BasicProblemSerializer,
+    ContestSerializer,
     ProblemSerializer,
     SubmissionSerializer,
     UserSerializer,
@@ -41,6 +42,11 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+class ContestViewSet(viewsets.ModelViewSet):
+    queryset = Contest.objects.all()
+    serializer_class = ContestSerializer
+
+
 class ProblemViewSet(viewsets.ModelViewSet):
     queryset = Problem.objects.all()
 
@@ -48,6 +54,9 @@ class ProblemViewSet(viewsets.ModelViewSet):
         if self.request.user.is_staff:
             return ProblemSerializer
         return BasicProblemSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user)
 
 
 class SubmissionViewSet(viewsets.ModelViewSet):

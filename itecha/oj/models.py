@@ -1,7 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
+
+class Contest(models.Model):
+    name = models.CharField(max_length=255)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Problem(models.Model):
@@ -11,6 +19,8 @@ class Problem(models.Model):
     testcases = models.BinaryField()
     hidden_code = models.TextField(blank=True, null=True)
     tags = models.TextField(blank=True, null=True)
+    creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    contest = models.ForeignKey(Contest, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.title

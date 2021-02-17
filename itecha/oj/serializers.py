@@ -4,7 +4,7 @@ import pickle
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from .models import Problem, Submission
+from .models import Contest, Problem, Submission
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -35,12 +35,19 @@ class PickleField(serializers.Field):
         return pickle.dumps(data)
 
 
+class ContestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contest
+        fields = "__all__"
+
+
 class ProblemSerializer(serializers.ModelSerializer):
     testcases = PickleField()
     default_code = serializers.CharField(
         allow_blank=True, allow_null=True, trim_whitespace=False
     )
     tags = JSONField()
+    contest = ContestSerializer(read_only=True)
 
     class Meta:
         model = Problem
