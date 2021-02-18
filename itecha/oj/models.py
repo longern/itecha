@@ -32,6 +32,7 @@ class Submission(models.Model):
     creator_ip = models.CharField(max_length=31, null=True)
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
+    score = models.IntegerField(null=True)
 
     def __str__(self):
         return f"{self.__class__.__name__}({self.id})"

@@ -112,6 +112,10 @@ export default {
         }
 
         this.$set(submission, "score", submission_score);
+        axios.patch(
+          `${process.env.VUE_APP_API_BASE_URL}submissions/${submission.id}`,
+          { score: submission_score }
+        );
       }
     },
   },
