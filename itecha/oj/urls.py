@@ -2,7 +2,8 @@ from django.urls import include, path
 from rest_framework import routers
 
 from .views import (
-    Login,
+    LoginView,
+    PythonExecutorView,
     ContestViewSet,
     ProblemViewSet,
     SubmissionViewSet,
@@ -16,6 +17,7 @@ router.register(r"submissions", SubmissionViewSet)
 router.register(r"users", UserViewSet)
 
 urlpatterns = [
-    path("login", Login.as_view()),
+    path("login", LoginView.as_view()),
+    path("python-executor", PythonExecutorView.as_view()),
     path("", include(router.urls)),
 ]

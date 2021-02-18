@@ -26,6 +26,7 @@ env = environ.Env(
     CORS_ALLOWED_ORIGINS=(list, ["http://localhost:8080"]),
     DATABASE_URL=(str, "sqlite:///db.sqlite3"),
     DATABASE_ENGINE=(str, ""),
+    PYTHON_EXECUTOR=(str, ""),
     TZ=(str, "Asia/Shanghai"),
 )
 environ.Env.read_env()
@@ -162,6 +163,9 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ],
 }
+
+# Python executor
+PYTHON_EXECUTOR = env("PYTHON_EXECUTOR")
 
 try:
     from .local_settings import *
