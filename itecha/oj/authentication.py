@@ -36,6 +36,8 @@ class TokenAuthentication(authentication.BaseAuthentication):
         token = auth_header[7:]
 
         user_id = check_token(token)
+        if user_id is None:
+            return None
 
         try:
             user = User.objects.get(id=user_id)
