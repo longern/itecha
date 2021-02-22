@@ -1,5 +1,6 @@
 import VueRouter from "vue-router";
 
+import ContestList from "./components/ContestList.vue";
 import Login from "./components/Login.vue";
 import Playground from "./components/Playground.vue";
 import Problem from "./components/Problem.vue";
@@ -12,6 +13,10 @@ const router = new VueRouter({
         {
             path: "/",
             component: ProblemList,
+        },
+        {
+            path: "/contests",
+            component: ContestList,
         },
         {
             path: "/login",

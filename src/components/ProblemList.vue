@@ -11,11 +11,7 @@
       <v-col>
         <v-card :loading="loading">
           <v-container>
-            <v-data-table
-              :headers="headers"
-              :items="problems"
-              hide-default-footer
-            >
+            <v-data-table :headers="headers" :items="problems">
               <template v-slot:item.title="{ item }">
                 <router-link :to="`/problems/${item.id}`" v-text="item.title">
                 </router-link>

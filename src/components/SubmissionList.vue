@@ -13,7 +13,6 @@
               :headers="headers"
               :items="submissions"
               disable-sort
-              hide-default-footer
             >
               <template v-slot:item.problem="{ item }">
                 <router-link
