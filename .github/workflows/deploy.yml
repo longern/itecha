@@ -37,4 +37,5 @@ jobs:
           SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
         run: |
           pip3 install -t dist/fc .[fc]
+          rm -rf dist/fc/numpy*
           ./setup.py deploy
