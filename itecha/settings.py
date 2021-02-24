@@ -152,6 +152,8 @@ MEDIA_URL = None
 
 WHITENOISE_INDEX_FILE = True
 
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+
 
 # Django rest framework
 

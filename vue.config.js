@@ -9,6 +9,7 @@ module.exports = {
   configureWebpack: {
     externals: {
       "axios": "axios",
+      "mavon-editor": "MavonEditor",
       "vue": "Vue",
       "vue-router": "VueRouter",
       "vuetify": "Vuetify",
@@ -41,13 +42,7 @@ if (!process.env.VUE_APP_ENABLE_CDN)
       from: 'node_modules/vuetify-dialog/dist',
       to: path.resolve(module.exports.outputDir, 'vuetify-dialog'),
     }, {
-      from: 'node_modules/mavon-editor/dist/markdown',
-      to: path.resolve(module.exports.outputDir, 'markdown'),
-    }, {
-      from: 'node_modules/mavon-editor/dist/katex',
-      to: path.resolve(module.exports.outputDir, 'katex')
-    }, {
-      from: 'node_modules/mavon-editor/dist/highlightjs',
-      to: path.resolve(module.exports.outputDir, 'highlightjs')
+      from: 'node_modules/mavon-editor/dist',
+      to: path.resolve(module.exports.outputDir, 'mavon-editor'),
     }]),
   ];
