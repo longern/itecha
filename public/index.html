@@ -12,16 +12,30 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css">
   <% if (VUE_APP_ENABLE_CDN) { %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vuetify/2.4.5/vuetify.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify-dialog@2.0.14/dist/vuetify-dialog.min.css">
     <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.9.0/github-markdown.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.5.1/vue-router.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vuetify/2.4.5/vuetify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify-dialog@2.0.14/dist/vuetify-dialog.min.js"></script>
     <script type="text/javascript" charset="UTF-8"
       src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.8.3/katex.min.js"></script>
     <script type="text/javascript" charset="UTF-8"
       src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
     <% } else { %>
+      <link rel="stylesheet" href="/vuetify/vuetify.min.css">
+      <link rel="stylesheet" href="/vuetify-dialog/vuetify-dialog.min.css">
       <link rel="stylesheet" href="/markdown/github-markdown.min.css">
       <link rel="stylesheet" href="/katex/katex.min.css">
+      <script src="/axios/axios.min.js"></script>
+      <script src="/vue/vue.min.js"></script>
+      <script src="/vue-router/vue-router.min.js"></script>
+      <script src="/vuetify/vuetify.min.js"></script>
+      <script src="/vuetify-dialog/vuetify-dialog.min.js"></script>
       <script src="/katex/katex.min.js"></script>
       <script src="/highlightjs/highlight.min.js"></script>
       <% } %>

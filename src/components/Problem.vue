@@ -19,7 +19,7 @@
       <v-col>
         <v-row>
           <v-col cols="12" md="5">
-            <v-card class="fill-height" :loading="loading">
+            <v-card class="problem-card fill-height" :loading="loading">
               <v-container class="problem-container">
                 <h1 v-text="problem.title" class="text-center mb-2"></h1>
                 <div v-html="renderedContent" class="markdown-body"></div>
@@ -139,6 +139,10 @@ export default {
 
 <style>
 @media (min-width: 960px) {
+  .problem-card {
+    overflow: hidden;
+  }
+
   .problem-container {
     height: 72vh;
     overflow-y: auto;
