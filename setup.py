@@ -55,7 +55,10 @@ setup(
         "whitenoise",
     ],
     extras_require={
-        "fc": ["djanble @ git+https://github.com/longern/djanble.git@main"]
+        "fc": [
+            "django-import-export",
+            "djanble @ git+https://github.com/longern/djanble.git@main",
+        ],
     },
     cmdclass={"deploy": DeployCommand},
 )
