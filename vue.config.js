@@ -2,11 +2,15 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 module.exports = {
-  "outputDir": "itecha_backend/static",
+  "outputDir": "itecha/static",
   "transpileDependencies": [
     "vuetify"
   ],
 };
+
+process.env.VUE_APP_API_BASE_URL = process.env.VUE_APP_API_BASE_URL || "/";
+
+process.env.VUE_APP_PYTHON3_EXECUTOR = process.env.VUE_APP_PYTHON3_EXECUTOR || "/python-executor";
 
 process.env.VUE_APP_ENABLE_CDN = process.env.VUE_APP_ENABLE_CDN || "";
 

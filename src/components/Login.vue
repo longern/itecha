@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <v-alert v-if="message" type="error">{{ message }}</v-alert>
     <v-row>
       <v-col md="4" offset-md="4">
         <v-card class="login pa-8 mt-16">
@@ -25,6 +24,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "Login",
 
@@ -38,23 +39,24 @@ export default {
     async login() {
       if (!this.$refs.loginForm.validate()) return;
 
-      const response = await fetch(process.env.VUE_APP_API_BASE_URL + "login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: this.username,
-          password: this.password,
-        }),
-      });
+      try {
+        const response = await axios.post(
+          process.env.VUE_APP_API_BASE_URL + "login",
+          {
+            username: this.username,
+            password: this.password,
+          }
+        );
 
-      if (response.status <= 299) {
-        this.$emit("login", (await response.json()).token);
+        this.$emit("login", response.data.token);
         this.$router.push("/");
         return;
+      } catch (e) {
+        this.$dialog.notify.error(e.message, {
+          position: "top-right",
+          timeout: 5000,
+        });
       }
-
-      const messageBody = await response.json();
-      this.message = messageBody.message[0].message;
     },
   },
 };

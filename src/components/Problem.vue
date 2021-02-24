@@ -5,7 +5,7 @@
         <v-breadcrumbs :items="breadcrumbsItems"></v-breadcrumbs>
       </v-col>
       <v-spacer></v-spacer>
-      <v-col md="auto" class="pt-8">
+      <v-col cols="auto" class="pt-8">
         <v-btn
           class="mr-3"
           @click="isDebugPanelVisible ^= true"
@@ -18,15 +18,15 @@
     <v-row>
       <v-col>
         <v-row>
-          <v-col md="4">
+          <v-col cols="12" md="5">
             <v-card class="fill-height" :loading="loading">
-              <v-container>
+              <v-container class="problem-container">
                 <h1 v-text="problem.title" class="text-center mb-2"></h1>
                 <div v-html="renderedContent" class="markdown-body"></div>
               </v-container>
             </v-card>
           </v-col>
-          <v-col>
+          <v-col cols="12" :md="isDebugPanelVisible ? 5 : 7">
             <v-card class="fill-height">
               <codemirror
                 ref="cm"
@@ -35,7 +35,7 @@
               ></codemirror>
             </v-card>
           </v-col>
-          <v-col v-if="isDebugPanelVisible" md="3">
+          <v-col v-if="isDebugPanelVisible" cols="12" md="2">
             <v-card class="fill-height">
               <v-container>
                 <v-textarea v-model="debugInput" label="输入"></v-textarea>
@@ -77,18 +77,25 @@ export default {
     },
     debugInput: "",
     debugOutput: "",
-    breadcrumbsItems: [
-      {
-        text: "首页",
-        disabled: false,
-        to: "/",
-      },
-    ],
     isDebugPanelVisible: false,
     loading: true,
   }),
 
   computed: {
+    breadcrumbsItems() {
+      return [
+        {
+          text: "首页",
+          disabled: false,
+          to: "/",
+        },
+        {
+          text: this.problem.title,
+          disabled: true,
+          to: "/",
+        },
+      ];
+    },
     renderedContent() {
       return md.render(this.problem.content || "");
     },
@@ -131,7 +138,14 @@ export default {
 </script>
 
 <style>
-.CodeMirror {
-  height: 60vh;
+@media (min-width: 960px) {
+  .problem-container {
+    height: 72vh;
+    overflow-y: auto;
+  }
+}
+
+div.CodeMirror {
+  height: 72vh;
 }
 </style>

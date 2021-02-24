@@ -11,14 +11,19 @@
       <v-col>
         <v-card :loading="loading">
           <v-container>
-            <v-data-table
-              :headers="headers"
-              :items="problems"
-              hide-default-footer
-            >
+            <v-data-table :headers="headers" :items="problems">
               <template v-slot:item.title="{ item }">
                 <router-link :to="`/problems/${item.id}`" v-text="item.title">
                 </router-link>
+              </template>
+              <template v-slot:item.tags="{ item }">
+                <v-chip-group v-if="item.tags">
+                  <v-chip
+                    v-for="tag in item.tags"
+                    :key="tag"
+                    v-text="tag"
+                  ></v-chip>
+                </v-chip-group>
               </template>
               <template v-slot:item.actions="{ item }" v-if="isSuperuser">
                 <router-link :to="`/problems/${item.id}/edit`" title="编辑">
@@ -40,6 +45,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "ProblemList",
 
@@ -50,6 +57,11 @@ export default {
       {
         text: "题目名称",
         value: "title",
+        sortable: false,
+      },
+      {
+        text: "标签",
+        value: "tags",
         sortable: false,
       },
       {
@@ -64,7 +76,7 @@ export default {
 
   async mounted() {
     this.problems = (
-      await (await fetch(`${process.env.VUE_APP_API_BASE_URL}problems`)).json()
+      await axios.get(`${process.env.VUE_APP_API_BASE_URL}problems`)
     ).data;
     this.loading = false;
   },

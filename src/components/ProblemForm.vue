@@ -18,7 +18,7 @@
             v-model="problem.content"
             required
             class="mb-4"
-            :externals="false"
+            :externalLink="false"
           ></mavon-editor>
           <v-expansion-panels>
             <v-expansion-panel>
@@ -42,6 +42,7 @@
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
+          <editable-tags v-model="problem.tags" label="标签"></editable-tags>
           <h3 class="my-4">测评</h3>
           <v-btn icon @click="appendTestCase"><v-icon>mdi-plus</v-icon></v-btn>
           <v-row v-for="(testcase, index) in problem.testcases" :key="index">
@@ -80,9 +81,10 @@
 
 <script>
 import axios from "axios";
-import { mavonEditor } from "mavon-editor";
 import { codemirror } from "vue-codemirror";
 import "mavon-editor/dist/css/index.css";
+
+import EditableTags from "./EditableTags.vue";
 
 export default {
   name: "ProblemForm",
@@ -90,7 +92,7 @@ export default {
   data: () => ({
     loading: true,
     original_title: "题目",
-    problem: { testcases: [] },
+    problem: { default_code: "", testcases: [], hidden_code: "", tags: [] },
     cmOption: {
       indentUnit: 4,
       lineNumbers: true,
@@ -152,7 +154,7 @@ export default {
     this.loading = false;
   },
 
-  components: { mavonEditor, codemirror },
+  components: { codemirror, EditableTags },
 };
 </script>
 
