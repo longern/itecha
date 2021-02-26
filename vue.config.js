@@ -16,6 +16,10 @@ module.exports = {
       vuetify: "Vuetify",
       "vuetify-dialog": "VuetifyDialog",
     },
+
+    optimization: {
+      splitChunks: false,
+    },
   },
 
   pluginOptions: {
