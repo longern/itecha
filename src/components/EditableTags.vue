@@ -29,11 +29,14 @@
 export default {
   name: "EditableTags",
 
-  props: ["value", "label"],
+  props: {
+    value: { type: Array, default: () => [] },
+    label: { type: String, default: "" }
+  },
 
   data: () => ({
     newTag: "",
-    newTagEditing: false,
+    newTagEditing: false
   }),
 
   created() {
@@ -59,9 +62,9 @@ export default {
     removeTag(tag) {
       this.$emit(
         "input",
-        this.value.filter((t) => t != tag)
+        this.value.filter(t => t != tag)
       );
-    },
-  },
+    }
+  }
 };
 </script>

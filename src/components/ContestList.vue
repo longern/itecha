@@ -59,28 +59,28 @@ import axios from "axios";
 export default {
   name: "ContestList",
 
-  props: ["isSuperuser"],
+  props: { isSuperuser: { type: Boolean, default: false } },
 
   data: () => ({
     headers: [
       {
         text: "比赛名称",
         value: "name",
-        sortable: false,
+        sortable: false
       },
       {
         text: "时间",
         value: "time",
-        sortable: false,
+        sortable: false
       },
       {
         text: "操作",
         value: "actions",
-        sortable: false,
-      },
+        sortable: false
+      }
     ],
     loading: true,
-    contests: [],
+    contests: []
   }),
 
   async mounted() {
@@ -88,7 +88,7 @@ export default {
       await axios.get(`${process.env.VUE_APP_API_BASE_URL}contests`)
     ).data;
     this.loading = false;
-  },
+  }
 };
 </script>
 

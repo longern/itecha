@@ -67,28 +67,28 @@ import axios from "axios";
 export default {
   name: "ProblemList",
 
-  props: ["isSuperuser"],
+  props: { isSuperuser: { type: Boolean, default: false } },
 
   data: () => ({
     headers: [
       {
         text: "题目名称",
         value: "title",
-        sortable: false,
+        sortable: false
       },
       {
         text: "标签",
         value: "tags",
-        sortable: false,
+        sortable: false
       },
       {
         text: "操作",
         value: "actions",
-        sortable: false,
-      },
+        sortable: false
+      }
     ],
     loading: true,
-    problems: [],
+    problems: []
   }),
 
   async mounted() {
@@ -96,7 +96,7 @@ export default {
       await axios.get(`${process.env.VUE_APP_API_BASE_URL}problems`)
     ).data;
     this.loading = false;
-  },
+  }
 };
 </script>
 

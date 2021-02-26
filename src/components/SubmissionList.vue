@@ -69,39 +69,39 @@ import axios from "axios";
 export default {
   name: "SubmissionList",
 
-  props: ["problem_id"],
+  props: { problemId: { type: String, required: true } },
 
   data: () => ({
     headers: [
       {
         text: "题目名称",
-        value: "problem",
+        value: "problem"
       },
       {
         text: "提交者",
-        value: "creator",
+        value: "creator"
       },
       {
         text: "代码",
-        value: "code",
+        value: "code"
       },
       {
         text: "分数",
-        value: "score",
+        value: "score"
       },
       {
         text: "提交时间",
-        value: "created",
-      },
+        value: "created"
+      }
     ],
     loading: true,
-    submissions: [],
+    submissions: []
   }),
 
   async mounted() {
     this.submissions = (
       await axios.get(`${process.env.VUE_APP_API_BASE_URL}submissions`, {
-        params: { problem: this.problem_id },
+        params: { problem: this.problemId }
       })
     ).data;
 
@@ -124,7 +124,7 @@ export default {
             pythonExecutorUrl,
             {
               source: `${submission.code}\n${hidden_code}`,
-              input: testcase.input_data,
+              input: testcase.input_data
             },
             { transformResponse: [] }
           );
@@ -139,8 +139,8 @@ export default {
           { score: submission_score }
         );
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
