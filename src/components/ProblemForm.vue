@@ -82,7 +82,6 @@
 <script>
 import axios from "axios";
 import { codemirror } from "vue-codemirror";
-import "mavon-editor/dist/css/index.css";
 
 import EditableTags from "./EditableTags.vue";
 
@@ -94,6 +93,7 @@ export default {
     original_title: "题目",
     problem: { default_code: "", testcases: [], hidden_code: "", tags: [] },
     cmOption: {
+      mode: "text/x-python",
       indentUnit: 4,
       lineNumbers: true,
       theme: "idea",

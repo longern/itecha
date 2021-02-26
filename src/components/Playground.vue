@@ -30,9 +30,6 @@
 <script>
 import axios from "axios";
 import { codemirror } from "vue-codemirror";
-import "codemirror/mode/python/python";
-import "codemirror/lib/codemirror.css";
-import "codemirror/theme/idea.css";
 
 export default {
   name: "Playground",
@@ -42,6 +39,7 @@ export default {
     debugInput: "",
     debugOutput: "",
     cmOption: {
+      mode: "text/x-python",
       indentUnit: 4,
       lineNumbers: true,
       theme: "idea",

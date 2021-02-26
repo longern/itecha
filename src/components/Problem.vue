@@ -53,9 +53,9 @@
 <script>
 import axios from "axios";
 import { codemirror } from "vue-codemirror";
-import "codemirror/mode/python/python";
-import "codemirror/lib/codemirror.css";
-import "codemirror/theme/idea.css";
+// import "codemirror/mode/python/python";
+// import "codemirror/lib/codemirror.css";
+// import "codemirror/theme/idea.css";
 import { mavonEditor } from "mavon-editor";
 
 const md = mavonEditor.getMarkdownIt();
@@ -67,6 +67,7 @@ export default {
     problem: {},
     code: "",
     cmOption: {
+      mode: "text/x-python",
       indentUnit: 4,
       lineNumbers: true,
       theme: "idea",

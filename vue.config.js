@@ -7,8 +7,10 @@ module.exports = {
   configureWebpack: {
     externals: {
       axios: "axios",
+      codemirror: "CodeMirror",
       "mavon-editor": "MavonEditor",
       vue: "Vue",
+      "vue-codemirror": "VueCodemirror",
       "vue-router": "VueRouter",
       vuetify: "Vuetify",
       "vuetify-dialog": "VuetifyDialog",
@@ -41,8 +43,20 @@ if (!process.env.VUE_APP_ENABLE_CDN)
         to: path.resolve(module.exports.outputDir, "axios"),
       },
       {
+        from: "node_modules/codemirror",
+        to: path.resolve(module.exports.outputDir, "codemirror"),
+      },
+      {
+        from: "node_modules/mavon-editor/dist",
+        to: path.resolve(module.exports.outputDir, "mavon-editor"),
+      },
+      {
         from: "node_modules/vue/dist",
         to: path.resolve(module.exports.outputDir, "vue"),
+      },
+      {
+        from: "node_modules/vue-codemirror/dist",
+        to: path.resolve(module.exports.outputDir, "vue-codemirror"),
       },
       {
         from: "node_modules/vue-router/dist",
@@ -55,10 +69,6 @@ if (!process.env.VUE_APP_ENABLE_CDN)
       {
         from: "node_modules/vuetify-dialog/dist",
         to: path.resolve(module.exports.outputDir, "vuetify-dialog"),
-      },
-      {
-        from: "node_modules/mavon-editor/dist",
-        to: path.resolve(module.exports.outputDir, "mavon-editor"),
       },
     ]),
   ];
