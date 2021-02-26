@@ -1,9 +1,15 @@
 <template>
   <v-container>
     <v-row class="align-center">
-      <h1 class="ma-8">题目列表</h1>
-      <v-spacer></v-spacer>
-      <v-btn v-if="isSuperuser" color="primary" to="/problems/create">
+      <h1 class="ma-8">
+        题目列表
+      </h1>
+      <v-spacer />
+      <v-btn
+        v-if="isSuperuser"
+        color="primary"
+        to="/problems/create"
+      >
         创建题目
       </v-btn>
     </v-row>
@@ -11,10 +17,15 @@
       <v-col>
         <v-card :loading="loading">
           <v-container>
-            <v-data-table :headers="headers" :items="problems">
+            <v-data-table
+              :headers="headers"
+              :items="problems"
+            >
               <template v-slot:item.title="{ item }">
-                <router-link :to="`/problems/${item.id}`" v-text="item.title">
-                </router-link>
+                <router-link
+                  :to="`/problems/${item.id}`"
+                  v-text="item.title"
+                />
               </template>
               <template v-slot:item.tags="{ item }">
                 <v-chip-group v-if="item.tags">
@@ -22,11 +33,17 @@
                     v-for="tag in item.tags"
                     :key="tag"
                     v-text="tag"
-                  ></v-chip>
+                  />
                 </v-chip-group>
               </template>
-              <template v-slot:item.actions="{ item }" v-if="isSuperuser">
-                <router-link :to="`/problems/${item.id}/edit`" title="编辑">
+              <template
+                v-if="isSuperuser"
+                v-slot:item.actions="{ item }"
+              >
+                <router-link
+                  :to="`/problems/${item.id}/edit`"
+                  title="编辑"
+                >
                   <v-icon>mdi-pencil</v-icon>
                 </router-link>
                 <router-link

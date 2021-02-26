@@ -1,16 +1,39 @@
 <template>
   <v-app>
-    <v-app-bar app absolute>
+    <v-app-bar
+      app
+      absolute
+    >
       <v-app-bar-title>
-        <router-link to="/" tag="span">iTechA</router-link>
+        <router-link
+          to="/"
+          tag="span"
+        >
+          iTechA
+        </router-link>
       </v-app-bar-title>
 
-      <v-spacer></v-spacer>
+      <v-spacer />
 
-      <v-btn text to="/playground">在线运行</v-btn>
+      <v-btn
+        text
+        to="/playground"
+      >
+        在线运行
+      </v-btn>
 
-      <v-btn v-if="user.username" text v-text="user.username"></v-btn>
-      <v-btn v-else text to="/login">登录</v-btn>
+      <v-btn
+        v-if="user.username"
+        text
+        v-text="user.username"
+      />
+      <v-btn
+        v-else
+        text
+        to="/login"
+      >
+        登录
+      </v-btn>
     </v-app-bar>
 
     <v-main>
@@ -18,7 +41,7 @@
         <router-view
           :is-superuser="user.is_superuser"
           @login="updateToken"
-        ></router-view>
+        />
       </div>
     </v-main>
   </v-app>
@@ -33,6 +56,14 @@ export default {
   data: () => ({
     user: {},
   }),
+
+  created() {
+    axios.defaults.withCredentials = true;
+    if (localStorage.getItem("rest_admin_auth")) {
+      const { token } = JSON.parse(localStorage.getItem("rest_admin_auth"));
+      this.updateToken(token);
+    }
+  },
 
   methods: {
     updateToken(token) {
@@ -52,14 +83,6 @@ export default {
       if (csrf_token_match)
         axios.defaults.headers["X-CSRFToken"] = csrf_token_match[1];
     },
-  },
-
-  created() {
-    axios.defaults.withCredentials = true;
-    if (localStorage.getItem("rest_admin_auth")) {
-      const { token } = JSON.parse(localStorage.getItem("rest_admin_auth"));
-      this.updateToken(token);
-    }
   },
 };
 </script>

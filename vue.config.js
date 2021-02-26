@@ -4,6 +4,7 @@ const path = require("path");
 module.exports = {
   outputDir: "itecha/static",
   transpileDependencies: ["vuetify"],
+
   configureWebpack: {
     externals: {
       axios: "axios",
@@ -16,6 +17,7 @@ module.exports = {
       "vuetify-dialog": "VuetifyDialog",
     },
   },
+
   pluginOptions: {
     compression: {
       gzip: {
@@ -25,6 +27,10 @@ module.exports = {
         minRatio: 0.8,
       },
     },
+  },
+
+  css: {
+    extract: false,
   },
 };
 

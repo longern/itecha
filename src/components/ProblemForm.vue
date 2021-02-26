@@ -7,19 +7,21 @@
           <span v-else>创建题目</span>
         </h2>
         <v-form>
-          <h3 class="mb-4">内容</h3>
+          <h3 class="mb-4">
+            内容
+          </h3>
           <v-text-field
             v-model="problem.title"
             label="标题"
             required
-          ></v-text-field>
+          />
           <v-label>描述</v-label>
           <mavon-editor
             v-model="problem.content"
             required
             class="mb-4"
-            :externalLink="false"
-          ></mavon-editor>
+            :external-link="false"
+          />
           <v-expansion-panels>
             <v-expansion-panel>
               <v-expansion-panel-header>默认代码</v-expansion-panel-header>
@@ -28,7 +30,7 @@
                   ref="cm"
                   v-model="problem.default_code"
                   :options="cmOption"
-                ></codemirror>
+                />
               </v-expansion-panel-content>
             </v-expansion-panel>
             <v-expansion-panel>
@@ -38,37 +40,57 @@
                   ref="cm"
                   v-model="problem.hidden_code"
                   :options="cmOption"
-                ></codemirror>
+                />
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
-          <editable-tags v-model="problem.tags" label="标签"></editable-tags>
-          <h3 class="my-4">测评</h3>
-          <v-btn icon @click="appendTestCase"><v-icon>mdi-plus</v-icon></v-btn>
-          <v-row v-for="(testcase, index) in problem.testcases" :key="index">
+          <editable-tags
+            v-model="problem.tags"
+            label="标签"
+          />
+          <h3 class="my-4">
+            测评
+          </h3>
+          <v-btn
+            icon
+            @click="appendTestCase"
+          >
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+          <v-row
+            v-for="(testcase, index) in problem.testcases"
+            :key="index"
+          >
             <v-col>
               <v-textarea
-                label="输入"
                 v-model="testcase.input_data"
+                label="输入"
                 required
-              ></v-textarea>
+              />
             </v-col>
             <v-col>
               <v-textarea
-                label="输出"
                 v-model="testcase.output_data"
+                label="输出"
                 required
-              ></v-textarea>
+              />
             </v-col>
             <v-col md="1">
-              <v-btn icon @click="deleteTestCase(index)">
+              <v-btn
+                icon
+                @click="deleteTestCase(index)"
+              >
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
             </v-col>
           </v-row>
           <v-row>
             <v-col>
-              <v-btn color="primary" @click="save" :disabled="loading">
+              <v-btn
+                color="primary"
+                :disabled="loading"
+                @click="save"
+              >
                 保存
               </v-btn>
             </v-col>
@@ -88,6 +110,8 @@ import EditableTags from "./EditableTags.vue";
 export default {
   name: "ProblemForm",
 
+  components: { codemirror, EditableTags },
+
   data: () => ({
     loading: true,
     original_title: "题目",
@@ -103,6 +127,19 @@ export default {
       },
     },
   }),
+
+  async mounted() {
+    if (this.$route.params.id) {
+      const problem_response = await axios.get(
+        `${process.env.VUE_APP_API_BASE_URL}problems/${this.$route.params.id}`
+      );
+      this.problem = problem_response.data;
+      this.original_title = this.problem.title;
+      if (!Array.isArray(this.problem.testcases))
+        this.$set(this.problem, "testcases", []);
+    }
+    this.loading = false;
+  },
 
   methods: {
     appendTestCase() {
@@ -140,21 +177,6 @@ export default {
       }
     },
   },
-
-  async mounted() {
-    if (this.$route.params.id) {
-      const problem_response = await axios.get(
-        `${process.env.VUE_APP_API_BASE_URL}problems/${this.$route.params.id}`
-      );
-      this.problem = problem_response.data;
-      this.original_title = this.problem.title;
-      if (!Array.isArray(this.problem.testcases))
-        this.$set(this.problem, "testcases", []);
-    }
-    this.loading = false;
-  },
-
-  components: { codemirror, EditableTags },
 };
 </script>
 

@@ -2,45 +2,79 @@
   <v-container>
     <v-row>
       <v-col>
-        <v-breadcrumbs :items="breadcrumbsItems"></v-breadcrumbs>
+        <v-breadcrumbs :items="breadcrumbsItems" />
       </v-col>
-      <v-spacer></v-spacer>
-      <v-col cols="auto" class="pt-8">
+      <v-spacer />
+      <v-col
+        cols="auto"
+        class="pt-8"
+      >
         <v-btn
           class="mr-3"
           @click="isDebugPanelVisible ^= true"
           v-text="isDebugPanelVisible ? '隐藏' : '调试'"
+        />
+        <v-btn
+          color="primary"
+          @click="submit"
         >
+          提交
         </v-btn>
-        <v-btn color="primary" @click="submit">提交</v-btn>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
         <v-row>
-          <v-col cols="12" md="5">
-            <v-card class="problem-card fill-height" :loading="loading">
+          <v-col
+            cols="12"
+            md="5"
+          >
+            <v-card
+              class="problem-card fill-height"
+              :loading="loading"
+            >
               <v-container class="problem-container">
-                <h1 v-text="problem.title" class="text-center mb-2"></h1>
-                <div v-html="renderedContent" class="markdown-body"></div>
+                <h1
+                  class="text-center mb-2"
+                  v-text="problem.title"
+                />
+                <div
+                  class="markdown-body"
+                  v-html="renderedContent"
+                />
               </v-container>
             </v-card>
           </v-col>
-          <v-col cols="12" :md="isDebugPanelVisible ? 5 : 7">
+          <v-col
+            cols="12"
+            :md="isDebugPanelVisible ? 5 : 7"
+          >
             <v-card class="fill-height">
               <codemirror
                 ref="cm"
                 v-model="code"
                 :options="cmOption"
-              ></codemirror>
+              />
             </v-card>
           </v-col>
-          <v-col v-if="isDebugPanelVisible" cols="12" md="2">
+          <v-col
+            v-if="isDebugPanelVisible"
+            cols="12"
+            md="2"
+          >
             <v-card class="fill-height">
               <v-container>
-                <v-textarea v-model="debugInput" label="输入"></v-textarea>
-                <v-btn color="secondary" @click="runPython3Code">运行</v-btn>
-                <pre class="mt-4"><code v-text="debugOutput" ></code></pre>
+                <v-textarea
+                  v-model="debugInput"
+                  label="输入"
+                />
+                <v-btn
+                  color="secondary"
+                  @click="runPython3Code"
+                >
+                  运行
+                </v-btn>
+                <pre class="mt-4"><code v-text="debugOutput" /></pre>
               </v-container>
             </v-card>
           </v-col>
@@ -62,6 +96,8 @@ const md = mavonEditor.getMarkdownIt();
 
 export default {
   name: "Problem",
+
+  components: { codemirror },
 
   data: () => ({
     problem: {},
@@ -102,6 +138,15 @@ export default {
     },
   },
 
+  async mounted() {
+    const problem_response = await axios.get(
+      `${process.env.VUE_APP_API_BASE_URL}problems/${this.$route.params.id}`
+    );
+    this.problem = problem_response.data;
+    this.code = this.problem.default_code || "";
+    this.loading = false;
+  },
+
   methods: {
     async runPython3Code() {
       const pythonExecutorUrl = process.env.VUE_APP_PYTHON3_EXECUTOR;
@@ -124,17 +169,6 @@ export default {
       });
     },
   },
-
-  async mounted() {
-    const problem_response = await axios.get(
-      `${process.env.VUE_APP_API_BASE_URL}problems/${this.$route.params.id}`
-    );
-    this.problem = problem_response.data;
-    this.code = this.problem.default_code || "";
-    this.loading = false;
-  },
-
-  components: { codemirror },
 };
 </script>
 

@@ -7,17 +7,19 @@
         close
         @click:close="removeTag(tag)"
       >
-        <span v-text="tag"></span>
+        <span v-text="tag" />
       </v-chip>
       <v-chip @click="activateEditor">
         <input
-          ref="editor"
           v-if="newTagEditing"
+          ref="editor"
           v-model.trim="newTag"
           @blur="addTag"
           @keydown.enter="addTag"
-        />
-        <v-icon v-else>mdi-plus</v-icon>
+        >
+        <v-icon v-else>
+          mdi-plus
+        </v-icon>
       </v-chip>
     </v-chip-group>
   </v-input>
@@ -33,6 +35,12 @@ export default {
     newTag: "",
     newTagEditing: false,
   }),
+
+  created() {
+    if (!Array.isArray(this.value)) {
+      this.$emit("input", []);
+    }
+  },
 
   methods: {
     async activateEditor() {
@@ -54,12 +62,6 @@ export default {
         this.value.filter((t) => t != tag)
       );
     },
-  },
-
-  created() {
-    if (!Array.isArray(this.value)) {
-      this.$emit("input", []);
-    }
   },
 };
 </script>

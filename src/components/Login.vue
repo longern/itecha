@@ -1,21 +1,32 @@
 <template>
   <v-container>
     <v-row>
-      <v-col md="4" offset-md="4">
+      <v-col
+        md="4"
+        offset-md="4"
+      >
         <v-card class="login pa-8 mt-16">
-          <v-form ref="loginForm" @submit.prevent="login">
+          <v-form
+            ref="loginForm"
+            @submit.prevent="login"
+          >
             <v-text-field
               v-model="username"
               label="用户名"
               required
-            ></v-text-field>
+            />
             <v-text-field
               v-model="password"
               type="password"
               label="密码"
               required
-            ></v-text-field>
-            <v-btn type="submit" color="primary">登录</v-btn>
+            />
+            <v-btn
+              type="submit"
+              color="primary"
+            >
+              登录
+            </v-btn>
           </v-form>
         </v-card>
       </v-col>

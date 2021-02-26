@@ -1,9 +1,16 @@
 <template>
   <v-container>
     <v-row class="align-center">
-      <h1 class="ma-8">提交记录</h1>
-      <v-spacer></v-spacer>
-      <v-btn color="primary" @click="run">测评</v-btn>
+      <h1 class="ma-8">
+        提交记录
+      </h1>
+      <v-spacer />
+      <v-btn
+        color="primary"
+        @click="run"
+      >
+        测评
+      </v-btn>
     </v-row>
     <v-row>
       <v-col>
@@ -18,33 +25,35 @@
                 <router-link
                   :to="`/problems/${item.problem.id}`"
                   v-text="item.problem.title"
-                >
-                </router-link>
+                />
               </template>
               <template v-slot:item.creator="{ item }">
                 <router-link
                   v-if="item.creator"
                   :to="`/users/${item.creator.id}`"
                   v-text="item.creator.username"
-                >
-                </router-link>
+                />
                 <span
                   v-if="item.creator_ip"
                   class="ml-1"
                   v-text="`(${item.creator_ip})`"
-                >
-                </span>
+                />
               </template>
               <template v-slot:item.code="{ item }">
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon v-bind="attrs" v-on="on">mdi-code-tags</v-icon>
+                    <v-icon
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      mdi-code-tags
+                    </v-icon>
                   </template>
-                  <pre v-text="item.code"></pre>
+                  <pre v-text="item.code" />
                 </v-tooltip>
               </template>
               <template v-slot:item.created="{ item }">
-                <span v-text="new Date(item.created).toLocaleString()"></span>
+                <span v-text="new Date(item.created).toLocaleString()" />
               </template>
             </v-data-table>
           </v-container>
@@ -89,6 +98,16 @@ export default {
     submissions: [],
   }),
 
+  async mounted() {
+    this.submissions = (
+      await axios.get(`${process.env.VUE_APP_API_BASE_URL}submissions`, {
+        params: { problem: this.problem_id },
+      })
+    ).data;
+
+    this.loading = false;
+  },
+
   methods: {
     async run() {
       const pythonExecutorUrl = process.env.VUE_APP_PYTHON3_EXECUTOR;
@@ -121,16 +140,6 @@ export default {
         );
       }
     },
-  },
-
-  async mounted() {
-    this.submissions = (
-      await axios.get(`${process.env.VUE_APP_API_BASE_URL}submissions`, {
-        params: { problem: this.problem_id },
-      })
-    ).data;
-
-    this.loading = false;
   },
 };
 </script>
