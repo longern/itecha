@@ -1,0 +1,13 @@
+v-alert {
+  border-radius: 4px;
+  padding: 16px;
+  color: #fff;
+}
+
+v-alert[type="error"] {
+  background-color: #FF5252;
+}
+
+v-alert[type="success"] {
+  background-color: #4CAF50;
+}
