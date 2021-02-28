@@ -155,17 +155,19 @@ export default {
     },
 
     async submit() {
+      if (!this.code) {
+        this.$dialog.notify.error("代码不能为空");
+        return;
+      }
+
       await axios.post(`${process.env.VUE_APP_API_BASE_URL}submissions`, {
         problem_id: this.problem.id,
         code: this.code,
       });
 
-      this.$dialog.notify.success("提交成功", {
-        position: "top-right",
-        timeout: 5000,
-      });
-    },
-  },
+      this.$dialog.notify.success("提交成功");
+    }
+  }
 };
 </script>
 
