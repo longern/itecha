@@ -21,7 +21,7 @@ class JSONField(serializers.Field):
             return None
 
     def to_internal_value(self, data):
-        return json.dumps(data)
+        return json.dumps(data, ensure_ascii=False)
 
 
 class PickleField(serializers.Field):
