@@ -9,41 +9,41 @@ import ProblemForm from "./components/ProblemForm.vue";
 import SubmissionList from "./components/SubmissionList.vue";
 
 const router = new VueRouter({
-    routes: [
-        {
-            path: "/",
-            component: ProblemList,
-        },
-        {
-            path: "/contests",
-            component: ContestList,
-        },
-        {
-            path: "/login",
-            component: Login,
-        },
-        {
-            path: "/playground",
-            component: Playground,
-        },
-        {
-            path: "/problems/create",
-            component: ProblemForm,
-        },
-        {
-            path: "/problems/:id",
-            component: Problem,
-        },
-        {
-            path: "/problems/:id/edit",
-            component: ProblemForm,
-        },
-        {
-            path: "/submissions",
-            component: SubmissionList,
-            props: (route) => ({ problem_id: route.query.problem_id }),
-        },
-    ],
+  routes: [
+    {
+      path: "/",
+      component: ProblemList,
+    },
+    {
+      path: "/contests",
+      component: ContestList,
+    },
+    {
+      path: "/login",
+      component: Login,
+    },
+    {
+      path: "/playground",
+      component: Playground,
+    },
+    {
+      path: "/problems/create",
+      component: ProblemForm,
+    },
+    {
+      path: "/problems/:id",
+      component: Problem,
+    },
+    {
+      path: "/problems/:id/edit",
+      component: ProblemForm,
+    },
+    {
+      path: "/submissions",
+      component: SubmissionList,
+      props: (route) => ({ problemId: route.query.problem_id }),
+    },
+  ],
 });
 
 export default router;
