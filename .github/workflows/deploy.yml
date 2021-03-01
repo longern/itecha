@@ -39,5 +39,6 @@ jobs:
           pip3 install -t dist/fc .[fc]
           rm -rf dist/fc/numpy*
           (cd dist/fc/django/contrib/ && rm -rf gis humanize postgres redirects sitemaps syndication)
+          (cd dist/fc/django/contrib/admin/locale/ && find -maxdepth 1 ! -name "zh_Hans" -exec rm -rf '{}' \;)
           du -s dist/fc/*
           ./setup.py deploy
