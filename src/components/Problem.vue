@@ -38,10 +38,7 @@
                   class="text-center mb-2"
                   v-text="problem.title"
                 />
-                <div
-                  class="markdown-body"
-                  v-html="renderedContent"
-                />
+                <markdown :source="problem.content" />
               </v-container>
             </v-card>
           </v-col>
@@ -87,14 +84,13 @@
 <script>
 import axios from "axios";
 import { codemirror } from "vue-codemirror";
-import { mavonEditor } from "mavon-editor";
 
-const md = mavonEditor.getMarkdownIt();
+import Markdown from "./Markdown.vue";
 
 export default {
   name: "Problem",
 
-  components: { codemirror },
+  components: { codemirror, Markdown },
 
   data: () => ({
     problem: {},
@@ -106,13 +102,13 @@ export default {
       theme: "idea",
       viewportMargin: Infinity,
       extraKeys: {
-        "Shift-Tab": "indentLess",
-      },
+        "Shift-Tab": "indentLess"
+      }
     },
     debugInput: "",
     debugOutput: "",
     isDebugPanelVisible: false,
-    loading: true,
+    loading: true
   }),
 
   computed: {
@@ -121,18 +117,15 @@ export default {
         {
           text: "首页",
           disabled: false,
-          to: "/",
+          to: "/"
         },
         {
           text: this.problem.title,
           disabled: true,
-          to: "/",
-        },
+          to: "/"
+        }
       ];
-    },
-    renderedContent() {
-      return md.render(this.problem.content || "");
-    },
+    }
   },
 
   async mounted() {
@@ -149,7 +142,7 @@ export default {
       const pythonExecutorUrl = process.env.VUE_APP_PYTHON3_EXECUTOR;
       const response = await axios.post(pythonExecutorUrl, {
         source: this.code,
-        input: this.debugInput,
+        input: this.debugInput
       });
       this.debugOutput = response.data;
     },
@@ -162,7 +155,7 @@ export default {
 
       await axios.post(`${process.env.VUE_APP_API_BASE_URL}submissions`, {
         problem_id: this.problem.id,
-        code: this.code,
+        code: this.code
       });
 
       this.$dialog.notify.success("提交成功");
