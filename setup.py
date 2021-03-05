@@ -49,6 +49,7 @@ setup(
     install_requires=[
         "django>=3.1",
         "djangorestframework",
+        "djangorestframework-queryfields",
         "django-environ",
         "django-filter",
         "requests",

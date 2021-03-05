@@ -2,6 +2,7 @@ import json
 import pickle
 
 from django.contrib.auth.models import User
+from drf_queryfields import QueryFieldsMixin
 from rest_framework import serializers
 
 from .models import Contest, Problem, Submission
@@ -41,7 +42,7 @@ class ContestSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ProblemSerializer(serializers.ModelSerializer):
+class ProblemSerializer(QueryFieldsMixin, serializers.ModelSerializer):
     testcases = PickleField()
     default_code = serializers.CharField(
         allow_blank=True, allow_null=True, trim_whitespace=False

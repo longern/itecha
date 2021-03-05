@@ -93,7 +93,9 @@ export default {
 
   async mounted() {
     this.problems = (
-      await axios.get(`${process.env.VUE_APP_API_BASE_URL}problems`)
+      await axios.get(`${process.env.VUE_APP_API_BASE_URL}problems`, {
+        params: { fields: "id,title,tags" }
+      })
     ).data;
     this.loading = false;
   }
