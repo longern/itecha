@@ -1,7 +1,7 @@
-name: Deploy
+name: Staging
 
 on:
-  push:
+  pull_request:
     branches: [main]
 
   workflow_dispatch:
@@ -26,11 +26,11 @@ jobs:
           pip3 install .
           npm ci
           npm run build
-          ./itecha/__main__.py collectstatic --no-input
+          ./manage.py collectstatic --no-input
 
       - name: Deploy with Aliyun FC 2
         env:
-          FUNCTION_COMPUTE_ARN: ${{ secrets.FUNCTION_COMPUTE_ARN }}
+          FUNCTION_COMPUTE_ARN: ${{ secrets.FUNCTION_COMPUTE_ARN_STAGING }}
           ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY_ID }}
           SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
         run: |
