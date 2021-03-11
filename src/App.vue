@@ -16,24 +16,43 @@
       <v-spacer />
 
       <v-btn
-        text
+        icon
         to="/playground"
       >
-        在线运行
+        <v-icon>mdi-language-python</v-icon>
       </v-btn>
 
-      <v-btn
-        v-if="user.username"
-        text
-        v-text="user.username"
-      />
-      <v-btn
-        v-else
-        text
-        to="/login"
+      <v-menu
+        left
+        offset-y
+        min-width="200"
       >
-        登录
-      </v-btn>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            icon
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>mdi-account</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list dense>
+          <template v-if="user.username">
+            <v-list-item>
+              <v-list-item-title v-text="user.username" />
+            </v-list-item>
+            <v-list-item to="/login">
+              <v-list-item-title>注销</v-list-item-title>
+            </v-list-item>
+          </template>
+          <template v-else>
+            <v-list-item to="/login">
+              <v-list-item-title>登录</v-list-item-title>
+            </v-list-item>
+          </template>
+        </v-list>
+      </v-menu>
     </v-app-bar>
 
     <v-main>

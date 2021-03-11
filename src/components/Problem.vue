@@ -4,7 +4,7 @@
       <v-col>
         <v-breadcrumbs :items="breadcrumbsItems" />
       </v-col>
-      <v-spacer />
+      <v-spacer v-if="!$vuetify.breakpoint.mobile" />
       <v-col
         cols="auto"
         class="pt-8"
@@ -102,13 +102,13 @@ export default {
       theme: "idea",
       viewportMargin: Infinity,
       extraKeys: {
-        "Shift-Tab": "indentLess"
-      }
+        "Shift-Tab": "indentLess",
+      },
     },
     debugInput: "",
     debugOutput: "",
     isDebugPanelVisible: false,
-    loading: true
+    loading: true,
   }),
 
   computed: {
@@ -117,15 +117,15 @@ export default {
         {
           text: "首页",
           disabled: false,
-          to: "/"
+          to: "/",
         },
         {
           text: this.problem.title,
           disabled: true,
-          to: "/"
-        }
+          to: "/",
+        },
       ];
-    }
+    },
   },
 
   async mounted() {
@@ -142,7 +142,7 @@ export default {
       const pythonExecutorUrl = process.env.VUE_APP_PYTHON3_EXECUTOR;
       const response = await axios.post(pythonExecutorUrl, {
         source: this.code,
-        input: this.debugInput
+        input: this.debugInput,
       });
       this.debugOutput = response.data;
     },
@@ -155,12 +155,12 @@ export default {
 
       await axios.post(`${process.env.VUE_APP_API_BASE_URL}submissions`, {
         problem_id: this.problem.id,
-        code: this.code
+        code: this.code,
       });
 
       this.$dialog.notify.success("提交成功");
-    }
-  }
+    },
+  },
 };
 </script>
 
