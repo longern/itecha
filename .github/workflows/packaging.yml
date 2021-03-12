@@ -20,7 +20,6 @@ jobs:
         run: |
           npm ci
           npm run build
-          ./manage.py collectstatic --no-input
           ./setup.py bdist_wheel
 
       - name: Upload wheel package
