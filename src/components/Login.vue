@@ -43,7 +43,7 @@ export default {
   data: () => ({
     username: "",
     password: "",
-    message: "",
+    message: ""
   }),
 
   methods: {
@@ -51,24 +51,21 @@ export default {
       if (!this.$refs.loginForm.validate()) return;
 
       try {
-        const response = await axios.post(
-          process.env.VUE_APP_API_BASE_URL + "login",
-          {
-            username: this.username,
-            password: this.password,
-          }
-        );
+        await axios.post(process.env.VUE_APP_API_BASE_URL + "login", {
+          username: this.username,
+          password: this.password
+        });
 
-        this.$emit("login", response.data.token);
+        this.$emit("login");
         this.$router.push("/");
         return;
       } catch (e) {
         this.$dialog.notify.error(e.message, {
           position: "top-right",
-          timeout: 5000,
+          timeout: 5000
         });
       }
-    },
-  },
+    }
+  }
 };
 </script>

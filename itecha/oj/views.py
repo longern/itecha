@@ -6,7 +6,6 @@ from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.views import APIView, Response
 
-from .authentication import generate_token
 from .models import Contest, Problem, Submission
 from .serializers import (
     BasicProblemSerializer,
@@ -25,8 +24,8 @@ class LoginView(APIView):
         password = request.data.get("password")
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            # login(request, user)
-            return Response({"token": generate_token(user)})
+            login(request, user)
+            return Response(status=204)
         else:
             return Response(status=401)
 
