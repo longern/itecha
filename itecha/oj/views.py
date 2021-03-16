@@ -117,9 +117,9 @@ def judge_code(
         source += "\n" + hidden_code
 
     if "____" in default_code:
-        segments = re.split("____", default_code)
+        segments = re.split("____", default_code.strip())
         source_pattern = ".{1,128}".join(map(re.escape, segments))
-        if not re.match(source_pattern):
+        if not re.match(f"^{source_pattern}$", source.strip()):
             return None
 
     correct_num = 0
