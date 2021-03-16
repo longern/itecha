@@ -120,14 +120,10 @@ export default {
         for (var j = 0; j < submission.problem.testcases.length; j++) {
           const testcase = submission.problem.testcases[j];
           const hidden_code = submission.problem.hidden_code || "";
-          const response = await axios.post(
-            pythonExecutorUrl,
-            {
-              source: `${submission.code}\n${hidden_code}`,
-              input: testcase.input_data
-            },
-            { transformResponse: [] }
-          );
+          const response = await axios.post(pythonExecutorUrl, {
+            source: `${submission.code}\n${hidden_code}`,
+            input: testcase.input_data,
+          });
           const output = response.data;
           if (output.trim() == testcase.output_data.trim())
             submission_score += testcase_score;
