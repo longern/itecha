@@ -11,3 +11,7 @@ v-alert[type="error"] {
 v-alert[type="success"] {
   background-color: #4CAF50;
 }
+
+v-alert[type="warning"] {
+  background-color: #FB8C00;
+}

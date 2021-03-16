@@ -73,11 +73,12 @@ export default {
   name: "App",
 
   data: () => ({
-    user: {}
+    user: {},
   }),
 
   created() {
     axios.defaults.withCredentials = true;
+    this.updateUser();
   },
 
   methods: {
@@ -90,8 +91,8 @@ export default {
       const csrf_token_match = document.cookie.match(/csrftoken=([^;]*)/);
       if (csrf_token_match)
         axios.defaults.headers["X-CSRFToken"] = csrf_token_match[1];
-    }
-  }
+    },
+  },
 };
 </script>
 

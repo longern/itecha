@@ -1,3 +1,6 @@
+import re
+import pickle
+
 import requests
 from django.conf import settings
 from django.contrib.auth import authenticate, login
@@ -30,7 +33,7 @@ class LoginView(APIView):
             return Response(status=401)
 
 
-def execute_code(code: str, code_input: str = "") -> bytes:
+def execute_code(code: str, code_input: str = "") -> str:
     """Executes Python code and collects its output"""
 
     import sys
@@ -52,7 +55,7 @@ def execute_code(code: str, code_input: str = "") -> bytes:
         exec(code, {})
     except Exception as e:
         traceback.print_exc()
-    output = output_buffer.getvalue().encode()
+    output = output_buffer.getvalue()
 
     # Restore the original stdin and stdout
     sys.stdin = sys.__stdin__
@@ -104,6 +107,30 @@ class ProblemViewSet(viewsets.ModelViewSet):
         serializer.save(creator=self.request.user)
 
 
+def judge_code(
+    source: str, testcases: list, default_code: str = "", hidden_code: str = ""
+):
+    if not testcases:
+        return None
+
+    if hidden_code:
+        source += "\n" + hidden_code
+
+    if "____" in default_code:
+        segments = re.split("____", default_code)
+        source_pattern = ".{1,128}".join(map(re.escape, segments))
+        if not re.match(source_pattern):
+            return None
+
+    correct_num = 0
+    for testcase in testcases:
+        output = execute_code(source, testcase["input_data"])
+        if output.strip() == testcase["output_data"].strip():
+            correct_num += 1
+    final_score = int(100 * correct_num / len(testcases))
+    return final_score
+
+
 class SubmissionViewSet(viewsets.ModelViewSet):
     queryset = Submission.objects.all()
     serializer_class = SubmissionSerializer
@@ -111,5 +138,12 @@ class SubmissionViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(
-            creator=self.request.user, creator_ip=self.request.META.get("REMOTE_ADDR")
+            creator=self.request.user,
+            creator_ip=self.request.META.get("REMOTE_ADDR"),
+            score=judge_code(
+                serializer.validated_data["code"],
+                pickle.loads(serializer.validated_data["problem"].testcases),
+                serializer.validated_data["problem"].default_code,
+                serializer.validated_data["problem"].hidden_code,
+            ),
         )
