@@ -153,12 +153,18 @@ export default {
         return;
       }
 
-      await axios.post(`${process.env.VUE_APP_API_BASE_URL}submissions`, {
-        problem_id: this.problem.id,
-        code: this.code,
-      });
+      const response = await axios.post(
+        `${process.env.VUE_APP_API_BASE_URL}submissions`,
+        {
+          problem_id: this.problem.id,
+          code: this.code,
+        }
+      );
 
-      this.$dialog.notify.success("提交成功");
+      const messageType = response.data.score === 100 ? "success" : "warning";
+      this.$dialog.notify[messageType](
+        `提交成功，得分：${response.data.score}`
+      );
     },
   },
 };
