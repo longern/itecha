@@ -1,0 +1,30 @@
+name: Packaging
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install latest pip
+        run: |
+          sudo apt-get install python3-setuptools
+          sudo pip3 install -U django pip
+
+      - name: Build wheel package
+        run: |
+          npm ci
+          npm run build
+          ./manage.py collectstatic --no-input
+          ./setup.py bdist_wheel
+
+      - name: Upload wheel package
+        uses: actions/upload-artifact@v2
+        with:
+          name: itecha.whl
+          path: dist/*.whl
