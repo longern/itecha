@@ -46,7 +46,9 @@ setup(
     url="https://github.com/longern/itecha",
     license="MIT",
     packages=find_packages(),
-    package_data={"itecha": ["static/*", "static/*/*", "static/*/*/*"]},
+    package_data={
+        "itecha": ["static/*", "static/*/*", "static/*/*/*", "static/*/*/*/*"]
+    },
     include_package_data=True,
     python_requires=">=3.6",
     install_requires=[
@@ -62,6 +64,11 @@ setup(
         "fc": [
             "django-import-export",
             "djanble @ git+https://github.com/longern/djanble.git@main",
+        ],
+    },
+    entry_points={
+        "console_scripts": [
+            "itecha = itecha.__main__:main",
         ],
     },
     cmdclass={"deploy": DeployCommand},
