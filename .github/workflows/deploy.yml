@@ -28,7 +28,7 @@ jobs:
           pip3 install .
           npm ci
           npm run build
-          ./manage.py collectstatic --no-input
+          ./itecha/__main__.py collectstatic --no-input
 
       - name: Deploy with Aliyun FC 2
         env:
