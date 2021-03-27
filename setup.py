@@ -3,7 +3,6 @@ import distutils.cmd
 import os
 import re
 
-import fc2
 from setuptools import find_packages, setup
 
 from itecha import __version__
@@ -21,10 +20,14 @@ class DeployCommand(distutils.cmd.Command):
         pass
 
     def run(self) -> None:
+        import fc2
+
         function_compute_arn = os.getenv("FUNCTION_COMPUTE_ARN")
         assert function_compute_arn
         match_pattern = r"^acs:fc:([^:]*):(\d+):services/([^.]*)\..*/functions/(.*)$"
-        service_site, account_id, service_name, function_name = re.match(match_pattern, function_compute_arn).groups()
+        service_site, account_id, service_name, function_name = re.match(
+            match_pattern, function_compute_arn
+        ).groups()
 
         client = fc2.Client(
             endpoint=f"http://{account_id}.{service_site}.fc.aliyuncs.com",
