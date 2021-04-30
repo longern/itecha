@@ -5,6 +5,8 @@ import sys
 
 
 def main_without_arguments():
+    import webbrowser
+
     from django.core.management import execute_from_command_line
 
     execute_from_command_line([sys.argv[0], "migrate"])
@@ -13,6 +15,8 @@ def main_without_arguments():
 
     if not User.objects.exists():
         User.objects.create_superuser(username="admin", password="admin")
+
+    webbrowser.open("http://127.0.0.1")
 
     execute_from_command_line([sys.argv[0], "runserver", "0.0.0.0:80", "--noreload"])
 
