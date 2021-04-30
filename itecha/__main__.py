@@ -4,6 +4,19 @@ import os
 import sys
 
 
+def main_without_arguments():
+    from django.core.management import execute_from_command_line
+
+    execute_from_command_line([sys.argv[0], "migrate"])
+
+    from django.contrib.auth.models import User
+
+    if not User.objects.exists():
+        User.objects.create_superuser(username="admin", password="admin")
+
+    execute_from_command_line([sys.argv[0], "runserver", "0.0.0.0:80", "--noreload"])
+
+
 def main():
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "itecha.settings")
@@ -15,6 +28,10 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
+
+    if len(sys.argv) <= 1:
+        return main_without_arguments()
+
     execute_from_command_line(sys.argv)
 
 
