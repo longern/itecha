@@ -1,0 +1,36 @@
+name: PyInstaller
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install pyinstaller
+        run: |
+          pip3 install -U pip pyinstaller
+
+      - name: Write secret key
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+        run: |
+          echo "__import__('os').environ.setdefault('SECRET_KEY', '$env:DJANGO_SECRET_KEY')" > secret.py
+
+      - name: Build static files
+        run: |
+          pip3 install .
+          npm ci && npm run build
+          ./itecha/__main__.py collectstatic --no-input
+          pip3 install --force-reinstall .
+          pyinstaller --runtime-hook secret.py --collect-submodules whitenoise -F -n itecha ./itecha/__main__.py
+
+      - name: Upload executable
+        uses: actions/upload-artifact@v2
+        with:
+          name: itecha-windows
+          path: dist/itecha.exe

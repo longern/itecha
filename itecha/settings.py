@@ -113,6 +113,8 @@ if DEBUG:
 
 DATABASES = {"default": env.db(engine=env("DATABASE_ENGINE"))}
 
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
