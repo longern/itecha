@@ -19,7 +19,7 @@ jobs:
         env:
           DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
         run: |
-          echo "__import__('os').environ['SECRET_KEY'] = '$env:DJANGO_SECRET_KEY'" > secret.py
+          echo "__import__('os').environ.setdefault('SECRET_KEY', '$env:DJANGO_SECRET_KEY'") > secret.py
 
       - name: Build static files
         run: |
