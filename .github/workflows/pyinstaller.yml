@@ -23,11 +23,11 @@ jobs:
 
       - name: Build static files
         run: |
-          pip3 install .
+          pip3 install . pandas
           npm ci && npm run build
           ./itecha/__main__.py collectstatic --no-input
-          pip3 install --force-reinstall .
-          pyinstaller --runtime-hook secret.py --collect-submodules whitenoise -F -n itecha ./itecha/__main__.py
+          pip3 install --force-reinstall --no-deps .
+          pyinstaller --runtime-hook secret.py --hidden-import pandas --collect-submodules whitenoise -F -n itecha ./itecha/__main__.py
 
       - name: Upload executable
         uses: actions/upload-artifact@v2
