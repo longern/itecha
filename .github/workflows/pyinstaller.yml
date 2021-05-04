@@ -13,7 +13,7 @@ jobs:
 
       - name: Install pyinstaller
         run: |
-          pip3 install -U pip pyinstaller
+          pip3 install pyinstaller
 
       - name: Write secret key
         env:
