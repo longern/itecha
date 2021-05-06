@@ -11,9 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Install pyinstaller
+      - name: Install dependencies
         run: |
-          pip3 install pyinstaller
+          pip3 install pandas pyinstaller
+          pip3 install -e .
 
       - name: Write secret key
         env:
@@ -23,9 +24,14 @@ jobs:
 
       - name: Build static files
         run: |
-          pip3 install . pandas
           npm ci && npm run build
-          ./itecha/__main__.py collectstatic --no-input
+
+      - name: Collect static files
+        run: |
+          python3 -m itecha collectstatic --no-input
+
+      - name: Generate executable files
+        run: |
           pip3 install --force-reinstall --no-deps .
           pyinstaller --runtime-hook secret.py --hidden-import pandas --collect-submodules whitenoise -F -n itecha ./itecha/__main__.py
 
