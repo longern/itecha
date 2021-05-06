@@ -42,6 +42,12 @@
             <v-list-item>
               <v-list-item-title v-text="user.username" />
             </v-list-item>
+            <v-list-item
+              v-if="user.is_superuser"
+              href="/admin"
+            >
+              <v-list-item-title>控制台</v-list-item-title>
+            </v-list-item>
             <v-list-item to="/login">
               <v-list-item-title>注销</v-list-item-title>
             </v-list-item>
