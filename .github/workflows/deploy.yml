@@ -3,8 +3,6 @@ name: Deploy
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
   workflow_dispatch:
 
@@ -19,16 +17,15 @@ jobs:
       - name: Install Aliyun FC 2
         run: |
           sudo apt-get install python3-setuptools
-          sudo pip3 install -U aliyun-fc2 django pip
+          sudo pip3 install -U aliyun-fc2 pip
 
       - name: Build static files
         env:
           VUE_APP_ENABLE_CDN: 1
         run: |
-          pip3 install .
-          npm ci
-          npm run build
-          ./itecha/__main__.py collectstatic --no-input
+          pip3 install -e .
+          npm ci && npm run build
+          python3 -m itecha collectstatic --no-input
 
       - name: Deploy with Aliyun FC 2
         env:
