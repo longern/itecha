@@ -3,6 +3,7 @@
     <v-app-bar
       app
       absolute
+      class="fill-height"
     >
       <v-app-bar-title>
         <router-link
@@ -61,13 +62,11 @@
       </v-menu>
     </v-app-bar>
 
-    <v-main>
-      <div>
-        <router-view
-          :is-superuser="user.is_superuser"
-          @login="updateUser"
-        />
-      </div>
+    <v-main class="fill-height">
+      <router-view
+        :is-superuser="user.is_superuser"
+        @login="updateUser"
+      />
     </v-main>
   </v-app>
 </template>
@@ -110,5 +109,9 @@ export default {
 
 .v-application .markdown-body pre code {
   background-color: transparent;
+}
+
+.fill-width {
+  width: 100%;
 }
 </style>

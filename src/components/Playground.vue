@@ -1,43 +1,46 @@
 <template>
-  <v-container class="playground">
-    <v-row>
-      <v-col>
-        <v-row>
-          <v-col
-            cols="12"
-            md="8"
-          >
-            <v-card class="fill-height">
-              <codemirror
-                ref="cm"
-                v-model="code"
-                :options="cmOption"
-              />
-            </v-card>
-          </v-col>
-          <v-col
-            cols="12"
-            md="4"
-          >
-            <v-card class="fill-height">
-              <v-container>
-                <v-textarea
-                  v-model="debugInput"
-                  label="输入"
-                />
-                <v-btn
-                  color="secondary"
-                  @click="runPython3Code"
-                >
-                  运行
-                </v-btn>
-                <pre class="mt-4"><code v-text="debugOutput" /></pre>
-              </v-container>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
+  <v-container
+    class="playground pa-0 fill-height"
+    fluid
+  >
+    <codemirror
+      v-if="!showIO"
+      ref="cm"
+      v-model="code"
+      :options="cmOption"
+      class="fill-height fill-width"
+    />
+    <v-container v-else>
+      <v-textarea
+        v-model="debugInput"
+        label="输入"
+      />
+      <v-btn
+        color="primary"
+        @click="runPython3Code"
+      >
+        运行
+      </v-btn>
+      <pre><code
+        v-if="debugOutput !== ''"
+        class="d-block mt-4"
+        v-text="debugOutput"
+      /></pre>
+    </v-container>
+    <v-footer app>
+      <v-btn
+        icon
+        @click="showIO = !showIO"
+      >
+        <v-icon>mdi-play</v-icon>
+      </v-btn>
+      <v-btn @click="undo" icon>
+        <v-icon>mdi-undo</v-icon>
+      </v-btn>
+      <v-btn @click="redo" icon>
+        <v-icon>mdi-redo</v-icon>
+      </v-btn>
+    </v-footer>
   </v-container>
 </template>
 
@@ -52,6 +55,7 @@ export default {
 
   data: () => ({
     code: "",
+    showIO: false,
     debugInput: "",
     debugOutput: "",
     cmOption: {
@@ -77,6 +81,21 @@ export default {
       });
       this.debugOutput = response.data;
     },
+
+    undo() {
+      this.$refs.cm.codemirror.doc.undo();
+    },
+
+    redo() {
+      this.$refs.cm.codemirror.doc.redo();
+    }
   },
 };
 </script>
+
+<style>
+.vue-codemirror > div.CodeMirror {
+  height: 100%;
+  width: 100%;
+}
+</style>
