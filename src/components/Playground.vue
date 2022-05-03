@@ -34,10 +34,16 @@
       >
         <v-icon>mdi-play</v-icon>
       </v-btn>
-      <v-btn @click="undo" icon>
+      <v-btn
+        icon
+        @click="undo"
+      >
         <v-icon>mdi-undo</v-icon>
       </v-btn>
-      <v-btn @click="redo" icon>
+      <v-btn
+        icon
+        @click="redo"
+      >
         <v-icon>mdi-redo</v-icon>
       </v-btn>
     </v-footer>
