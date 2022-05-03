@@ -39,14 +39,11 @@ class MSALLoginView(APIView):
 
         return HttpResponseRedirect(authorization_request_url)
 
-    def options(self, request):
-        try:
-            getattr(settings, "MSAL_JWT")
-
-            return Response(status=200)
-
-        except (ImportError, AttributeError):
+    def options(self, request, *args, **kwargs):
+        if not getattr(settings, "MSAL_JWT", {}).get("CLIENT_ID"):
             return Response("MSAL is not enabled", status=500)
+
+        return super().options(request, *args, **kwargs)
 
 
 class MSALRedirectView(APIView):
@@ -71,7 +68,7 @@ class MSALRedirectView(APIView):
         if "access_token" in tokens:
             email = tokens["id_token_claims"]["preferred_username"]
             try:
-                user = get_user_model().objects.get(email=email)
+                user = get_user_model().objects.get(username=email)
             except ObjectDoesNotExist:
                 user = get_user_model().objects.create_user(username=email, email=email)
             login(request, user)
