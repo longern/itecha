@@ -46,6 +46,12 @@ export default {
     message: ""
   }),
 
+  created() {
+    axios.options("/msal/login").then(() => {
+      window.location = "/msal/login";
+    }).catch(() => {})
+  },
+
   methods: {
     async login() {
       if (!this.$refs.loginForm.validate()) return;

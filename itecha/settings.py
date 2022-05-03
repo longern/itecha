@@ -126,6 +126,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
+MSAL_JWT = env("MSAL_JWT", dict, {})
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/

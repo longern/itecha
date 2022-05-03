@@ -64,6 +64,7 @@ setup(
         "fc": [
             "django-import-export",
             "djanble @ git+https://github.com/longern/djanble.git@main",
+            "msal",
         ],
     },
     entry_points={
