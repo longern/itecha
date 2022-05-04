@@ -102,6 +102,10 @@ export default {
 </script>
 
 <style>
+.v-application {
+  max-height: 100vh;
+}
+
 .v-app-bar-title {
   font-family: Consolas, "Courier New", Courier, monospace;
   cursor: pointer;

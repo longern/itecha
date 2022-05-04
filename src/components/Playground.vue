@@ -4,13 +4,12 @@
     fluid
   >
     <codemirror
-      v-if="!showIO"
       ref="cm"
       v-model="code"
       :options="cmOption"
       class="fill-height fill-width"
     />
-    <v-container v-else>
+    <v-card v-if="showIO" class="io-card" outlined>
       <v-textarea
         v-model="debugInput"
         label="输入"
@@ -26,14 +25,8 @@
         class="d-block mt-4"
         v-text="debugOutput"
       /></pre>
-    </v-container>
+    </v-card>
     <v-footer app>
-      <v-btn
-        icon
-        @click="showIO = !showIO"
-      >
-        <v-icon>mdi-play</v-icon>
-      </v-btn>
       <v-btn
         icon
         @click="undo"
@@ -45,6 +38,16 @@
         @click="redo"
       >
         <v-icon>mdi-redo</v-icon>
+      </v-btn>
+      <v-spacer/>
+      <v-btn
+        fab
+        small
+        color="primary"
+        @click="showIO = !showIO"
+        class="ml-2"
+      >
+        <v-icon>mdi-play</v-icon>
       </v-btn>
     </v-footer>
   </v-container>
@@ -110,8 +113,16 @@ export default {
 </script>
 
 <style>
-.vue-codemirror > div.CodeMirror {
+.playground > .vue-codemirror > div.CodeMirror {
   height: 100%;
   width: 100%;
+}
+
+.io-card {
+  position: absolute;
+  bottom: 0;
+  z-index: 5;
+  width: 100%;
+  padding: 16px;
 }
 </style>
