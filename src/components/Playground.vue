@@ -76,7 +76,17 @@ export default {
     },
   }),
 
-  async mounted() {},
+  async mounted() {
+    if (localStorage.playgroundCode) {
+      this.code = localStorage.playgroundCode;
+    }
+  },
+
+  watch: {
+    code(newCode) {
+      localStorage.playgroundCode = newCode;
+    }
+  },
 
   methods: {
     async runPython3Code() {
