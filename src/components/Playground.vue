@@ -9,7 +9,11 @@
       :options="cmOption"
       class="fill-height fill-width"
     />
-    <v-card v-if="showIO" class="io-card" outlined>
+    <v-card
+      v-if="showIO"
+      class="io-card"
+      outlined
+    >
       <v-textarea
         v-model="debugInput"
         label="输入"
@@ -39,13 +43,33 @@
       >
         <v-icon>mdi-redo</v-icon>
       </v-btn>
-      <v-spacer/>
+      <v-spacer />
+      <v-btn
+        icon
+        @click="
+          () => {
+            $refs.capture.click();
+          }
+        "
+      >
+        <form ref="captureForm">
+          <input
+            ref="capture"
+            type="file"
+            accept="image/*"
+            capture="environment"
+            hidden
+            @change="uploadImage"
+          >
+        </form>
+        <v-icon>mdi-camera</v-icon>
+      </v-btn>
       <v-btn
         fab
         small
         color="primary"
-        @click="showIO = !showIO"
         class="ml-2"
+        @click="showIO = !showIO"
       >
         <v-icon>mdi-play</v-icon>
       </v-btn>
@@ -79,15 +103,15 @@ export default {
     },
   }),
 
-  async mounted() {
-    if (localStorage.playgroundCode) {
-      this.code = localStorage.playgroundCode;
-    }
-  },
-
   watch: {
     code(newCode) {
       localStorage.playgroundCode = newCode;
+    },
+  },
+
+  async mounted() {
+    if (localStorage.playgroundCode) {
+      this.code = localStorage.playgroundCode;
     }
   },
 
@@ -107,7 +131,14 @@ export default {
 
     redo() {
       this.$refs.cm.codemirror.doc.redo();
-    }
+    },
+
+    async uploadImage() {
+      const orcUrl = "https://1945724074264704.cn-hongkong.fc.aliyuncs.com/2016-08-15/proxy/executors.LATEST/tesseract/";
+      axios.post(orcUrl, this.$refs.capture.files[0]).then((response) => {
+        this.code = response.data;
+      });
+    },
   },
 };
 </script>
