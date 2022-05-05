@@ -46,6 +46,7 @@
       <v-spacer />
       <v-btn
         icon
+        :loading="isUploadingImage"
         @click="
           () => {
             $refs.capture.click();
@@ -57,7 +58,7 @@
             ref="capture"
             type="file"
             accept="image/*"
-            capture="environment"
+            capture
             hidden
             @change="uploadImage"
           >
@@ -91,6 +92,7 @@ export default {
     showIO: false,
     debugInput: "",
     debugOutput: "",
+    isUploadingImage: false,
     cmOption: {
       mode: "text/x-python",
       indentUnit: 4,
@@ -134,10 +136,11 @@ export default {
     },
 
     async uploadImage() {
+      this.isUploadingImage = true;
       const orcUrl = "https://1945724074264704.cn-hongkong.fc.aliyuncs.com/2016-08-15/proxy/executors.LATEST/tesseract/";
-      axios.post(orcUrl, this.$refs.capture.files[0]).then((response) => {
-        this.code = response.data;
-      });
+      const response = await axios.post(orcUrl, this.$refs.capture.files[0]);
+      this.code = response.data;
+      this.isUploadingImage = false;
     },
   },
 };
