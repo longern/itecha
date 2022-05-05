@@ -169,10 +169,22 @@ export default {
 
         const orcUrl = "https://1945724074264704.cn-hongkong.fc.aliyuncs.com/2016-08-15/proxy/executors.LATEST/tesseract/";
         const response = await axios.post(orcUrl, imageFile);
-        this.code = response.data;
+        let code = response.data;
+
+        let codeLines = code.split("\n");
+        for (let i = 1; i < codeLines.length; i++) {
+          if (codeLines[i - 1].search(/:$/) >= 0) {
+            const numLeadingSpaces = codeLines[i - 1].match(/^ */)[0].length;
+            codeLines[i] = " ".repeat(numLeadingSpaces + 4) + codeLines[i];
+          }
+        }
+        code = codeLines.join("\n");
+
+        this.code = code;
       } catch(err) {
         console.log(err);
       }
+
       this.isUploadingImage = false;
     },
   },
