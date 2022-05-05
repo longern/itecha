@@ -43,6 +43,12 @@
       >
         <v-icon>mdi-redo</v-icon>
       </v-btn>
+      <v-btn
+        icon
+        @click="indentMore"
+      >
+        <v-icon>mdi-keyboard-tab</v-icon>
+      </v-btn>
       <v-spacer />
       <v-btn
         icon
@@ -133,6 +139,10 @@ export default {
 
     redo() {
       this.$refs.cm.codemirror.doc.redo();
+    },
+
+    indentMore() {
+      this.$refs.cm.codemirror.execCommand("indentMore");
     },
 
     async uploadImage() {
