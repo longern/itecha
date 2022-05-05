@@ -60,7 +60,7 @@
             accept="image/*"
             capture
             hidden
-            @change="uploadImage"
+            @input="uploadImage"
           >
         </form>
         <v-icon>mdi-camera</v-icon>
@@ -137,9 +137,42 @@ export default {
 
     async uploadImage() {
       this.isUploadingImage = true;
-      const orcUrl = "https://1945724074264704.cn-hongkong.fc.aliyuncs.com/2016-08-15/proxy/executors.LATEST/tesseract/";
-      const response = await axios.post(orcUrl, this.$refs.capture.files[0]);
-      this.code = response.data;
+      try {
+        let imageFile = this.$refs.capture.files[0];
+        const SIZE_LIMIT = 10 ** 5;
+        if (imageFile.size >= SIZE_LIMIT) {
+          const imageFileContent = await new Promise(resolve => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.readAsDataURL(imageFile);
+          });
+
+          const img = await new Promise(resolve => {
+            const img = document.createElement("img");
+            img.onload = () => resolve(img);
+            img.src = imageFileContent;
+          });
+
+          const canvas = document.createElement("canvas");
+          const resizeRatio = Math.sqrt(SIZE_LIMIT / imageFile.size) * 0.95;
+          canvas.width = resizeRatio * img.width;
+          canvas.height = resizeRatio * img.height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          imageFile = await new Promise(resolve => {
+            canvas.toBlob(blob => {
+              const resizedFile = new File([blob], "image.png");
+              resolve(resizedFile);
+            });
+          });
+        }
+
+        const orcUrl = "https://1945724074264704.cn-hongkong.fc.aliyuncs.com/2016-08-15/proxy/executors.LATEST/tesseract/";
+        const response = await axios.post(orcUrl, imageFile);
+        this.code = response.data;
+      } catch(err) {
+        console.log(err);
+      }
       this.isUploadingImage = false;
     },
   },
