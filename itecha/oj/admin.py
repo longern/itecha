@@ -20,3 +20,4 @@ class ProblemAdmin(ImportExportMixin, admin.ModelAdmin):
 @admin.register(Submission)
 class SubmissionAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display = ("problem", "creator", "score", "created")
+    show_full_result_count = False
