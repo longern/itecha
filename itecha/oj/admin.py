@@ -19,4 +19,4 @@ class ProblemAdmin(ImportExportMixin, admin.ModelAdmin):
 
 @admin.register(Submission)
 class SubmissionAdmin(ImportExportMixin, admin.ModelAdmin):
-    pass
+    list_display = ("problem", "creator", "score", "created")
