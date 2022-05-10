@@ -21,6 +21,14 @@
         :items="problems"
         mobile-breakpoint="0"
       >
+        <template v-slot:item.status="{ item }">
+          <span
+            v-if="item.status === 'AC'"
+            class="green--text"
+          >
+            <v-icon>mdi-check</v-icon>
+          </span>
+        </template>
         <template v-slot:item.title="{ item }">
           <router-link
             :to="`/problems/${item.id}`"
@@ -70,6 +78,11 @@ export default {
   data: () => ({
     headers: [
       {
+        text: "状态",
+        value: "status",
+        sortable: false,
+      },
+      {
         text: "题目名称",
         value: "title",
         sortable: false,
@@ -95,6 +108,28 @@ export default {
         params: { fields: "id,title,tags" },
       })
     ).data;
+
+    const msal_token_match = document.cookie.match(/(^| )msal_token=([^;]+)/);
+    if (msal_token_match) {
+      const msal_token = msal_token_match[2];
+      const approot_response = await axios.get(
+        "https://graph.microsoft.com/v1.0/me/drive/special/approot/children",
+        {
+          headers: { Authorization: `Bearer ${msal_token}` },
+          withCredentials: false,
+        }
+      )
+
+      const files = approot_response.data.value;
+      const filenames = files.map(file => file.name);
+
+      // If filename starts with problem id, then mark the problem as solved.
+      for (const problem of this.problems) {
+        if (filenames.includes(`${problem.id}.py`)) {
+          problem.status = "AC";
+        }
+      }
+    }
 
     this.loading = false;
   },
