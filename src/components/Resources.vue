@@ -7,6 +7,7 @@
       <v-btn
         text
         href="https://v2.ykt.cbern.com.cn/65/document/94af91d903fe46959df0c5f86dd9bf1f/pdf.pdf"
+        download="数据与计算.pdf"
       >
         数据与计算
       </v-btn>
@@ -15,6 +16,7 @@
       <v-btn
         text
         href="https://v2.ykt.cbern.com.cn/65/document/970cd78f6ce045609ca239d1ce096a5e/pdf.pdf"
+        download="信息系统与社会.pdf"
       >
         信息系统与社会
       </v-btn>
@@ -23,6 +25,7 @@
       <v-btn
         text
         href="https://v2.ykt.cbern.com.cn/65/document/cd1d4ae30d324d25ad3ff62e8f1ac172/pdf.pdf"
+        download="数据与数据结构.pdf"
       >
         数据与数据结构
       </v-btn>

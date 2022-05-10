@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container :class="{'pa-0': $vuetify.breakpoint.mdAndDown}">
     <v-row
       v-if="user.isSuperuser"
       class="align-center"
@@ -11,53 +11,51 @@
         创建题目
       </v-btn>
     </v-row>
-    <v-row>
-      <v-col>
-        <v-card :loading="loading">
-          <v-container>
-            <v-data-table
-              :headers="headers"
-              :items="problems"
-              mobile-breakpoint="0"
-            >
-              <template v-slot:item.title="{ item }">
-                <router-link
-                  :to="`/problems/${item.id}`"
-                  v-text="item.title"
-                />
-              </template>
-              <template v-slot:item.tags="{ item }">
-                <v-chip-group v-if="item.tags">
-                  <v-chip
-                    v-for="tag in item.tags"
-                    :key="tag"
-                    small
-                    v-text="tag"
-                  />
-                </v-chip-group>
-              </template>
-              <template
-                v-if="user.isSuperuser"
-                v-slot:item.actions="{ item }"
-              >
-                <router-link
-                  :to="`/problems/${item.id}/edit`"
-                  title="编辑"
-                >
-                  <v-icon>mdi-pencil</v-icon>
-                </router-link>
-                <router-link
-                  :to="`/submissions?problem_id=${item.id}`"
-                  title="提交记录"
-                >
-                  <v-icon>mdi-clock</v-icon>
-                </router-link>
-              </template>
-            </v-data-table>
-          </v-container>
-        </v-card>
-      </v-col>
-    </v-row>
+    <v-card
+      :loading="loading"
+      :flat="$vuetify.breakpoint.mdAndDown"
+      :tile="$vuetify.breakpoint.mdAndDown"
+    >
+      <v-data-table
+        :headers="headers"
+        :items="problems"
+        mobile-breakpoint="0"
+      >
+        <template v-slot:item.title="{ item }">
+          <router-link
+            :to="`/problems/${item.id}`"
+            v-text="item.title"
+          />
+        </template>
+        <template v-slot:item.tags="{ item }">
+          <v-chip-group v-if="item.tags">
+            <v-chip
+              v-for="tag in item.tags"
+              :key="tag"
+              small
+              v-text="tag"
+            />
+          </v-chip-group>
+        </template>
+        <template
+          v-if="user.isSuperuser"
+          v-slot:item.actions="{ item }"
+        >
+          <router-link
+            :to="`/problems/${item.id}/edit`"
+            title="编辑"
+          >
+            <v-icon>mdi-pencil</v-icon>
+          </router-link>
+          <router-link
+            :to="`/submissions?problem_id=${item.id}`"
+            title="提交记录"
+          >
+            <v-icon>mdi-clock</v-icon>
+          </router-link>
+        </template>
+      </v-data-table>
+    </v-card>
   </v-container>
 </template>
 
