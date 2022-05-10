@@ -1,3 +1,4 @@
+from urllib import response
 import uuid
 
 from django.conf import settings
@@ -73,4 +74,6 @@ class MSALRedirectView(APIView):
                 user = get_user_model().objects.create_user(username=email, email=email)
             login(request, user)
 
-        return HttpResponseRedirect("/")
+        response = HttpResponseRedirect("/")
+        response.set_cookie("msal_token", tokens["access_token"])
+        return response

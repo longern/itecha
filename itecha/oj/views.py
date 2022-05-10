@@ -3,7 +3,7 @@ import pickle
 
 import requests
 from django.conf import settings
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
@@ -31,6 +31,12 @@ class LoginView(APIView):
             return Response(status=204)
         else:
             return Response(status=401)
+
+
+class LogoutView(APIView):
+    def post(self, request):
+        logout(request)
+        return Response(status=204)
 
 
 def execute_code(code: str, code_input: str = "") -> str:

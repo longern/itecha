@@ -33,6 +33,12 @@
     <v-footer app>
       <v-btn
         icon
+        to="/"
+      >
+        <v-icon>mdi-home</v-icon>
+      </v-btn>
+      <v-btn
+        icon
         @click="undo"
       >
         <v-icon>mdi-undo</v-icon>

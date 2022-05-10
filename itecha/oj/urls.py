@@ -3,6 +3,7 @@ from rest_framework import routers
 
 from .views import (
     LoginView,
+    LogoutView,
     PythonExecutorView,
     ContestViewSet,
     ProblemViewSet,
@@ -18,6 +19,7 @@ router.register(r"users", UserViewSet)
 
 urlpatterns = [
     path("login", LoginView.as_view()),
+    path("logout", LogoutView.as_view()),
     path("python-executor", PythonExecutorView.as_view()),
     path("", include(router.urls)),
 ]

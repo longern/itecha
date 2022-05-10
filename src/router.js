@@ -6,6 +6,8 @@ import Playground from "./components/Playground.vue";
 import Problem from "./components/Problem.vue";
 import ProblemList from "./components/ProblemList.vue";
 import ProblemForm from "./components/ProblemForm.vue";
+import Profile from "./components/Profile.vue";
+import Resources from "./components/Resources.vue"
 import SubmissionList from "./components/SubmissionList.vue";
 
 const router = new VueRouter({
@@ -13,6 +15,10 @@ const router = new VueRouter({
     {
       path: "/",
       component: ProblemList,
+    },
+    {
+      path: "/resources",
+      component: Resources,
     },
     {
       path: "/contests",
@@ -25,6 +31,10 @@ const router = new VueRouter({
     {
       path: "/playground",
       component: Playground,
+    },
+    {
+      path: "/profile",
+      component: Profile,
     },
     {
       path: "/problems/create",

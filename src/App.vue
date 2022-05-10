@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <v-app-bar
+      v-if="$vuetify.breakpoint.lgAndUp"
       app
       absolute
       class="fill-height"
@@ -40,7 +41,7 @@
 
         <v-list dense>
           <template v-if="user.username">
-            <v-list-item>
+            <v-list-item to="/profile">
               <v-list-item-title v-text="user.username" />
             </v-list-item>
             <v-list-item
@@ -49,7 +50,7 @@
             >
               <v-list-item-title>控制台</v-list-item-title>
             </v-list-item>
-            <v-list-item to="/login">
+            <v-list-item @click="logout">
               <v-list-item-title>注销</v-list-item-title>
             </v-list-item>
           </template>
@@ -64,10 +65,47 @@
 
     <v-main class="fill-height">
       <router-view
-        :is-superuser="user.is_superuser"
+        :user="user"
         @login="updateUser"
       />
     </v-main>
+
+    <v-footer
+      v-if="$route.path !== '/playground'"
+      app
+      class="d-lg-none d-flex py-0"
+    >
+      <v-spacer />
+      <v-btn
+        text
+        to="/"
+      >
+        <v-icon>mdi-home</v-icon>
+        <div>练习</div>
+      </v-btn>
+      <v-btn
+        text
+        to="/resources"
+      >
+        <v-icon>mdi-book</v-icon>
+        <div>资源</div>
+      </v-btn>
+      <v-btn
+        text
+        to="/playground"
+      >
+        <v-icon>mdi-pencil</v-icon>
+        <div>编程</div>
+      </v-btn>
+      <v-btn
+        text
+        to="/profile"
+      >
+        <v-icon>mdi-account</v-icon>
+        <div>我的</div>
+      </v-btn>
+      <v-spacer />
+    </v-footer>
   </v-app>
 </template>
 
@@ -97,6 +135,11 @@ export default {
       if (csrf_token_match)
         axios.defaults.headers["X-CSRFToken"] = csrf_token_match[1];
     },
+
+    async logout() {
+      await axios.post(`${process.env.VUE_APP_API_BASE_URL}logout`);
+      this.user = {};
+    }
   },
 };
 </script>
@@ -117,5 +160,17 @@ export default {
 
 .fill-width {
   width: 100%;
+}
+
+.v-application--wrap > .v-footer .v-btn {
+    padding: 0 20px;
+    min-height: 56px;
+    border-radius: 0;
+}
+
+.v-application--wrap > .v-footer .v-btn__content {
+    display:flex;
+    flex-direction:column;
+    font-size: 12px;
 }
 </style>

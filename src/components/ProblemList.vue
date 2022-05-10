@@ -1,12 +1,10 @@
 <template>
   <v-container>
-    <v-row class="align-center">
-      <h1 class="ma-8">
-        题目列表
-      </h1>
-      <v-spacer />
+    <v-row
+      v-if="user.isSuperuser"
+      class="align-center"
+    >
       <v-btn
-        v-if="isSuperuser"
         color="primary"
         to="/problems/create"
       >
@@ -20,6 +18,7 @@
             <v-data-table
               :headers="headers"
               :items="problems"
+              mobile-breakpoint="0"
             >
               <template v-slot:item.title="{ item }">
                 <router-link
@@ -32,12 +31,13 @@
                   <v-chip
                     v-for="tag in item.tags"
                     :key="tag"
+                    small
                     v-text="tag"
                   />
                 </v-chip-group>
               </template>
               <template
-                v-if="isSuperuser"
+                v-if="user.isSuperuser"
                 v-slot:item.actions="{ item }"
               >
                 <router-link
@@ -67,38 +67,38 @@ import axios from "axios";
 export default {
   name: "ProblemList",
 
-  props: { isSuperuser: { type: Boolean, default: false } },
+  props: { user: { type: Object, default: () => {} } },
 
   data: () => ({
     headers: [
       {
         text: "题目名称",
         value: "title",
-        sortable: false
+        sortable: false,
       },
       {
         text: "标签",
         value: "tags",
-        sortable: false
+        sortable: false,
       },
       {
         text: "操作",
         value: "actions",
-        sortable: false
-      }
+        sortable: false,
+      },
     ],
     loading: true,
-    problems: []
+    problems: [],
   }),
 
   async mounted() {
     this.problems = (
       await axios.get(`${process.env.VUE_APP_API_BASE_URL}problems`, {
-        params: { fields: "id,title,tags" }
+        params: { fields: "id,title,tags" },
       })
     ).data;
     this.loading = false;
-  }
+  },
 };
 </script>
 
