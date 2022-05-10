@@ -22,12 +22,12 @@
         mobile-breakpoint="0"
       >
         <template v-slot:item.status="{ item }">
-          <span
+          <v-icon
             v-if="item.status === 'AC'"
-            class="green--text"
+            color="green"
           >
-            <v-icon>mdi-check</v-icon>
-          </span>
+            mdi-check
+          </v-icon>
         </template>
         <template v-slot:item.title="{ item }">
           <router-link
