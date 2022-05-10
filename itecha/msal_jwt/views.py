@@ -27,13 +27,14 @@ class MSALLoginView(APIView):
         except AttributeError:
             return Response("msal is not correctly configured", status=500)
 
-        authorization_request_url = msal.PublicClientApplication(
+        authorization_request_url = msal.ConfidentialClientApplication(
             msal_settings.get("CLIENT_ID"),
+            client_credential=msal_settings.get("CLIENT_SECRET"),
             authority=msal_settings.get(
                 "AUTHORITY_URL", "https://login.microsoftonline.com/common/"
             ),
         ).get_authorization_request_url(
-            msal_settings.get("SCOPES", ["User.ReadBasic.All"]),
+            getattr(settings, "MSAL_JWT_SCOPES"),
             state=state,
             redirect_uri=msal_settings.get("REDIRECT_URI"),
         )
@@ -62,7 +63,7 @@ class MSALRedirectView(APIView):
             ),
         ).acquire_token_by_authorization_code(
             request.GET["code"],
-            msal_settings.get("SCOPES", ["User.ReadBasic.All"]),
+            getattr(settings, "MSAL_JWT_SCOPES"),
             redirect_uri=msal_settings.get("REDIRECT_URI"),
         )
 

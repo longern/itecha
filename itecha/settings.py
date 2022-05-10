@@ -128,6 +128,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 MSAL_JWT = env("MSAL_JWT", dict, {})
 
+MSAL_JWT_SCOPES = [
+    "User.Read",
+    "Files.ReadWrite.AppFolder",
+]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
