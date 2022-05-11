@@ -21,9 +21,7 @@
         </v-btn>
       </template>
     </mobile-app-bar>
-    <v-row
-      class="flex-column ma-0 fill-height"
-    >
+    <v-row class="flex-column ma-0 fill-height">
       <v-col
         class="grow pa-0"
         style="height: 0"
@@ -107,9 +105,7 @@
         >
           <v-row>
             <v-spacer />
-            <v-col
-              cols="auto"
-            >
+            <v-col cols="auto">
               <v-btn
                 class="mr-3"
                 @click="displayDebugPanel ^= true"
@@ -171,11 +167,15 @@ export default {
     this.code = this.problem.default_code || "";
 
     await this.$nextTick();
-    for (const node of this.$refs.problemText.$el.querySelectorAll("code")) {
+    const problemTextElem = this.$refs.problemText.$el;
+    for (const node of problemTextElem.querySelectorAll("code")) {
       if (node.innerText.match(/____\d+____/)) {
         this.code = node.innerText;
       }
     }
+
+    const inputNode = problemTextElem.querySelector("code.lang-input");
+    if (inputNode) { this.debugInput = inputNode.innerText; }
 
     this.loading = false;
   },
