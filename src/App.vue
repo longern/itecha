@@ -94,7 +94,7 @@
         text
         to="/playground"
       >
-        <v-icon>mdi-pencil</v-icon>
+        <v-icon>mdi-code-tags</v-icon>
         <div>编程</div>
       </v-btn>
       <v-btn
