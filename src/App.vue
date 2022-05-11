@@ -126,6 +126,17 @@ export default {
 
   methods: {
     async updateUser() {
+      const msal_token_match = document.cookie.match(
+        /(^| )msal_access_token=([^;]+)/
+      );
+      const refresh_token_match = document.cookie.match(
+        /(^| )msal_refresh_token=([^;]+)/
+      );
+      if (refresh_token_match && !msal_token_match) {
+        const refresh_token = refresh_token_match[2];
+        axios.get("/msal/refresh", { params: { refresh_token } });
+      }
+
       const user_response = await axios.get(
         `${process.env.VUE_APP_API_BASE_URL}users/current`
       );
@@ -139,7 +150,7 @@ export default {
     async logout() {
       await axios.post(`${process.env.VUE_APP_API_BASE_URL}logout`);
       this.user = {};
-    }
+    },
   },
 };
 </script>
@@ -163,14 +174,14 @@ export default {
 }
 
 .v-application--wrap > .v-footer .v-btn {
-    padding: 0 20px;
-    min-height: 56px;
-    border-radius: 0;
+  padding: 0 20px;
+  min-height: 56px;
+  border-radius: 0;
 }
 
 .v-application--wrap > .v-footer .v-btn__content {
-    display:flex;
-    flex-direction:column;
-    font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
 }
 </style>

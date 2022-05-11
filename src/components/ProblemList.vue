@@ -109,7 +109,7 @@ export default {
       })
     ).data;
 
-    const msal_token_match = document.cookie.match(/(^| )msal_token=([^;]+)/);
+    const msal_token_match = document.cookie.match(/(^| )msal_access_token=([^;]+)/);
     if (msal_token_match) {
       const msal_token = msal_token_match[2];
       const approot_response = await axios.get(

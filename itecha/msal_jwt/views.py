@@ -1,4 +1,3 @@
-from urllib import response
 import uuid
 
 from django.conf import settings
@@ -67,6 +66,44 @@ class MSALRedirectView(APIView):
             redirect_uri=msal_settings.get("REDIRECT_URI"),
         )
 
+        if "access_token" not in tokens:
+            return Response(status=401)
+
+        email = tokens["id_token_claims"]["preferred_username"]
+        try:
+            user = get_user_model().objects.get(username=email)
+        except ObjectDoesNotExist:
+            user = get_user_model().objects.create_user(username=email, email=email)
+        login(request, user)
+
+        response = HttpResponseRedirect("/")
+        response.set_cookie(
+            "msal_access_token", tokens["access_token"], max_age=tokens["expires_in"]
+        )
+        response.set_cookie(
+            "msal_refresh_token",
+            tokens["refresh_token"],
+            max_age=settings.SESSION_COOKIE_AGE,
+        )
+        return response
+
+
+class MSALRefreshView(APIView):
+    def get(self, request):
+        import msal
+
+        msal_settings = getattr(settings, "MSAL_JWT")
+        tokens = msal.ConfidentialClientApplication(
+            msal_settings.get("CLIENT_ID"),
+            client_credential=msal_settings.get("CLIENT_SECRET"),
+            authority=msal_settings.get(
+                "AUTHORITY_URL", "https://login.microsoftonline.com/common/"
+            ),
+        ).acquire_token_by_refresh_token(
+            request.GET["refresh_token"],
+            getattr(settings, "MSAL_JWT_SCOPES"),
+        )
+
         if "access_token" in tokens:
             email = tokens["id_token_claims"]["preferred_username"]
             try:
@@ -75,6 +112,8 @@ class MSALRedirectView(APIView):
                 user = get_user_model().objects.create_user(username=email, email=email)
             login(request, user)
 
-        response = HttpResponseRedirect("/")
-        response.set_cookie("msal_token", tokens["access_token"])
+        response = Response(status=204)
+        response.set_cookie(
+            "msal_access_token", tokens["access_token"], max_age=tokens["expires_in"]
+        )
         return response

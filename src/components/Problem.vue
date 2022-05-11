@@ -166,7 +166,7 @@ export default {
         `提交成功，得分：${response.data.score}`
       );
 
-      const msal_token_match = document.cookie.match(/(^| )msal_token=([^;]+)/);
+      const msal_token_match = document.cookie.match(/(^| )msal_access_token=([^;]+)/);
       if (msal_token_match && response.data.score === 100) {
         const msal_token = msal_token_match[2];
         await axios.put(
