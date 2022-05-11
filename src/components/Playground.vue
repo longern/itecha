@@ -16,7 +16,7 @@
     >
       <v-textarea
         v-model="debugInput"
-        label="输入"
+        label="用户输入"
       />
       <v-btn
         color="primary"

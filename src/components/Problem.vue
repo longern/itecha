@@ -40,14 +40,17 @@
               v-if="!$vuetify.breakpoint.mobile || !displayEditor"
               cols="12"
               md="5"
-              class="fill-height"
+              class="fill-height overflow-y-auto"
             >
               <h4
                 v-if="!$vuetify.breakpoint.mobile"
                 class="text-center mb-2"
                 v-text="problem.title"
               />
-              <markdown :source="problem.content" />
+              <markdown
+                ref="problemText"
+                :source="problem.content"
+              />
               <v-btn
                 v-if="$vuetify.breakpoint.mobile"
                 class="my-3"
@@ -160,12 +163,20 @@ export default {
     loading: true,
   }),
 
-  async mounted() {
+  async created() {
     const problem_response = await axios.get(
       `${process.env.VUE_APP_API_BASE_URL}problems/${this.$route.params.id}`
     );
     this.problem = problem_response.data;
     this.code = this.problem.default_code || "";
+
+    await this.$nextTick();
+    for (const node of this.$refs.problemText.$el.querySelectorAll("code")) {
+      if (node.innerText.match(/____\d+____/)) {
+        this.code = node.innerText;
+      }
+    }
+
     this.loading = false;
   },
 
