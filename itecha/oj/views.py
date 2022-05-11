@@ -119,14 +119,14 @@ def judge_code(
     if not testcases:
         return None
 
-    if hidden_code:
-        source += "\n" + hidden_code
-
-    if "____" in default_code:
-        segments = re.split("____", default_code.strip())
-        source_pattern = ".{1,128}".join(map(re.escape, segments))
+    if re.search("___\d___", default_code):
+        segments = re.split("___\d___", default_code.strip())
+        source_pattern = ".{1,64}".join(map(re.escape, segments))
         if not re.match(f"^{source_pattern}$", source.strip()):
             return None
+
+    if hidden_code:
+        source += "\n" + hidden_code
 
     correct_num = 0
     for testcase in testcases:
@@ -143,13 +143,18 @@ class SubmissionViewSet(viewsets.ModelViewSet):
     filterset_fields = ["creator", "problem"]
 
     def perform_create(self, serializer):
+        content: str = serializer.validated_data["problem"].content
+        default_code_regex = re.compile(r"```py(?:thon)?\n([\S\s]*?___\d+___[\S\s]*?)\n?```")
+        default_code_match = re.search(default_code_regex, content)
+        default_code = default_code_match.group(1) if default_code_match else ""
+
         serializer.save(
             creator=self.request.user,
             creator_ip=self.request.META.get("REMOTE_ADDR"),
             score=judge_code(
                 serializer.validated_data["code"],
                 pickle.loads(serializer.validated_data["problem"].testcases),
-                serializer.validated_data["problem"].default_code,
+                default_code,
                 serializer.validated_data["problem"].hidden_code,
             ),
         )

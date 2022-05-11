@@ -169,7 +169,7 @@ export default {
     await this.$nextTick();
     const problemTextElem = this.$refs.problemText.$el;
     for (const node of problemTextElem.querySelectorAll("code")) {
-      if (node.innerText.match(/____\d+____/)) {
+      if (node.innerText.match(/___\d+___/)) {
         this.code = node.innerText;
       }
     }
