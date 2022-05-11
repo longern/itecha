@@ -1,69 +1,84 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col>
-        <v-breadcrumbs :items="breadcrumbsItems" />
-      </v-col>
-      <v-spacer v-if="!$vuetify.breakpoint.mobile" />
-      <v-col
-        cols="auto"
-        class="pt-8"
-      >
+  <mobile-container
+    :loading="loading"
+    fluid
+  >
+    <mobile-app-bar :title="problem.title">
+      <template v-slot:back>
         <v-btn
-          class="mr-3"
-          @click="isDebugPanelVisible ^= true"
-          v-text="isDebugPanelVisible ? '隐藏' : '调试'"
-        />
-        <v-btn
-          color="primary"
-          @click="submit"
+          v-if="$vuetify.breakpoint.mobile && displayEditor"
+          icon
+          @click="displayEditor = false"
         >
-          提交
+          <v-icon>mdi-chevron-down</v-icon>
         </v-btn>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <v-row>
-          <v-col
-            cols="12"
-            md="5"
+        <v-btn
+          v-else
+          icon
+          to="/"
+        >
+          <v-icon>mdi-chevron-left</v-icon>
+        </v-btn>
+      </template>
+    </mobile-app-bar>
+    <v-row
+      class="flex-column ma-0 fill-height"
+    >
+      <v-col
+        class="grow pa-0"
+        style="height: 0"
+      >
+        <v-container
+          fluid
+          class="fill-height py-0"
+        >
+          <v-row
+            class="fill-height"
+            style="overflow: auto"
           >
-            <v-card
-              class="problem-card fill-height"
-              :loading="loading"
+            <v-col
+              v-if="!$vuetify.breakpoint.mobile || !displayEditor"
+              cols="12"
+              md="5"
+              class="fill-height"
             >
-              <v-container class="problem-container">
-                <h1
-                  class="text-center mb-2"
-                  v-text="problem.title"
-                />
-                <markdown :source="problem.content" />
-              </v-container>
-            </v-card>
-          </v-col>
-          <v-col
-            cols="12"
-            :md="isDebugPanelVisible ? 5 : 7"
-          >
-            <v-card class="fill-height">
+              <h4
+                v-if="!$vuetify.breakpoint.mobile"
+                class="text-center mb-2"
+                v-text="problem.title"
+              />
+              <markdown :source="problem.content" />
+              <v-btn
+                v-if="$vuetify.breakpoint.mobile"
+                class="my-3"
+                color="primary"
+                @click="displayEditor = !displayEditor"
+              >
+                打开代码编辑器
+              </v-btn>
+            </v-col>
+            <v-col
+              v-if="!$vuetify.breakpoint.mobile || displayEditor"
+              cols="12"
+              :md="displayDebugPanel ? 5 : 7"
+              class="fill-height pa-0"
+            >
               <codemirror
                 ref="cm"
                 v-model="code"
                 :options="cmOption"
+                class="fill-height"
               />
-            </v-card>
-          </v-col>
-          <v-col
-            v-if="isDebugPanelVisible"
-            cols="12"
-            md="2"
-          >
-            <v-card class="fill-height">
-              <v-container>
+            </v-col>
+            <v-col
+              v-if="displayDebugPanel"
+              cols="12"
+              md="2"
+            >
+              <v-card class="fill-height pa-3">
                 <v-textarea
                   v-model="debugInput"
-                  label="输入"
+                  label="用户输入"
                 />
                 <v-btn
                   color="secondary"
@@ -72,13 +87,43 @@
                   运行
                 </v-btn>
                 <pre class="mt-4"><code v-text="debugOutput" /></pre>
-              </v-container>
-            </v-card>
-          </v-col>
-        </v-row>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-col>
+
+      <v-col
+        md="auto"
+        class="shrink pa-0"
+      >
+        <v-card
+          outlined
+          tile
+          class="pa-3"
+        >
+          <v-row>
+            <v-spacer />
+            <v-col
+              cols="auto"
+            >
+              <v-btn
+                class="mr-3"
+                @click="displayDebugPanel ^= true"
+                v-text="displayDebugPanel ? '隐藏' : '调试'"
+              />
+              <v-btn
+                color="primary"
+                @click="submit"
+              >
+                提交
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card>
       </v-col>
     </v-row>
-  </v-container>
+  </mobile-container>
 </template>
 
 <script>
@@ -86,11 +131,13 @@ import axios from "axios";
 import { codemirror } from "vue-codemirror";
 
 import Markdown from "./Markdown.vue";
+import MobileAppBar from "./MobileAppBar.vue";
+import MobileContainer from "./MobileContainer.vue";
 
 export default {
   name: "Problem",
 
-  components: { codemirror, Markdown },
+  components: { codemirror, Markdown, MobileAppBar, MobileContainer },
 
   data: () => ({
     problem: {},
@@ -99,6 +146,7 @@ export default {
       mode: "text/x-python",
       indentUnit: 4,
       lineNumbers: true,
+      lineWrapping: true,
       theme: "idea",
       viewportMargin: Infinity,
       extraKeys: {
@@ -107,26 +155,10 @@ export default {
     },
     debugInput: "",
     debugOutput: "",
-    isDebugPanelVisible: false,
+    displayEditor: false,
+    displayDebugPanel: false,
     loading: true,
   }),
-
-  computed: {
-    breadcrumbsItems() {
-      return [
-        {
-          text: "首页",
-          disabled: false,
-          to: "/",
-        },
-        {
-          text: this.problem.title,
-          disabled: true,
-          to: "/",
-        },
-      ];
-    },
-  },
 
   async mounted() {
     const problem_response = await axios.get(
@@ -166,7 +198,9 @@ export default {
         `提交成功，得分：${response.data.score}`
       );
 
-      const msal_token_match = document.cookie.match(/(^| )msal_access_token=([^;]+)/);
+      const msal_token_match = document.cookie.match(
+        /(^| )msal_access_token=([^;]+)/
+      );
       if (msal_token_match && response.data.score === 100) {
         const msal_token = msal_token_match[2];
         await axios.put(
@@ -176,7 +210,7 @@ export default {
             headers: { Authorization: `Bearer ${msal_token}` },
             withCredentials: false,
           }
-        )
+        );
       }
     },
   },
@@ -188,14 +222,10 @@ export default {
   .problem-card {
     overflow: hidden;
   }
-
-  .problem-container {
-    height: 72vh;
-    overflow-y: auto;
-  }
 }
 
 div.CodeMirror {
-  height: 72vh;
+  height: 100%;
+  overflow: hidden;
 }
 </style>

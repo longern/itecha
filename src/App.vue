@@ -73,7 +73,7 @@
     <v-footer
       v-if="$route.path !== '/playground'"
       app
-      class="d-lg-none d-flex py-0"
+      :class="{'d-none': !$vuetify.breakpoint.mobile, 'py-0': true}"
     >
       <v-spacer />
       <v-btn

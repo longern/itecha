@@ -109,6 +109,7 @@ export default {
       mode: "text/x-python",
       indentUnit: 4,
       lineNumbers: true,
+      lineWrapping: true,
       theme: "idea",
       viewportMargin: Infinity,
       extraKeys: {
