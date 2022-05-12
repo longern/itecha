@@ -65,7 +65,7 @@
             <v-col
               v-if="!$vuetify.breakpoint.mobile || displayEditor"
               cols="12"
-              :md="displayDebugPanel ? 5 : 7"
+              md="7"
               class="fill-height pa-0"
             >
               <codemirror
@@ -74,25 +74,6 @@
                 :options="cmOption"
                 class="fill-height"
               />
-            </v-col>
-            <v-col
-              v-if="displayDebugPanel"
-              cols="12"
-              md="2"
-            >
-              <v-card class="fill-height pa-3">
-                <v-textarea
-                  v-model="debugInput"
-                  label="用户输入"
-                />
-                <v-btn
-                  color="secondary"
-                  @click="runPython3Code"
-                >
-                  运行
-                </v-btn>
-                <pre class="mt-4"><code v-text="debugOutput" /></pre>
-              </v-card>
             </v-col>
           </v-row>
         </v-container>
@@ -110,11 +91,16 @@
           <v-row>
             <v-spacer />
             <v-col cols="auto">
-              <v-btn
-                class="mr-3"
-                @click="displayDebugPanel ^= true"
-                v-text="displayDebugPanel ? '隐藏' : '调试'"
-              />
+              <io-dialog
+                ref="ioDialog"
+                v-model="displayDebugPanel"
+                @run="runPython3Code"
+              >
+                <v-btn
+                  class="mr-3"
+                  @click="displayDebugPanel = true"
+                >调试</v-btn>
+              </io-dialog>
               <v-btn
                 color="primary"
                 @click="submit"
@@ -133,6 +119,7 @@
 import axios from "axios";
 import { codemirror } from "vue-codemirror";
 
+import IoDialog from "./IoDialog.vue";
 import Markdown from "./Markdown.vue";
 import MobileAppBar from "./MobileAppBar.vue";
 import MobileContainer from "./MobileContainer.vue";
@@ -140,7 +127,7 @@ import MobileContainer from "./MobileContainer.vue";
 export default {
   name: "Problem",
 
-  components: { codemirror, Markdown, MobileAppBar, MobileContainer },
+  components: { codemirror, IoDialog, Markdown, MobileAppBar, MobileContainer },
 
   data: () => ({
     problem: {},
@@ -156,8 +143,6 @@ export default {
         "Shift-Tab": "indentLess",
       },
     },
-    debugInput: "",
-    debugOutput: "",
     displayEditor: false,
     displayDebugPanel: false,
     loading: true,
@@ -189,20 +174,20 @@ export default {
 
     const inputNode = problemTextElem.querySelector("code.lang-input");
     if (inputNode) {
-      this.debugInput = inputNode.innerText;
+      this.$refs.ioDialog.input = inputNode.innerText;
     }
 
     this.loading = false;
   },
 
   methods: {
-    async runPython3Code() {
+    async runPython3Code(input) {
       const pythonExecutorUrl = process.env.VUE_APP_PYTHON3_EXECUTOR;
       const response = await axios.post(pythonExecutorUrl, {
         source: this.code,
-        input: this.debugInput,
+        input: input,
       });
-      this.debugOutput = response.data;
+      this.$refs.ioDialog.receiveOutput(response.data);
     },
 
     async submit() {
