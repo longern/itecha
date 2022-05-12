@@ -168,7 +168,6 @@ export default {
       `${process.env.VUE_APP_API_BASE_URL}problems/${this.$route.params.id}`
     );
     this.problem = problem_response.data;
-    this.code = this.problem.default_code || "";
 
     await this.$nextTick();
     const problemTextElem = this.$refs.problemText.$el;

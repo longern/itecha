@@ -30,7 +30,6 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=255)),
                 ('content', models.TextField()),
-                ('default_code', models.TextField(blank=True, null=True)),
                 ('testcases', models.BinaryField()),
                 ('hidden_code', models.TextField(blank=True, null=True)),
                 ('tags', models.TextField(blank=True, null=True)),

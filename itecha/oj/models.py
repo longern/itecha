@@ -15,7 +15,6 @@ class Contest(models.Model):
 class Problem(models.Model):
     title = models.CharField(max_length=255, null=False)
     content = models.TextField()
-    default_code = models.TextField(blank=True, null=True)
     testcases = models.BinaryField()
     hidden_code = models.TextField(blank=True, null=True)
     tags = models.TextField(blank=True, null=True)

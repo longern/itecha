@@ -24,16 +24,6 @@
           />
           <v-expansion-panels>
             <v-expansion-panel>
-              <v-expansion-panel-header>默认代码</v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <codemirror
-                  ref="cm"
-                  v-model="problem.default_code"
-                  :options="cmOption"
-                />
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-            <v-expansion-panel>
               <v-expansion-panel-header>隐藏代码</v-expansion-panel-header>
               <v-expansion-panel-content>
                 <codemirror
@@ -115,7 +105,7 @@ export default {
   data: () => ({
     loading: true,
     original_title: "题目",
-    problem: { default_code: "", testcases: [], hidden_code: "", tags: [] },
+    problem: { testcases: [], hidden_code: "", tags: [] },
     cmOption: {
       mode: "text/x-python",
       indentUnit: 4,

@@ -44,9 +44,6 @@ class ContestSerializer(serializers.ModelSerializer):
 
 class ProblemSerializer(QueryFieldsMixin, serializers.ModelSerializer):
     testcases = PickleField()
-    default_code = serializers.CharField(
-        allow_blank=True, allow_null=True, trim_whitespace=False
-    )
     tags = JSONField()
     contest = ContestSerializer(read_only=True)
 
@@ -58,7 +55,7 @@ class ProblemSerializer(QueryFieldsMixin, serializers.ModelSerializer):
 class BasicProblemSerializer(ProblemSerializer):
     class Meta:
         model = Problem
-        fields = ["id", "title", "content", "default_code", "tags"]
+        fields = ["id", "title", "content", "tags"]
 
 
 class SubmissionSerializer(serializers.ModelSerializer):
