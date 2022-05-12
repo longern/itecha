@@ -22,6 +22,7 @@ class Problem(models.Model):
     contest = models.ForeignKey(
         Contest, on_delete=models.SET_NULL, blank=True, null=True
     )
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
