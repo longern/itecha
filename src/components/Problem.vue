@@ -3,7 +3,10 @@
     :loading="loading"
     fluid
   >
-    <mobile-app-bar :title="problem.title">
+    <mobile-app-bar
+      v-if="$vuetify.breakpoint.mobile"
+      :title="problem.title"
+    >
       <template v-slot:back>
         <v-btn
           v-if="$vuetify.breakpoint.mobile && displayEditor"
@@ -50,7 +53,7 @@
                 :source="problem.content"
               />
               <v-btn
-                v-if="$vuetify.breakpoint.mobile"
+                v-show="$vuetify.breakpoint.mobile"
                 ref="displayEditorButton"
                 class="my-3"
                 color="primary"

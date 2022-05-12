@@ -1,8 +1,5 @@
 <template>
-  <v-app-bar
-    :class="{ 'd-none': !$vuetify.breakpoint.mobile }"
-    app
-  >
+  <v-app-bar app>
     <slot name="back">
       <v-btn
         to="/"
