@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar
-      v-if="$vuetify.breakpoint.lgAndUp"
+      v-if="!$vuetify.breakpoint.isMobile"
       app
       absolute
       class="fill-height"

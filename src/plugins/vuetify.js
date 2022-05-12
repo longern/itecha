@@ -8,6 +8,9 @@ import "./notify.css";
 Vue.use(Vuetify);
 
 const vuetify = new Vuetify({
+  breakpoint: {
+    mobileBreakpoint: "sm",
+  },
   lang: {
     locales: { zhHans },
     current: "zhHans",
