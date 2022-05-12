@@ -71,11 +71,10 @@
     </v-main>
 
     <v-footer
-      v-if="$route.path !== '/playground'"
+      v-if="$route.path !== '/playground' && $vuetify.breakpoint.mobile"
       app
-      :class="{'d-none': !$vuetify.breakpoint.mobile, 'py-0': true}"
+      class="mobile-footer py-0"
     >
-      <v-spacer />
       <v-btn
         text
         to="/"
@@ -104,7 +103,6 @@
         <v-icon>mdi-account</v-icon>
         <div>我的</div>
       </v-btn>
-      <v-spacer />
     </v-footer>
   </v-app>
 </template>
@@ -173,13 +171,13 @@ export default {
   width: 100%;
 }
 
-.v-application--wrap > .v-footer .v-btn {
-  padding: 0 20px;
-  min-height: 56px;
+.mobile-footer>.v-btn {
+  margin: 0 auto;
+  min-height: 48px;
   border-radius: 0;
 }
 
-.v-application--wrap > .v-footer .v-btn__content {
+.mobile-footer .v-btn__content {
   display: flex;
   flex-direction: column;
   font-size: 12px;
