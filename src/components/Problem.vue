@@ -35,7 +35,7 @@
             style="overflow: auto"
           >
             <v-col
-              v-if="!$vuetify.breakpoint.mobile || !displayEditor"
+              v-show="!$vuetify.breakpoint.mobile || !displayEditor"
               cols="12"
               md="5"
               class="fill-height overflow-y-auto"
@@ -51,6 +51,7 @@
               />
               <v-btn
                 v-if="$vuetify.breakpoint.mobile"
+                ref="displayEditorButton"
                 class="my-3"
                 color="primary"
                 @click="displayEditor = !displayEditor"
@@ -171,11 +172,23 @@ export default {
     for (const node of problemTextElem.querySelectorAll("code")) {
       if (node.innerText.match(/___\d+___/)) {
         this.code = node.innerText;
+        if (this.$vuetify.breakpoint.mobile) {
+          node
+            .closest("pre")
+            .insertAdjacentElement(
+              "beforebegin",
+              this.$refs.displayEditorButton.$el
+            );
+        }
+        node.closest("pre").remove();
+        break;
       }
     }
 
     const inputNode = problemTextElem.querySelector("code.lang-input");
-    if (inputNode) { this.debugInput = inputNode.innerText; }
+    if (inputNode) {
+      this.debugInput = inputNode.innerText;
+    }
 
     this.loading = false;
   },
