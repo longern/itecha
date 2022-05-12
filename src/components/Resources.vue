@@ -30,7 +30,7 @@
         数据与数据结构
       </v-btn>
     </v-row>
-    <h4 class="my-2">
+    <h4 class="mt-6 mb-2">
       官方资源
     </h4>
     <v-row>
