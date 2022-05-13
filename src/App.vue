@@ -64,10 +64,12 @@
     </v-app-bar>
 
     <v-main class="fill-height">
-      <router-view
-        :user="user"
-        @login="updateUser"
-      />
+      <keep-alive include="ProblemList">
+        <router-view
+          :user="user"
+          @login="updateUser"
+        />
+      </keep-alive>
     </v-main>
 
     <v-footer
