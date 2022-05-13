@@ -104,16 +104,11 @@ class MSALRefreshView(APIView):
             getattr(settings, "MSAL_JWT_SCOPES"),
         )
 
-        if "access_token" in tokens:
-            email = tokens["id_token_claims"]["preferred_username"]
-            try:
-                user = get_user_model().objects.get(username=email)
-            except ObjectDoesNotExist:
-                user = get_user_model().objects.create_user(username=email, email=email)
-            login(request, user)
-
         response = Response(status=204)
         response.set_cookie(
             "msal_access_token", tokens["access_token"], max_age=tokens["expires_in"]
+        )
+        response.set_cookie(
+            "msal_refresh_token", tokens["refresh_token"], max_age=settings.SESSION_COOKIE_AGE
         )
         return response
