@@ -99,7 +99,9 @@
                 <v-btn
                   class="mr-3"
                   @click="displayDebugPanel = true"
-                >调试</v-btn>
+                >
+                  调试
+                </v-btn>
               </io-dialog>
               <v-btn
                 color="primary"

@@ -41,7 +41,10 @@
           </v-btn>
         </v-card-actions>
       </v-container>
-      <v-card-text v-else class="overflow-auto">
+      <v-card-text
+        v-else
+        class="overflow-auto"
+      >
         <pre
           v-if="output"
           class="mt-4"

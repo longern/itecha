@@ -22,6 +22,13 @@ module.exports = {
     },
   },
 
+  pages: {
+    index: {
+      entry: "src/main.js",
+      title: "iTechA 高中信息技术交互式教学助手",
+    },
+  },
+
   pluginOptions: {
     compression: {
       gzip: {
