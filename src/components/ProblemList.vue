@@ -1,7 +1,7 @@
 <template>
   <mobile-container :loading="loading">
     <v-row
-      v-if="user.isSuperuser"
+      v-if="user.is_superuser"
       class="align-center"
     >
       <v-btn
@@ -41,7 +41,7 @@
         </v-chip-group>
       </template>
       <template
-        v-if="user.isSuperuser"
+        v-if="user.is_superuser"
         v-slot:item.actions="{ item }"
       >
         <router-link

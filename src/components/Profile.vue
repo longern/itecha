@@ -29,7 +29,7 @@
     </v-list>
     <v-list>
       <v-list-item
-        v-if="user.isSuperuser"
+        v-if="user.is_superuser"
         @click="() => $refs.archive.click()"
       >
         <v-list-item-icon>
