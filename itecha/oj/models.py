@@ -27,6 +27,41 @@ class Problem(models.Model):
     def __str__(self):
         return self.title
 
+    @classmethod
+    def import_markdown_package(cls, file):
+        import os
+        import zipfile
+
+        all_problems = cls.objects.all()
+        problem_map = {p.title: p for p in all_problems}
+
+        with zipfile.ZipFile(file) as archive:
+            namelist = archive.namelist()
+
+            has_root_dir = namelist and all(
+                name.startswith(namelist[0]) for name in namelist
+            )
+            if has_root_dir:
+                root_dir = namelist.pop(0)
+
+            for filename in namelist:
+                basename = os.path.basename(filename)
+                if not basename.endswith(".md") or basename == "README.md":
+                    continue
+
+                with archive.open(filename) as file:
+                    content = file.read().decode("utf-8")
+
+                title = filename.rsplit(".", 1)[0]
+                if has_root_dir:
+                    title = title[len(root_dir):]
+
+                if title in problem_map:
+                    problem = problem_map[title]
+                    problem.content = content
+                else:
+                    problem = cls.objects.create(title=title, content=content)
+
 
 class Submission(models.Model):
     code = models.TextField()

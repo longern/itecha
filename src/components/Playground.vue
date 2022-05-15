@@ -59,22 +59,16 @@
       <v-btn
         icon
         :loading="isUploadingImage"
-        @click="
-          () => {
-            $refs.capture.click();
-          }
-        "
+        @click="() => $refs.capture.click()"
       >
-        <form ref="captureForm">
-          <input
-            ref="capture"
-            type="file"
-            accept="image/*"
-            capture
-            hidden
-            @input="uploadImage"
-          >
-        </form>
+        <input
+          ref="capture"
+          type="file"
+          accept="image/*"
+          capture
+          hidden
+          @input="uploadImage"
+        >
         <v-icon>mdi-camera</v-icon>
       </v-btn>
       <v-btn
@@ -158,13 +152,13 @@ export default {
         let imageFile = this.$refs.capture.files[0];
         const SIZE_LIMIT = 10 ** 5;
         if (imageFile.size >= SIZE_LIMIT) {
-          const imageFileContent = await new Promise(resolve => {
+          const imageFileContent = await new Promise((resolve) => {
             const reader = new FileReader();
             reader.onload = (e) => resolve(e.target.result);
             reader.readAsDataURL(imageFile);
           });
 
-          const img = await new Promise(resolve => {
+          const img = await new Promise((resolve) => {
             const img = document.createElement("img");
             img.onload = () => resolve(img);
             img.src = imageFileContent;
@@ -176,15 +170,16 @@ export default {
           canvas.height = resizeRatio * img.height;
           const ctx = canvas.getContext("2d");
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          imageFile = await new Promise(resolve => {
-            canvas.toBlob(blob => {
+          imageFile = await new Promise((resolve) => {
+            canvas.toBlob((blob) => {
               const resizedFile = new File([blob], "image.png");
               resolve(resizedFile);
             });
           });
         }
 
-        const orcUrl = "https://1945724074264704.cn-hongkong.fc.aliyuncs.com/2016-08-15/proxy/executors.LATEST/tesseract/";
+        const orcUrl =
+          "https://1945724074264704.cn-hongkong.fc.aliyuncs.com/2016-08-15/proxy/executors.LATEST/tesseract/";
         const response = await axios.post(orcUrl, imageFile);
         let code = response.data;
 
@@ -198,7 +193,7 @@ export default {
         code = codeLines.join("\n");
 
         this.code = code;
-      } catch(err) {
+      } catch (err) {
         console.log(err);
       }
 

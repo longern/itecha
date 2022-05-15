@@ -1,5 +1,5 @@
-import re
 import pickle
+import re
 
 import requests
 from django.conf import settings
@@ -112,6 +112,11 @@ class ProblemViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
 
+    @action(methods=["PUT"], detail=False)
+    def import_markdown(self, request):
+        Problem.import_markdown_package(request.FILES["file"])
+        return Response(status=204)
+
 
 def judge_code(
     source: str, testcases: list, default_code: str = "", hidden_code: str = ""
@@ -144,7 +149,9 @@ class SubmissionViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         content: str = serializer.validated_data["problem"].content
-        default_code_regex = re.compile(r"```py(?:thon)?\n([\S\s]*?___\d+___[\S\s]*?)\n?```")
+        default_code_regex = re.compile(
+            r"```py(?:thon)?\n([\S\s]*?___\d+___[\S\s]*?)\n?```"
+        )
         default_code_match = re.search(default_code_regex, content)
         default_code = default_code_match.group(1) if default_code_match else ""
 

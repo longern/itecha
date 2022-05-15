@@ -42,6 +42,7 @@ DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -98,6 +99,7 @@ SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 
 
 # CORS configuration
+
 if DEBUG:
     INSTALLED_APPS.append("corsheaders")
 
@@ -133,27 +135,6 @@ MSAL_JWT_SCOPES = [
     "Files.ReadWrite.AppFolder",
 ]
 
-LOGGING = {
-    'version': 1,
-    'filters': {
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        }
-    },
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'filters': ['require_debug_true'],
-            'class': 'logging.StreamHandler',
-        }
-    },
-    'loggers': {
-        'django.db.backends': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-        }
-    }
-}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -192,8 +173,13 @@ REST_FRAMEWORK = {
     ],
 }
 
+
 # Python executor
+
 PYTHON_EXECUTOR = env("PYTHON_EXECUTOR")
+
+
+# Local settings
 
 try:
     from .local_settings import *

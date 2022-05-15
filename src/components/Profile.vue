@@ -28,6 +28,21 @@
       </v-list-item>
     </v-list>
     <v-list>
+      <v-list-item
+        v-if="user.isSuperuser"
+        @click="() => $refs.archive.click()"
+      >
+        <v-list-item-icon>
+          <v-icon>mdi-upload</v-icon>
+        </v-list-item-icon>
+        <v-list-item-title>上传题目包</v-list-item-title>
+        <input
+          ref="archive"
+          type="file"
+          hidden
+          @input="uploadArchive"
+        >
+      </v-list-item>
       <v-list-item @click="logout">
         <v-list-item-icon>
           <v-icon>mdi-logout</v-icon>
@@ -63,6 +78,16 @@ export default {
     async logout() {
       await axios.post(`${process.env.VUE_APP_API_BASE_URL}logout`);
       this.user = {};
+    },
+
+    uploadArchive() {
+      const archiveFormData = new FormData();
+      archiveFormData.append("file", this.$refs.archive.files[0]);
+      axios.put(
+        `${process.env.VUE_APP_API_BASE_URL}problems/import_markdown`,
+        archiveFormData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
     },
   },
 };

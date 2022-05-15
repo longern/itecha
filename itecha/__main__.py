@@ -21,6 +21,16 @@ def main_without_arguments():
     execute_from_command_line([sys.argv[0], "runserver", "0.0.0.0:80", "--noreload"])
 
 
+def main_import_markdown(file):
+    import django
+
+    django.setup()
+
+    from .oj.models import Problem
+
+    Problem.import_markdown_package(file)
+
+
 def main():
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "itecha.settings")
@@ -35,6 +45,9 @@ def main():
 
     if len(sys.argv) <= 1:
         return main_without_arguments()
+
+    if len(sys.argv) == 2 and sys.argv[1].endswith(".zip"):
+        return main_import_markdown(sys.argv[1])
 
     execute_from_command_line(sys.argv)
 
