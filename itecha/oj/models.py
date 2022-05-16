@@ -33,7 +33,7 @@ class Problem(models.Model):
         import zipfile
 
         all_problems = cls.objects.all()
-        problem_map = {p.title: p for p in all_problems}
+        problem_map: dict[str, Problem] = {p.title: p for p in all_problems}
 
         with zipfile.ZipFile(file) as archive:
             namelist = archive.namelist()
@@ -54,11 +54,12 @@ class Problem(models.Model):
 
                 title = filename.rsplit(".", 1)[0]
                 if has_root_dir:
-                    title = title[len(root_dir):]
+                    title = title[len(root_dir) :]
 
                 if title in problem_map:
                     problem = problem_map[title]
                     problem.content = content
+                    problem.save()
                 else:
                     problem = cls.objects.create(title=title, content=content)
 
