@@ -46,7 +46,7 @@
               <h4
                 v-if="!$vuetify.breakpoint.mobile"
                 class="text-center mb-2"
-                v-text="problem.title"
+                v-text="problem.title.replace(/.*\//, '')"
               />
               <markdown
                 ref="problemText"

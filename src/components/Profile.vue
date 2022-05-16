@@ -48,7 +48,7 @@
         to="/problems/create"
       >
         <v-list-item-icon>
-          <v-icon>mdi-add</v-icon>
+          <v-icon>mdi-file-plus</v-icon>
         </v-list-item-icon>
         <v-list-item-title>创建题目</v-list-item-title>
       </v-list-item>
