@@ -1,16 +1,5 @@
 <template>
   <mobile-container :loading="loading">
-    <v-row
-      v-if="user.is_superuser"
-      class="align-center"
-    >
-      <v-btn
-        color="primary"
-        to="/problems/create"
-      >
-        创建题目
-      </v-btn>
-    </v-row>
     <v-data-table
       :headers="headers"
       :items="problems"

@@ -43,6 +43,15 @@
           @input="uploadArchive"
         >
       </v-list-item>
+      <v-list-item
+        v-if="user.is_superuser"
+        to="/problems/create"
+      >
+        <v-list-item-icon>
+          <v-icon>mdi-add</v-icon>
+        </v-list-item-icon>
+        <v-list-item-title>创建题目</v-list-item-title>
+      </v-list-item>
       <v-list-item @click="logout">
         <v-list-item-icon>
           <v-icon>mdi-logout</v-icon>

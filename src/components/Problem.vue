@@ -5,7 +5,7 @@
   >
     <mobile-app-bar
       v-if="$vuetify.breakpoint.mobile"
-      :title="problem.title"
+      :title="problem.title.replace(/.*\//, '')"
     >
       <template v-slot:back>
         <v-btn
