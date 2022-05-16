@@ -3,6 +3,8 @@
     <v-data-table
       :headers="headers"
       :items="problems"
+      disable-pagination
+      hide-default-footer
       mobile-breakpoint="0"
     >
       <template v-slot:item.status="{ item }">
