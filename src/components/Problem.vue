@@ -5,7 +5,7 @@
   >
     <mobile-app-bar
       v-if="$vuetify.breakpoint.mobile"
-      :title="problem.title.replace(/.*\//, '')"
+      :title="verboseTitle"
     >
       <template v-slot:back>
         <v-btn
@@ -46,7 +46,7 @@
               <h4
                 v-if="!$vuetify.breakpoint.mobile"
                 class="text-center mb-2"
-                v-text="problem.title.replace(/.*\//, '')"
+                v-text="verboseTitle"
               />
               <markdown
                 ref="problemText"
@@ -149,6 +149,12 @@ export default {
     displayDebugPanel: false,
     loading: true,
   }),
+
+  computed: {
+    verboseTitle() {
+      return (this.problem.title || "").replace(/.*\//, '');
+    },
+  },
 
   async created() {
     const problem_response = await axios.get(
