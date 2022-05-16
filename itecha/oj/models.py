@@ -30,6 +30,8 @@ class Problem(models.Model):
     @classmethod
     def import_markdown_package(cls, file):
         import os
+        import pickle
+        import re
         import zipfile
 
         all_problems = cls.objects.all()
@@ -52,6 +54,18 @@ class Problem(models.Model):
                 with archive.open(filename) as file:
                     content = file.read().decode("utf-8")
 
+                match = re.search("<!-- ?testcases\n([\S\s]*?)--!>", content)
+                testcases = []
+                if match:
+                    content = content[: match.span()[0]] + content[match.span()[1] :]
+                    testcases_segments = match.group(1).split("\n\n")
+                    testcases = [
+                        {"input_data": input_data, "output_data": output_data}
+                        for input_data, output_data in zip(
+                            testcases_segments[::2], testcases_segments[1::2]
+                        )
+                    ]
+
                 title = filename.rsplit(".", 1)[0]
                 if has_root_dir:
                     title = title[len(root_dir) :]
@@ -59,9 +73,12 @@ class Problem(models.Model):
                 if title in problem_map:
                     problem = problem_map[title]
                     problem.content = content
+                    problem.testcases = pickle.dumps(testcases)
                     problem.save()
                 else:
-                    problem = cls.objects.create(title=title, content=content)
+                    problem = cls.objects.create(
+                        title=title, content=content, testcases=pickle.dumps(testcases)
+                    )
 
 
 class Submission(models.Model):
