@@ -54,7 +54,7 @@ class Problem(models.Model):
                 with archive.open(filename) as file:
                     content = file.read().decode("utf-8")
 
-                match = re.search("<!-- ?testcases\n([\S\s]*?)--!>", content)
+                match = re.search("<!-- ?testcases\n([\S\s]*?)-->", content)
                 testcases = []
                 if match:
                     content = content[: match.span()[0]] + content[match.span()[1] :]
