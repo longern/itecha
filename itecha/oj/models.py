@@ -46,9 +46,11 @@ class Problem(models.Model):
             if has_root_dir:
                 root_dir = namelist.pop(0)
 
+            SPECIAL_MARKDOWN_FILES = ("README.md", "CONTRIBUTING.md")
+
             for filename in namelist:
                 basename = os.path.basename(filename)
-                if not basename.endswith(".md") or basename == "README.md":
+                if not basename.endswith(".md") or basename in SPECIAL_MARKDOWN_FILES:
                     continue
 
                 with archive.open(filename) as file:
