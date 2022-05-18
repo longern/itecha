@@ -8,7 +8,7 @@
         flat
         tile
         :loading="loading"
-        class="fill-height"
+        class="fill-height overflow-y-auto"
       >
         <slot />
       </v-card>
