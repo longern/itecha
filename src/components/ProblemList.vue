@@ -94,7 +94,10 @@ export default {
   async created() {
     this.problems = (
       await axios.get(`${process.env.VUE_APP_API_BASE_URL}problems`, {
-        params: { fields: "id,title,tags" },
+        params: {
+          fields: "id,title,tags",
+          ordering: "title",
+        },
       })
     ).data;
 
