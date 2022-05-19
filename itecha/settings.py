@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_filters",
     "itecha.oj",
+    "itecha.msal_jwt",
 ]
 
 try:
