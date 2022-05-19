@@ -19,6 +19,13 @@
 
       <v-btn
         icon
+        to="/resources"
+      >
+        <v-icon>mdi-book</v-icon>
+      </v-btn>
+
+      <v-btn
+        icon
         to="/playground"
       >
         <v-icon>mdi-language-python</v-icon>
