@@ -26,7 +26,7 @@ def main_import_markdown(file):
 
     django.setup()
 
-    from .oj.models import Problem
+    from itecha.oj.models import Problem
 
     Problem.import_markdown_package(file)
 
