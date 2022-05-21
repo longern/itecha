@@ -63,7 +63,7 @@
               </v-btn>
             </v-col>
             <v-col
-              v-if="!$vuetify.breakpoint.mobile || displayEditor"
+              v-show="!$vuetify.breakpoint.mobile || displayEditor"
               cols="12"
               md="7"
               class="fill-height pa-0"
@@ -152,7 +152,7 @@ export default {
 
   computed: {
     verboseTitle() {
-      return (this.problem.title || "").replace(/.*\//, '');
+      return (this.problem.title || "").replace(/.*\//, "");
     },
   },
 
@@ -167,6 +167,25 @@ export default {
     for (const node of problemTextElem.querySelectorAll("code")) {
       if (node.innerText.match(/___\d+___/)) {
         this.code = node.innerText;
+        await this.$nextTick();
+
+        // Hide omitted code
+        const patt = /[ \t]*#region hidden\n[\S\s]*?\n#endregion/g;
+        const doc = this.$refs.cm.codemirror.doc;
+        for (;;) {
+          const match = patt.exec(this.code);
+          if (match === null) break;
+          const elem = document.createElement("span");
+          elem.className = "cm-comment";
+          elem.innerText = "# Omitted";
+          doc.markText(
+            doc.posFromIndex(match.index),
+            doc.posFromIndex(patt.lastIndex),
+            { replacedWith: elem }
+          );
+        }
+
+        // Move display editor button
         if (this.$vuetify.breakpoint.mobile) {
           node
             .closest("pre")
