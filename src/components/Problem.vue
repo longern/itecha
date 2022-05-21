@@ -57,7 +57,7 @@
                 ref="displayEditorButton"
                 class="my-3"
                 color="primary"
-                @click="displayEditor = !displayEditor"
+                @click="toggleDisplayEditor"
               >
                 打开代码编辑器
               </v-btn>
@@ -215,6 +215,14 @@ export default {
         input: input,
       });
       this.$refs.ioDialog.receiveOutput(response.data);
+    },
+
+    async toggleDisplayEditor() {
+      this.displayEditor = !this.displayEditor;
+      if (this.displayEditor) {
+        await this.$nextTick();
+        this.$refs.cm.codemirror.refresh();
+      }
     },
 
     async submit() {
