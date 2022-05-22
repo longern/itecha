@@ -106,6 +106,7 @@
               <v-btn
                 color="primary"
                 @click="submit"
+                :disabled="!user.username"
               >
                 提交
               </v-btn>
@@ -130,6 +131,8 @@ export default {
   name: "Problem",
 
   components: { codemirror, IoDialog, Markdown, MobileAppBar, MobileContainer },
+
+  props: { user: { type: Object, default: () => {} } },
 
   data: () => ({
     problem: {},
