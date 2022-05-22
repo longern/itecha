@@ -107,6 +107,7 @@
                 color="primary"
                 @click="submit"
                 :disabled="!user.username"
+                :loading="submitLoading"
               >
                 提交
               </v-btn>
@@ -151,6 +152,7 @@ export default {
     displayEditor: false,
     displayDebugPanel: false,
     loading: true,
+    submitLoading: false,
   }),
 
   computed: {
@@ -234,6 +236,7 @@ export default {
         return;
       }
 
+      this.submitLoading = true;
       const response = await axios.post(
         `${process.env.VUE_APP_API_BASE_URL}submissions`,
         {
@@ -241,6 +244,7 @@ export default {
           code: this.code,
         }
       );
+      this.submitLoading = false;
 
       const messageType = response.data.score === 100 ? "success" : "warning";
       this.$dialog.notify[messageType](
