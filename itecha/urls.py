@@ -21,3 +21,6 @@ urlpatterns = [
     path("", include("itecha.oj.urls")),
     path("", include("itecha.msal_jwt.urls")),
 ]
+
+admin.site.site_title = "iTechA 站点管理员"
+admin.site.site_header = "iTechA 管理"
