@@ -10,8 +10,9 @@
     <%= htmlWebpackPlugin.options.title %>
   </title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/6.7.96/css/materialdesignicons.min.css" />
   <% if (VUE_APP_ENABLE_CDN) { %>
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/6.7.96/css/materialdesignicons.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vuetify/2.6.5/vuetify.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify-dialog@2.0.14/dist/vuetify-dialog.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/codemirror.min.css" />
@@ -35,6 +36,7 @@
     <script type="text/javascript" charset="UTF-8"
       src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
     <% } else { %>
+      <link rel="stylesheet" href="/@mdi/font/css/materialdesignicons.css" />
       <link rel="stylesheet" href="/vuetify/vuetify.min.css">
       <link rel="stylesheet" href="/vuetify-dialog/vuetify-dialog.min.css">
       <link rel="stylesheet" href="/codemirror/lib/codemirror.css" />

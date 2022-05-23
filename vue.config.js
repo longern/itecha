@@ -56,6 +56,10 @@ if (!process.env.VUE_APP_ENABLE_CDN)
   module.exports.configureWebpack.plugins = [
     new CopyWebpackPlugin([
       {
+        from: "node_modules/@mdi",
+        to: path.resolve(module.exports.outputDir, "@mdi"),
+      },
+      {
         from: "node_modules/axios/dist",
         to: path.resolve(module.exports.outputDir, "axios"),
       },
