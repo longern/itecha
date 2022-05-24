@@ -39,3 +39,14 @@ jobs:
           (cd dist/fc/django/contrib/admin/locale/ && find -maxdepth 1 ! -name "zh_Hans" -exec rm -rf '{}' \;)
           du -s dist/fc/*
           ./setup.py deploy
+
+      - name: Deploy with AWS Lambda
+        env:
+          AWS_LAMBDA_ARN: ${{ secrets.AWS_LAMBDA_ARN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          sudo apt-get install awscli
+          (cd dist/fc && zip -q -r lambda.zip * && mv lambda.zip ../../)
+          AWS_REGION=`echo "$AWS_LAMBDA_ARN" | grep -oP "[a-z]+-[a-z]+-\d+"`
+          aws lambda update-function-code --function-name $AWS_LAMBDA_ARN --zip-file fileb://lambda.zip --region $AWS_REGION > /dev/null
