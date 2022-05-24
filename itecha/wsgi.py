@@ -14,3 +14,8 @@ from django.core.wsgi import get_wsgi_application
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'itecha.settings')
 
 application = get_wsgi_application()
+
+def lambda_handler(event, context):
+    from apig_wsgi import make_lambda_handler
+
+    return make_lambda_handler(application)(event, context)
