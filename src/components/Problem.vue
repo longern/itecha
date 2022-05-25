@@ -105,9 +105,9 @@
               </io-dialog>
               <v-btn
                 color="primary"
-                @click="submit"
                 :disabled="!user.username"
                 :loading="submitLoading"
+                @click="submit"
               >
                 提交
               </v-btn>

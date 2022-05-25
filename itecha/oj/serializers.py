@@ -44,7 +44,7 @@ class ContestSerializer(serializers.ModelSerializer):
 
 class ProblemSerializer(QueryFieldsMixin, serializers.ModelSerializer):
     testcases = PickleField()
-    tags = JSONField()
+    tags = JSONField(allow_null=True)
     contest = ContestSerializer(read_only=True)
 
     class Meta:

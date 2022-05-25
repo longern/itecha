@@ -8,8 +8,10 @@
 
 <script>
 import { mavonEditor } from "mavon-editor";
+import { markdownItFancyListPlugin } from "markdown-it-fancy-lists";
 
 const md = mavonEditor.getMarkdownIt();
+md.use(markdownItFancyListPlugin);
 
 export default {
   name: "Markdown",

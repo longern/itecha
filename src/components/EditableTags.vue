@@ -31,12 +31,12 @@ export default {
 
   props: {
     value: { type: Array, default: () => [] },
-    label: { type: String, default: "" }
+    label: { type: String, default: "" },
   },
 
   data: () => ({
     newTag: "",
-    newTagEditing: false
+    newTagEditing: false,
   }),
 
   created() {
@@ -53,6 +53,7 @@ export default {
     },
 
     addTag() {
+      if (!this.value) this.value = [];
       if (this.newTag && this.value.indexOf(this.newTag) < 0)
         this.$emit("input", this.value.concat([this.newTag]));
       this.newTag = "";
@@ -62,9 +63,9 @@ export default {
     removeTag(tag) {
       this.$emit(
         "input",
-        this.value.filter(t => t != tag)
+        this.value.filter((t) => t != tag)
       );
-    }
-  }
+    },
+  },
 };
 </script>
