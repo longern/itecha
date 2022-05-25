@@ -24,7 +24,8 @@ jobs:
           VUE_APP_ENABLE_CDN: 1
         run: |
           pip3 install -e .
-          npm ci && npm run build
+          npm ci
+          npm run build
           python3 -m itecha collectstatic --no-input
 
       - name: Deploy with Aliyun FC 2
