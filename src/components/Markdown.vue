@@ -68,7 +68,9 @@ input[type=text] {
 }
 
 .markdown-body ol[type=A] > li {
+  background-color: whitesmoke;
   border: 1px solid transparent;
+  padding: 8px;
 }
 
 .markdown-body ol[type=A] > li.checked {
