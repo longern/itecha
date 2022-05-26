@@ -21,7 +21,10 @@ export default {
 
   watch: {
     source() {
-      this.$refs.mc.innerHTML = md.render(this.source || "");
+      let source = this.source || "";
+      source = source.replace(/(?<!_)_{6}(?!_)/g, "<ins>______</ins>");
+
+      this.$refs.mc.innerHTML = md.render(source);
 
       // Render ordered list with type=A as radio button
       for (const ol of this.$refs.mc.querySelectorAll("ol[type=A]")) {
@@ -45,12 +48,24 @@ export default {
           });
         }
       }
+
+      for (const ins of this.$refs.mc.querySelectorAll("ins")) {
+        const input = document.createElement("input");
+        input.type = "text";
+        ins.replaceWith(input);
+      }
     },
   },
 };
 </script>
 
 <style>
+input[type=text] {
+  border-bottom: 1px solid black;
+  text-align: center;
+  width: 6em;
+}
+
 .markdown-body ol[type=A] > li {
   border: 1px solid transparent;
 }
