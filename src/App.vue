@@ -80,7 +80,7 @@
     </v-main>
 
     <v-footer
-      v-if="$route.path !== '/playground' && $vuetify.breakpoint.mobile"
+      v-if="displayFooter"
       app
       class="mobile-footer py-0"
     >
@@ -125,6 +125,15 @@ export default {
   data: () => ({
     user: {},
   }),
+
+  computed: {
+    displayFooter() {
+      return (
+        ["/", "/resources", "/profile"].includes(this.$route.path) &&
+        this.$vuetify.breakpoint.mobile
+      );
+    },
+  },
 
   created() {
     axios.defaults.withCredentials = true;
@@ -180,7 +189,7 @@ export default {
   width: 100%;
 }
 
-.mobile-footer>.v-btn {
+.mobile-footer > .v-btn {
   margin: 0 auto;
   min-height: 48px;
   border-radius: 0;

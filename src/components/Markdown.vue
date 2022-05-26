@@ -61,6 +61,7 @@ export default {
 
 <style>
 input[type=text] {
+  background-color: whitesmoke;
   border-bottom: 1px solid black;
   text-align: center;
   width: 6em;
